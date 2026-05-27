@@ -7,8 +7,6 @@ import {
   IDataService,
   NullDataService,
 } from "../../domain/interfaces/DataService";
-import { Profile } from "../../domain/models/Profile";
-import { Project } from "../../domain/models/Project";
 
 describe("DataService Interface", () => {
   describe("IDataService contract", () => {

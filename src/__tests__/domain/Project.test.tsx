@@ -4,7 +4,7 @@
 
 import { describe, it, expect, beforeEach } from "vitest";
 import { Project, IProject } from "../../domain/models/Project";
-import { Technology, FetchError, FetchErrorCode } from "../../domain/types";
+import { FetchError } from "../../domain/types";
 
 describe("Project Model", () => {
   let validProject: IProject;

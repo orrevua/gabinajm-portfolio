@@ -22,18 +22,27 @@ import { FetchError, FetchErrorCode } from "@domain/types";
 
 describe("Sanity Client", () => {
   const originalEnv = { ...process.env };
+  const setEnv = (key: string, value?: string) => {
+    const env = process.env as Record<string, string | undefined>;
+    if (value === undefined) {
+      delete env[key];
+    } else {
+      env[key] = value;
+    }
+  };
 
   beforeEach(() => {
     resetSanityClient();
-    process.env.NEXT_PUBLIC_SANITY_PROJECT_ID = "test-project";
-    process.env.NEXT_PUBLIC_SANITY_DATASET = "production";
-    process.env.NEXT_PUBLIC_SANITY_API_VERSION = "2024-01-15";
-    process.env.NODE_ENV = "production";
+    process.env = { ...originalEnv };
+    setEnv("NEXT_PUBLIC_SANITY_PROJECT_ID", "test-project");
+    setEnv("NEXT_PUBLIC_SANITY_DATASET", "production");
+    setEnv("NEXT_PUBLIC_SANITY_API_VERSION", "2024-01-15");
+    setEnv("NODE_ENV", "production");
     mockFetch.mockReset();
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    process.env = { ...originalEnv };
     resetSanityClient();
   });
 
@@ -46,13 +55,13 @@ describe("Sanity Client", () => {
     });
 
     it("should include optional API token if provided", () => {
-      process.env.SANITY_API_TOKEN = "test-token";
+      setEnv("SANITY_API_TOKEN", "test-token");
       const config = getSanityConfig();
       expect(config.token).toBe("test-token");
     });
 
     it("should throw FetchError if projectId is missing", () => {
-      delete process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+      setEnv("NEXT_PUBLIC_SANITY_PROJECT_ID");
       try {
         getSanityConfig();
         expect(true).toBe(false); // Should have thrown
@@ -66,17 +75,17 @@ describe("Sanity Client", () => {
     });
 
     it("should throw FetchError if dataset is missing", () => {
-      delete process.env.NEXT_PUBLIC_SANITY_DATASET;
+      setEnv("NEXT_PUBLIC_SANITY_DATASET");
       expect(() => getSanityConfig()).toThrow(FetchError);
     });
 
     it("should throw FetchError if apiVersion is missing", () => {
-      delete process.env.NEXT_PUBLIC_SANITY_API_VERSION;
+      setEnv("NEXT_PUBLIC_SANITY_API_VERSION");
       expect(() => getSanityConfig()).toThrow(FetchError);
     });
 
     it("should throw with HTTP 500 status on missing config", () => {
-      delete process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+      setEnv("NEXT_PUBLIC_SANITY_PROJECT_ID");
       try {
         getSanityConfig();
       } catch (error) {
@@ -95,19 +104,19 @@ describe("Sanity Client", () => {
     });
 
     it("should use CDN in production", () => {
-      process.env.NODE_ENV = "production";
+      setEnv("NODE_ENV", "production");
       const client = createSanityClient();
       expect(client).toBeDefined();
     });
 
     it("should not use CDN in development", () => {
-      process.env.NODE_ENV = "development";
+      setEnv("NODE_ENV", "development");
       const client = createSanityClient();
       expect(client).toBeDefined();
     });
 
     it("should throw FetchError if config is invalid", () => {
-      delete process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+      setEnv("NEXT_PUBLIC_SANITY_PROJECT_ID");
       expect(() => createSanityClient()).toThrow(FetchError);
     });
   });
@@ -133,7 +142,7 @@ describe("Sanity Client", () => {
     });
 
     it("should throw FetchError if config is missing", () => {
-      delete process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+      setEnv("NEXT_PUBLIC_SANITY_PROJECT_ID");
       expect(() => getSanityClient()).toThrow(FetchError);
     });
   });
@@ -160,7 +169,7 @@ describe("Sanity Client", () => {
   describe("error handling", () => {
     it("should catch and log errors", () => {
       const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-      delete process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+      setEnv("NEXT_PUBLIC_SANITY_PROJECT_ID");
 
       try {
         getSanityClient();

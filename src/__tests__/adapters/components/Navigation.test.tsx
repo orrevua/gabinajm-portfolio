@@ -2,9 +2,9 @@
  * Unit tests for Navigation component
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { Navigation, type NavigationProps } from "../../../adapters/routes/components/Navigation";
+import { Navigation } from "../../../adapters/routes/components/Navigation";
 
 // Mock next/link
 vi.mock("next/link", () => ({

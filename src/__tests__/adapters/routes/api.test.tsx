@@ -3,7 +3,7 @@
  * Tests for GET /api/projects, GET /api/projects/[slug], GET /api/profile
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 
 /**
  * GET /api/projects Tests

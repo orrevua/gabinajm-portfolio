@@ -3,8 +3,7 @@
  * Tests the complete pipeline: Sanity → DataService → API Routes → Pages
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
 
 // Mock next/image and next/link
 vi.mock("next/image", () => ({
@@ -24,54 +23,6 @@ vi.mock("next/link", () => ({
 /**
  * Mock Sanity responses for integration testing
  */
-const mockSanityProject = {
-  _id: "proj-1",
-  title: "Portfolio Website",
-  slug: "portfolio-website",
-  description: "A modern portfolio built with Next.js",
-  mainImage: {
-    asset: {
-      _ref: "image-xyz",
-      url: "https://cdn.sanity.io/images/project.jpg",
-      lqip: "data:image/jpeg;base64,/9j/...",
-      alt: "Portfolio screenshot",
-    },
-  },
-  technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-  link: "https://portfolio.dev",
-  repository: "https://github.com/user/portfolio",
-  featured: true,
-  publishedAt: "2024-01-15T10:30:00Z",
-};
-
-const mockSanityProfile = {
-  _id: "profile-1",
-  name: "Gabriel",
-  title: "Full Stack Developer",
-  bio: "Building beautiful web experiences",
-  avatar: {
-    asset: {
-      _ref: "image-avatar",
-      url: "https://cdn.sanity.io/images/avatar.jpg",
-      lqip: "data:image/jpeg;base64,/9j/...",
-      alt: "Gabriel",
-    },
-  },
-  social: [
-    {
-      _key: "github",
-      platform: "GitHub",
-      url: "https://github.com/gabriel",
-    },
-    {
-      _key: "linkedin",
-      platform: "LinkedIn",
-      url: "https://linkedin.com/in/gabriel",
-    },
-  ],
-  technologies: ["React", "TypeScript", "Node.js", "PostgreSQL"],
-  resumeUrl: "https://example.com/resume.pdf",
-};
 
 /**
  * Unit 6.1: DataService Integration Tests

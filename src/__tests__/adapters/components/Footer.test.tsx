@@ -4,7 +4,7 @@
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { Footer, type FooterProps } from "../../../adapters/routes/components/Footer";
+import { Footer } from "../../../adapters/routes/components/Footer";
 
 // Mock next/link
 vi.mock("next/link", () => ({

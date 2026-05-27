@@ -3,8 +3,7 @@
  * Testing Server Components with mocked data service
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
 /**
  * HomePage Tests

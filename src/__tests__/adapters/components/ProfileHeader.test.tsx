@@ -4,7 +4,7 @@
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { ProfileHeader, type ProfileHeaderProps } from "../../../adapters/routes/components/ProfileHeader";
+import { ProfileHeader } from "../../../adapters/routes/components/ProfileHeader";
 import type { IProfile } from "@domain";
 
 // Mock next/image

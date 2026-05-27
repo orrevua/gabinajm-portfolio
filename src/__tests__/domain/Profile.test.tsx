@@ -4,7 +4,7 @@
 
 import { describe, it, expect, beforeEach } from "vitest";
 import { Profile, IProfile } from "../../domain/models/Profile";
-import { FetchError, FetchErrorCode } from "../../domain/types";
+import { FetchError } from "../../domain/types";
 
 describe("Profile Model", () => {
   let validProfile: IProfile;
@@ -179,7 +179,7 @@ describe("Profile Model", () => {
       // Runtime doesn't throw, but properties are protected by TypeScript readonly
     });
 
-    it("should not allow socialLinks mutation", () => {
+    it("should allow socialLinks mutation at runtime", () => {
       const originalLength = profile.socialLinks.length;
       expect(() => {
         profile.socialLinks.push({
@@ -187,6 +187,7 @@ describe("Profile Model", () => {
           url: "https://twitter.com",
         });
       }).not.toThrow(); // Arrays are mutable, but this tests the behavior
+      expect(profile.socialLinks.length).toBe(originalLength + 1);
       // To ensure true immutability, Object.freeze() should be applied in constructor
     });
   });

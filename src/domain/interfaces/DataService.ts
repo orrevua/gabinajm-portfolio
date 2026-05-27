@@ -105,22 +105,26 @@ export class NullDataService implements IDataService {
     return null;
   }
 
-  async getProjects(): Promise<Project[]> {
+  async getProjects(_options?: {
+    featuredOnly?: boolean;
+    limit?: number;
+    sort?: "newest" | "oldest" | "featured";
+  }): Promise<Project[]> {
     console.warn("NullDataService: getProjects() returning empty array");
     return [];
   }
 
-  async getFeaturedProjects(): Promise<Project[]> {
+  async getFeaturedProjects(_limit?: number): Promise<Project[]> {
     console.warn("NullDataService: getFeaturedProjects() returning empty array");
     return [];
   }
 
-  async getProjectBySlug(): Promise<Project | null> {
+  async getProjectBySlug(_slug: string): Promise<Project | null> {
     console.warn("NullDataService: getProjectBySlug() returning null");
     return null;
   }
 
-  async getSections(): Promise<Section[]> {
+  async getSections(_uid?: string): Promise<Section[]> {
     console.warn("NullDataService: getSections() returning empty array");
     return [];
   }

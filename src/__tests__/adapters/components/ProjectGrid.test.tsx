@@ -4,7 +4,7 @@
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { ProjectGrid, type ProjectGridProps } from "../../../adapters/routes/components/ProjectGrid";
+import { ProjectGrid } from "../../../adapters/routes/components/ProjectGrid";
 
 // Mock ProjectCard
 vi.mock("../../adapters/routes/components/ProjectCard", () => ({

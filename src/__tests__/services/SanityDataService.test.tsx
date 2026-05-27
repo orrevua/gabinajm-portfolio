@@ -12,8 +12,7 @@ vi.mock("../../services/sanityClient", () => ({
 
 import { SanityDataService } from "../../services/SanityDataService";
 import { getSanityClient, checkSanityHealth } from "../../services/sanityClient";
-import { Profile, Project, type IProfile, type IProject } from "@domain";
-import { Technology } from "@domain/types";
+import { Profile, Project } from "@domain";
 
 describe("SanityDataService", () => {
   let service: SanityDataService;
