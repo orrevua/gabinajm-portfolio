@@ -5,24 +5,6 @@
   "installCommand": "npm install",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "env": {
-    "NEXT_PUBLIC_SANITY_PROJECT_ID": {
-      "description": "Sanity project ID for CMS integration",
-      "required": true
-    },
-    "NEXT_PUBLIC_SANITY_DATASET": {
-      "description": "Sanity dataset name (production|staging)",
-      "required": true
-    },
-    "SANITY_API_TOKEN": {
-      "description": "Sanity API token for server-side queries",
-      "required": false
-    },
-    "NEXT_PUBLIC_APP_URL": {
-      "description": "Public URL of the portfolio (e.g., https://gabinajm.com)",
-      "required": false
-    }
-  },
   "git": {
     "deploymentEnabled": {
       "main": true
