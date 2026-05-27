@@ -30,6 +30,21 @@ describe("DataService Interface", () => {
       expect(typeof service.getProjectBySlug).toBe("function");
     });
 
+    it("should define getSections() method", () => {
+      const service: IDataService = new NullDataService();
+      expect(typeof service.getSections).toBe("function");
+    });
+
+    it("should define getHomePage() method", () => {
+      const service: IDataService = new NullDataService();
+      expect(typeof service.getHomePage).toBe("function");
+    });
+
+    it("should define getAllProjectSlugs() method", () => {
+      const service: IDataService = new NullDataService();
+      expect(typeof service.getAllProjectSlugs).toBe("function");
+    });
+
     it("should define isReady() method", () => {
       const service: IDataService = new NullDataService();
       expect(typeof service.isReady).toBe("function");
@@ -106,6 +121,48 @@ describe("NullDataService", () => {
     });
   });
 
+  describe("getSections()", () => {
+    it("should return empty array", async () => {
+      const result = await service.getSections();
+      expect(result).toEqual([]);
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it("should accept uid parameter", async () => {
+      const result = await service.getSections("about");
+      expect(result).toEqual([]);
+    });
+
+    it("should log warning", async () => {
+      await service.getSections();
+      expect(console.warn).toHaveBeenCalledWith(
+        expect.stringContaining("NullDataService: getSections()")
+      );
+    });
+  });
+
+  describe("getHomePage()", () => {
+    it("should return null", async () => {
+      const result = await service.getHomePage();
+      expect(result).toBeNull();
+    });
+  });
+
+  describe("getAllProjectSlugs()", () => {
+    it("should return empty array", async () => {
+      const result = await service.getAllProjectSlugs();
+      expect(result).toEqual([]);
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it("should log warning", async () => {
+      await service.getAllProjectSlugs();
+      expect(console.warn).toHaveBeenCalledWith(
+        expect.stringContaining("NullDataService: getAllProjectSlugs()")
+      );
+    });
+  });
+
   describe("getProjectBySlug()", () => {
     it("should return null", async () => {
       const result = await service.getProjectBySlug("test-slug");
@@ -145,6 +202,9 @@ describe("NullDataService", () => {
       expect(() => service.getProjects()).not.toThrow();
       expect(() => service.getFeaturedProjects()).not.toThrow();
       expect(() => service.getProjectBySlug("any")).not.toThrow();
+      expect(() => service.getSections()).not.toThrow();
+      expect(() => service.getHomePage()).not.toThrow();
+      expect(() => service.getAllProjectSlugs()).not.toThrow();
       expect(() => service.isReady()).not.toThrow();
     });
 
@@ -153,11 +213,16 @@ describe("NullDataService", () => {
       const projects = await service.getProjects();
       const featured = await service.getFeaturedProjects();
 
+      const sections = await service.getSections();
+      const homePage = await service.getHomePage();
+      const slugs = await service.getAllProjectSlugs();
+
       expect(profile).toBeNull();
       expect(projects.length).toBe(0);
       expect(featured.length).toBe(0);
-
-      // Components can render "Loading..." or cached content
+      expect(sections.length).toBe(0);
+      expect(homePage).toBeNull();
+      expect(slugs.length).toBe(0);
     });
   });
 });
