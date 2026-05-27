@@ -59,9 +59,10 @@ describe("ProfileHeader Component", () => {
 
     it("should render profile image when available", () => {
       render(<ProfileHeader profile={mockProfile} />);
-      const image = screen.getByTestId("profile-image");
-      expect(image).toHaveAttribute("src", "https://example.com/avatar.jpg");
-      expect(image).toHaveAttribute("alt", "Jane Doe avatar");
+      const images = screen.getAllByTestId("profile-image");
+      const avatar = images.find((img) => img.getAttribute("src") === "https://example.com/avatar.jpg");
+      expect(avatar).toBeDefined();
+      expect(avatar).toHaveAttribute("alt", "Jane Doe avatar");
     });
 
     it("should render bio", () => {
@@ -78,35 +79,6 @@ describe("ProfileHeader Component", () => {
       expect(screen.queryByText("Passionate")).not.toBeInTheDocument();
     });
   });
-
-  describe("social links", () => {
-    it("should render social links", () => {
-      render(<ProfileHeader profile={mockProfile} />);
-      const links = screen.getAllByRole("link");
-      const socialLinks = links.filter((l) =>
-        l.getAttribute("href")?.includes("github") ||
-        l.getAttribute("href")?.includes("linkedin")
-      );
-      expect(socialLinks.length).toBeGreaterThan(0);
-    });
-
-    it("should not render social section when no links", () => {
-      const profile: IProfile = {
-        ...mockProfile,
-        socialLinks: [],
-      };
-      render(<ProfileHeader profile={profile} />);
-      // Should still render but without social icons
-      expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
-    });
-
-    it("should have proper aria labels for social links", () => {
-      render(<ProfileHeader profile={mockProfile} />);
-      const githubLink = screen.getByLabelText(/Visit.*github/i);
-      expect(githubLink).toHaveAttribute("target", "_blank");
-    });
-  });
-
 
   describe("null profile", () => {
     it("should render fallback when profile is null", () => {

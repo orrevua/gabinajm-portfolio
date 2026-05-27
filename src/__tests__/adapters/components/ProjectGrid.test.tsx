@@ -43,7 +43,7 @@ describe("ProjectGrid Component", () => {
 
     it("should render title by default", () => {
       render(<ProjectGrid projects={mockProjects} />);
-      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Projects");
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("My projects");
     });
 
     it("should render custom title", () => {

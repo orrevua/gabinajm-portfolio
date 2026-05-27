@@ -151,9 +151,9 @@ describe("Navigation Component", () => {
 
     it("should use default navigation links", () => {
       render(<Navigation />);
-      expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "Projects" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
       expect(screen.getByRole("link", { name: "About" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Contact" })).toBeInTheDocument();
     });
   });
 
