@@ -20,12 +20,26 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
 
+// Mock i18n translations
+vi.mock("@/src/i18n", () => ({
+  useTranslation: () => ({
+    locale: "en",
+    setLocale: vi.fn(),
+    t: {
+      nav: {
+        home: "Home",
+        about: "About",
+        contact: "Contact",
+        menu: "Menu",
+        close: "Close",
+      },
+    },
+  }),
+}));
+
 describe("Navigation Component", () => {
-  const defaultLinks = [
-    { href: "/", label: "Home" },
-    { href: "/projects", label: "Projects" },
-    { href: "/about", label: "About" },
-  ];
+  const navLabels = ["Home", "About", "Contact"];
+  const getMenuButton = () => screen.getByLabelText("Toggle navigation menu");
 
   describe("rendering", () => {
     it("should render navigation element", () => {
@@ -40,10 +54,10 @@ describe("Navigation Component", () => {
     });
 
     it("should render navigation links on desktop", () => {
-      render(<Navigation links={defaultLinks} />);
-      defaultLinks.forEach((link) => {
+      render(<Navigation />);
+      navLabels.forEach((label) => {
         expect(
-          screen.getByRole("link", { name: link.label })
+          screen.getByRole("link", { name: label })
         ).toBeInTheDocument();
       });
     });
@@ -51,14 +65,14 @@ describe("Navigation Component", () => {
 
   describe("mobile menu", () => {
     it("should have hidden mobile menu button on desktop", () => {
-      const { container } = render(<Navigation links={defaultLinks} />);
-      const button = container.querySelector("button");
+      render(<Navigation />);
+      const button = getMenuButton();
       expect(button).toHaveClass("md:hidden");
     });
 
     it("should toggle mobile menu on button click", async () => {
-      const { container } = render(<Navigation links={defaultLinks} />);
-      const button = container.querySelector("button");
+      render(<Navigation />);
+      const button = getMenuButton();
 
       expect(button).toHaveAttribute("aria-expanded", "false");
 
@@ -70,8 +84,8 @@ describe("Navigation Component", () => {
     });
 
     it("should close menu on escape key", async () => {
-      const { container } = render(<Navigation links={defaultLinks} />);
-      const button = container.querySelector("button");
+      render(<Navigation />);
+      const button = getMenuButton();
 
       fireEvent.click(button!);
       expect(button).toHaveAttribute("aria-expanded", "true");
@@ -81,13 +95,13 @@ describe("Navigation Component", () => {
     });
 
     it("should show mobile menu links when open", async () => {
-      render(<Navigation links={defaultLinks} />);
-      const button = screen.getByLabelText("Toggle navigation menu");
+      render(<Navigation />);
+      const button = getMenuButton();
 
       fireEvent.click(button);
 
-      defaultLinks.forEach((link) => {
-        const links = screen.getAllByRole("link", { name: link.label });
+      navLabels.forEach((label) => {
+        const links = screen.getAllByRole("link", { name: label });
         expect(links.length).toBeGreaterThan(0);
       });
     });
@@ -95,11 +109,7 @@ describe("Navigation Component", () => {
 
   describe("active link", () => {
     it("should mark current page as active", () => {
-      vi.doMock("next/navigation", () => ({
-        usePathname: () => "/projects",
-      }));
-
-      render(<Navigation links={defaultLinks} />);
+      render(<Navigation />);
 
       // Find the Projects link - it should be marked as active
       // Note: actual implementation would require proper routing context
@@ -109,7 +119,7 @@ describe("Navigation Component", () => {
 
   describe("accessibility", () => {
     it("should have proper navigation role", () => {
-      render(<Navigation links={defaultLinks} />);
+      render(<Navigation />);
       expect(screen.getByRole("navigation")).toBeInTheDocument();
     });
 
@@ -120,25 +130,24 @@ describe("Navigation Component", () => {
     });
 
     it("should have aria-label on menu button", () => {
-      const { container } = render(<Navigation />);
-      const button = container.querySelector("button");
+      render(<Navigation />);
+      const button = getMenuButton();
       expect(button).toHaveAttribute("aria-label");
     });
 
     it("should have aria-expanded on menu button", () => {
-      const { container } = render(<Navigation />);
-      const button = container.querySelector("button");
+      render(<Navigation />);
+      const button = getMenuButton();
       expect(button).toHaveAttribute("aria-expanded");
     });
 
     it("should have role region on mobile menu", async () => {
-      const { container } = render(<Navigation links={defaultLinks} />);
-      const button = container.querySelector("button");
+      render(<Navigation />);
+      const button = getMenuButton();
 
       fireEvent.click(button!);
 
-      const mobileMenu = container.querySelector("[role='region']");
-      expect(mobileMenu).toBeInTheDocument();
+      expect(screen.getByRole("region")).toBeInTheDocument();
     });
   });
 
@@ -151,30 +160,22 @@ describe("Navigation Component", () => {
 
     it("should use default navigation links", () => {
       render(<Navigation />);
-      expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "About" })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "Contact" })).toBeInTheDocument();
-    });
-  });
-
-
-  describe("empty links", () => {
-    it("should handle empty links array", () => {
-      render(<Navigation links={[]} />);
-      expect(screen.getByRole("navigation")).toBeInTheDocument();
+      navLabels.forEach((label) => {
+        expect(screen.getByRole("link", { name: label })).toBeInTheDocument();
+      });
     });
   });
 
   describe("responsive design", () => {
     it("should have hidden desktop nav on mobile", () => {
-      const { container } = render(<Navigation links={defaultLinks} />);
+      const { container } = render(<Navigation />);
       const desktopNav = container.querySelector(".hidden.md\\:flex");
       expect(desktopNav).toBeInTheDocument();
     });
 
     it("should have mobile menu button", () => {
-      const { container } = render(<Navigation />);
-      const button = container.querySelector("button");
+      render(<Navigation />);
+      const button = getMenuButton();
       expect(button).toHaveClass("md:hidden");
     });
   });
