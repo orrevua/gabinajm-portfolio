@@ -33,6 +33,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, profileUn
           height={770}
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(760px,90%)] opacity-[0.06]"
           aria-hidden="true"
+          loading="lazy"
         />
         <svg className="absolute top-[15%] right-[10%] w-[180px] h-[180px] md:w-[260px] md:h-[260px] animate-float-a opacity-[0.15]" viewBox="0 0 260 260" fill="none"><circle cx="130" cy="130" r="128" stroke="#ff4522" strokeWidth="2" /></svg>
         <svg className="absolute bottom-[20%] left-[8%] w-[100px] h-[100px] md:w-[160px] md:h-[160px] animate-float-b opacity-[0.12]" viewBox="0 0 160 160" fill="none"><circle cx="80" cy="80" r="78" stroke="#9ceaef" strokeWidth="2" /></svg>
