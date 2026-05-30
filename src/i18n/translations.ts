@@ -1,0 +1,208 @@
+export type Locale = "en" | "pt";
+
+export const translations = {
+  en: {
+    nav: {
+      home: "Home",
+      about: "About",
+      contact: "Contact",
+      menu: "Menu",
+      close: "Close",
+    },
+    hero: {
+      badge: "Product Designer",
+      greeting: "Hi there! ",
+      wave: "\u{1F44B}",
+      intro: "\nI'm ",
+      name: "Gabi",
+      comma: ",",
+      ctaPrimary: "Get in touch",
+      ctaSecondary: "Learn more",
+    },
+    about: {
+      heading: "About Me",
+      showMore: "Show more",
+      resume: "My resume",
+      valuesHeading: "My values",
+      values: [
+        { title: "Accessibility first", body: "Design is not complete if it is not accessible to everyone. Every design decision should consider diverse users and their needs." },
+        { title: "Intentional simplicity", body: "Remove unnecessary complexity to create intuitive and enjoyable experiences." },
+        { title: "Continuous collaboration", body: "The best solutions emerge when designers, developers, and users work together." },
+      ],
+      skillsHeading: "Skills & Tools",
+      experienceHeading: "Experience",
+    },
+    projects: {
+      heading: "My projects",
+      backToProjects: "Back to projects",
+      nextProject: "Next Project",
+      viewProject: "View Project",
+      sourceCode: "Source Code",
+      viewAllProjects: "View All Projects",
+      notFound: "Project Not Found",
+      notFoundDescription: "The project you're looking for doesn't exist or has been removed.",
+    },
+    pastExperience: {
+      heading: "Past Experience",
+    },
+    contact: {
+      heading: "Let's talk",
+      subtitle: "I will reply to you as soon as possible.",
+      nameLabel: "Name",
+      namePlaceholder: "Enter your name",
+      emailLabel: "E-mail",
+      emailPlaceholder: "email@example.com",
+      messageLabel: "Message",
+      messagePlaceholder: "Tell me about your project...",
+      send: "Send Message",
+      sending: "Sending...",
+      sent: "Message Sent!",
+      connectHeading: "Connect with me",
+      availability: "Availability:",
+      toastSuccess: "Your message was sent successfully!",
+      toastError: "Error sending message",
+    },
+    password: {
+      title: "Page blocked",
+      subtitle: "Enter the password to continue",
+      label: "Password",
+      placeholder: "Enter the password",
+      unlock: "Unlock",
+      verifying: "Verifying...",
+      incorrectPassword: "The password is incorrect.",
+      genericError: "Something went wrong. Please try again.",
+    },
+    footer: {
+      copyright: "© {year} Gabinajm. All rights reserved.",
+      tagline: "Designed & built with passion and accessibility in mind",
+    },
+    loading: {
+      label: "Loading",
+      text: "Loading • Loading • Loading • Loading • ",
+    },
+    accessibility: {
+      skipToContent: "Skip to content",
+    },
+    error: {
+      oops: "Oops",
+      somethingWentWrong: "Something went wrong",
+      errorId: "Error ID:",
+      tryAgainAction: "Try Again",
+      backToHome: "Back to Home",
+      pageNotFound: "Page not found",
+      profileNotFound: "Profile Not Found",
+      profileUnavailable: "Profile information is currently unavailable.",
+      unableToLoad: "Unable to Load Content",
+      tryAgain: "Please try again later.",
+      refreshPage: "Refresh Page",
+      unableToLoadProject: "Unable to Load Project",
+    },
+  },
+  pt: {
+    nav: {
+      home: "Home",
+      about: "Sobre",
+      contact: "Contato",
+      menu: "Menu",
+      close: "Fechar",
+    },
+    hero: {
+      badge: "Product Designer",
+      greeting: "Olá! ",
+      wave: "\u{1F44B}",
+      intro: "\nEu sou a ",
+      name: "Gabi",
+      comma: ",",
+      ctaPrimary: "Entre em contato",
+      ctaSecondary: "Saiba mais",
+    },
+    about: {
+      heading: "Sobre Mim",
+      showMore: "Ver mais",
+      resume: "Meu currículo",
+      valuesHeading: "Meus valores",
+      values: [
+        { title: "Acessibilidade em primeiro lugar", body: "O design não está completo se não for acessível a todos. Cada decisão de design deve considerar usuários diversos e suas necessidades." },
+        { title: "Simplicidade intencional", body: "Remover complexidade desnecessária para criar experiências intuitivas e agradáveis." },
+        { title: "Colaboração contínua", body: "As melhores soluções surgem quando designers, desenvolvedores e usuários trabalham juntos." },
+      ],
+      skillsHeading: "Habilidades & Ferramentas",
+      experienceHeading: "Experiência",
+    },
+    projects: {
+      heading: "Meus projetos",
+      backToProjects: "Voltar aos projetos",
+      nextProject: "Próximo Projeto",
+      viewProject: "Ver Projeto",
+      sourceCode: "Código Fonte",
+      viewAllProjects: "Ver Todos os Projetos",
+      notFound: "Projeto Não Encontrado",
+      notFoundDescription: "O projeto que você procura não existe ou foi removido.",
+    },
+    pastExperience: {
+      heading: "Experiência Anterior",
+    },
+    contact: {
+      heading: "Vamos conversar",
+      subtitle: "Responderei o mais breve possível.",
+      nameLabel: "Nome",
+      namePlaceholder: "Digite seu nome",
+      emailLabel: "E-mail",
+      emailPlaceholder: "email@exemplo.com",
+      messageLabel: "Mensagem",
+      messagePlaceholder: "Conte-me sobre seu projeto...",
+      send: "Enviar Mensagem",
+      sending: "Enviando...",
+      sent: "Mensagem Enviada!",
+      connectHeading: "Conecte-se comigo",
+      availability: "Disponibilidade:",
+      toastSuccess: "Sua mensagem foi enviada com sucesso!",
+      toastError: "Erro ao enviar mensagem",
+    },
+    password: {
+      title: "Página bloqueada",
+      subtitle: "Digite a senha para continuar",
+      label: "Senha",
+      placeholder: "Digite a senha",
+      unlock: "Desbloquear",
+      verifying: "Verificando...",
+      incorrectPassword: "A senha está incorreta.",
+      genericError: "Algo deu errado. Tente novamente.",
+    },
+    footer: {
+      copyright: "© {year} Gabinajm. Todos os direitos reservados.",
+      tagline: "Projetado e construído com paixão e acessibilidade em mente",
+    },
+    loading: {
+      label: "Carregando",
+      text: "Carregando • Carregando • Carregando • ",
+    },
+    accessibility: {
+      skipToContent: "Ir para o conteúdo",
+    },
+    error: {
+      oops: "Ops",
+      somethingWentWrong: "Algo deu errado",
+      errorId: "ID do erro:",
+      tryAgainAction: "Tentar Novamente",
+      backToHome: "Voltar ao Início",
+      pageNotFound: "Página não encontrada",
+      profileNotFound: "Perfil Não Encontrado",
+      profileUnavailable: "As informações do perfil estão indisponíveis no momento.",
+      unableToLoad: "Não Foi Possível Carregar",
+      tryAgain: "Por favor, tente novamente mais tarde.",
+      refreshPage: "Atualizar Página",
+      unableToLoadProject: "Não Foi Possível Carregar o Projeto",
+    },
+  },
+} as const;
+
+type DeepMutable<T> = {
+  -readonly [K in keyof T]: T[K] extends ReadonlyArray<infer U>
+    ? DeepMutable<U>[]
+    : T[K] extends object
+    ? DeepMutable<T[K]>
+    : string;
+};
+
+export type TranslationKeys = DeepMutable<typeof translations.en>;
