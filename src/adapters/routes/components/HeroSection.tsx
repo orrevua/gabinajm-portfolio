@@ -47,10 +47,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </span>
             <br />
             {intro}{" "}
-            <span className="relative bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent">
-              Gabi
+            <span className="inline-flex items-baseline whitespace-nowrap">
+              <span className="relative bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent">
+                Gabi
+              </span>
+              <span className="text-[#0A0A0A]">,</span>
             </span>
-            ,
           </h1>
 
           <p className="text-lg text-[#0A0A0A]/70 leading-relaxed mb-8 max-w-md">

@@ -70,7 +70,7 @@ export default async function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body>
+      <body suppressHydrationWarning className="min-h-screen flex flex-col">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -90,7 +90,7 @@ export default async function RootLayout({
         <LocaleProvider initialLocale={locale}>
           <SkipToContent />
           <Navigation brandName="Gabinajm" />
-          <main id="main-content">{children}</main>
+          <main id="main-content" className="flex-1">{children}</main>
           <TranslatedFooter />
         </LocaleProvider>
       </body>
