@@ -267,6 +267,7 @@ describe("SanityDataService", () => {
         featuredOnly: true,
         limit: 5,
         sort: "newest",
+        locale: "en",
       });
     });
   });
