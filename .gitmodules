@@ -1,0 +1,3 @@
+[submodule "libs/agentic-skills"]
+	path = libs/agentic-skills
+	url = https://github.com/flpfrnc/agentic-skills.git
