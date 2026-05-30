@@ -2,12 +2,14 @@ import { Metadata } from "next";
 import { ProfileHeader } from "@/src/adapters/routes/components/ProfileHeader";
 import { SectionBlock } from "@/src/adapters/routes/components/SectionBlock";
 import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
+import { PortableTextRenderer } from "@/src/adapters/routes/components/PortableTextRenderer";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
 import { ValuesSection } from "@/src/adapters/routes/components/ValuesSection";
 import { getSanityDataService } from "@/src/services";
 import { getServerTranslations } from "@/src/i18n/serverLocale";
 import type { Profile } from "@/src/domain/models/Profile";
 import type { Section } from "@/src/domain/models/Section";
+import type { AboutPage as AboutPageData } from "@/src/domain/interfaces/DataService";
 
 export const revalidate = 3600;
 
@@ -36,13 +38,15 @@ export default async function AboutPage() {
 
   let profile: Profile | null = null;
   let sections: Section[] = [];
+  let aboutPage: AboutPageData | null = null;
   let fetchError = false;
 
   try {
     const dataService = await getSanityDataService();
-    [profile, sections] = await Promise.all([
+    [profile, sections, aboutPage] = await Promise.all([
       dataService.getProfile(locale),
-      dataService.getSections(undefined, locale),
+      dataService.getSectionsByPage("about", locale),
+      dataService.getAboutPage(locale),
     ]);
   } catch {
     fetchError = true;
@@ -96,28 +100,32 @@ export default async function AboutPage() {
 
   return (
     <>
-      <ProfileHeader profile={profile} profileUnavailableText={t.error.profileUnavailable} />
+      <ProfileHeader
+        profile={profile}
+        profileUnavailableText={t.error.profileUnavailable}
+        heading={t.about.heading}
+      />
 
-      <section className="container-max pb-24 md:pb-32">
+      <section className="container-max pb-24 md:pb-32 mt-10 md:mt-16">
         {/* Bio card */}
         <ScrollReveal>
-          <div className="bg-white rounded-3xl p-8 md:p-12 mb-20 md:mb-28 shadow-[0_4px_32px_rgba(0,0,0,0.08)]">
+          <div className="bg-white rounded-3xl p-8 md:p-12 mb-20 md:mb-28 drop-shadow-2xl">
             <h2 className="text-[clamp(28px,4vw,36px)] font-bold leading-tight mb-8 bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent">
-              {t.about.bioHeading}
+              {aboutPage?.bioHeading || t.about.bioHeading}
             </h2>
             <div className="space-y-6 text-lg md:text-xl text-[#0A0A0A]/70 leading-relaxed mb-10">
-              {profile.aboutBio
-                ? profile.aboutBio.split("\n\n").map((paragraph, i) => (
-                    <p key={i}>{paragraph}</p>
-                  ))
-                : t.about.bio.map((paragraph, i) => (
-                    <p key={i}>{paragraph}</p>
-                  ))
-              }
+              {profile.aboutBio ? (
+                <PortableTextRenderer value={profile.aboutBio} />
+              ) : (
+                t.about.bio.map((paragraph, i) => <p key={i}>{paragraph}</p>)
+              )}
             </div>
 
             <div className="flex flex-wrap gap-3 mb-10">
-              {SKILL_CHIPS.map((chip) => (
+              {(aboutPage?.skillChips && aboutPage.skillChips.length > 0
+                ? aboutPage.skillChips
+                : SKILL_CHIPS
+              ).map((chip) => (
                 <span
                   key={chip.label}
                   className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full"
@@ -133,7 +141,7 @@ export default async function AboutPage() {
                 href={resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-[#0A0A0A] bg-white border-2 border-[#0A0A0A]/10 rounded-full px-6 py-4 shadow-[0_2px_8px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] hover:border-[#0A0A0A]/30 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-all duration-300"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-pill border-2 border-accent text-[#0A0A0A] font-semibold shadow-[0_10px_20px_rgba(246,51,154,0.2)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.3)] hover:bg-accent hover:text-white transition-colors transition-shadow"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
@@ -145,7 +153,10 @@ export default async function AboutPage() {
         </ScrollReveal>
 
         <ScrollReveal>
-          <ValuesSection />
+          <ValuesSection
+            heading={aboutPage?.valuesHeading}
+            values={aboutPage?.values}
+          />
         </ScrollReveal>
       </section>
 
