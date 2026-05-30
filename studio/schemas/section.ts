@@ -74,6 +74,85 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'contentBlocks',
+      title: 'Content Blocks',
+      description: 'Structured content blocks (cards, values, etc.)',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'infoCard',
+          title: 'Info Card',
+          fields: [
+            defineField({ name: 'heading', title: 'Heading', type: 'string' }),
+            defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
+            defineField({ name: 'body', title: 'Body', type: 'text', rows: 6 }),
+            defineField({ name: 'body_pt', title: 'Body (PT)', type: 'text', rows: 6 }),
+            defineField({
+              name: 'chips',
+              title: 'Chips / Tags',
+              type: 'array',
+              of: [{
+                type: 'object',
+                fields: [
+                  defineField({ name: 'label', title: 'Label', type: 'string', validation: (rule) => rule.required() }),
+                  defineField({ name: 'label_pt', title: 'Label (PT)', type: 'string' }),
+                  defineField({ name: 'color', title: 'Background Color', type: 'string', description: 'Hex e.g. #fee8db' }),
+                ],
+                preview: { select: { title: 'label', subtitle: 'color' } },
+              }],
+            }),
+            defineField({
+              name: 'ctaLabel',
+              title: 'CTA Button Label',
+              type: 'string',
+            }),
+            defineField({ name: 'ctaLabel_pt', title: 'CTA Button Label (PT)', type: 'string' }),
+            defineField({
+              name: 'ctaHref',
+              title: 'CTA Button Link',
+              type: 'url',
+              validation: (rule) => rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto'] }),
+            }),
+          ],
+          preview: {
+            select: { title: 'heading' },
+            prepare({ title }) { return { title: title || 'Info Card' } },
+          },
+        },
+        {
+          type: 'object',
+          name: 'valueCards',
+          title: 'Value Cards',
+          fields: [
+            defineField({ name: 'heading', title: 'Heading', type: 'string' }),
+            defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
+            defineField({
+              name: 'items',
+              title: 'Values',
+              type: 'array',
+              of: [{
+                type: 'object',
+                fields: [
+                  defineField({ name: 'title', title: 'Title', type: 'string', validation: (rule) => rule.required() }),
+                  defineField({ name: 'title_pt', title: 'Title (PT)', type: 'string' }),
+                  defineField({ name: 'description', title: 'Description', type: 'text', rows: 3, validation: (rule) => rule.required() }),
+                  defineField({ name: 'description_pt', title: 'Description (PT)', type: 'text', rows: 3 }),
+                ],
+                preview: { select: { title: 'title' } },
+              }],
+            }),
+          ],
+          preview: {
+            select: { title: 'heading', items: 'items' },
+            prepare({ title, items }) {
+              return { title: title || `Value Cards (${items?.length || 0})` }
+            },
+          },
+        },
+      ],
+    }),
+    defineField({
       name: 'background',
       title: 'Background',
       type: 'object',
@@ -120,6 +199,13 @@ export default defineType({
       initialValue: true,
     }),
     defineField({
+      name: 'hasDropShadow',
+      title: 'Has Drop Shadow',
+      type: 'boolean',
+      description: 'Toggle whether content blocks in this section should render with a drop shadow',
+      initialValue: true,
+    }),
+    defineField({
       name: 'padding',
       title: 'Padding',
       type: 'string',
@@ -133,6 +219,20 @@ export default defineType({
         layout: 'radio',
       },
       initialValue: 'py-16',
+    }),
+    defineField({
+      name: 'page',
+      title: 'Page',
+      type: 'string',
+      description: 'Which page this section belongs to',
+      options: {
+        list: [
+          { title: 'About', value: 'about' },
+          { title: 'Home', value: 'home' },
+        ],
+        layout: 'radio',
+      },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'order',
