@@ -34,12 +34,19 @@ import {
 /**
  * Raw Sanity document types before mapping to domain models
  */
+function loc<T>(en: T, pt: T | undefined | null, locale: string): T {
+  return locale === "pt" && pt != null ? pt : en;
+}
+
 interface SanityProfile {
   _id: string;
   name: string;
   title: string;
+  title_pt?: string;
   bio: string;
+  bio_pt?: string;
   aboutBio?: string;
+  aboutBio_pt?: string;
   avatar?: {
     asset?: {
       url: string;
@@ -65,11 +72,14 @@ interface SanityProfile {
 interface SanityProject {
   _id: string;
   title: string;
+  title_pt?: string;
   subtitle?: string;
+  subtitle_pt?: string;
   slug: {
     current: string;
   };
   description: string;
+  description_pt?: string;
   mainImageSize?: string;
   mainImage?: {
     asset?: {
@@ -110,20 +120,25 @@ interface SanityProject {
     _type: string;
     _key: string;
     sectionLabel?: string;
+    sectionLabel_pt?: string;
     heading?: string;
     body?: string;
+    body_pt?: string;
     bullets?: unknown[];
+    bullets_pt?: unknown[];
     bgColor?: string;
     textColor?: string;
     subtitle?: string;
+    subtitle_pt?: string;
     caption?: string;
+    caption_pt?: string;
     columns?: number;
     metric?: string;
     label?: string;
     alt?: string;
     image?: { asset?: { url: string; lqip?: string }; alt?: string };
     images?: Array<{ asset?: { url: string; lqip?: string }; alt?: string }>;
-    cards?: Array<{ metric: string; label: string }>;
+    cards?: Array<{ metric: string; label: string; label_pt?: string }>;
     videoUrl?: string;
     externalUrl?: string;
     poster?: { asset?: { url: string; lqip?: string }; alt?: string };
@@ -146,7 +161,9 @@ interface SanitySection {
   _id: string;
   uid: { current: string };
   title: string;
+  title_pt?: string;
   subtitle?: string;
+  subtitle_pt?: string;
   content?: unknown[];
   background?: {
     type?: string;
@@ -184,7 +201,7 @@ const normalizeCategory = (category: string): Technology["category"] => {
  * Maps Sanity profile document to domain Profile model
  * Handles null/missing fields gracefully
  */
-function mapSanityProfileToModel(sanityProfile: SanityProfile): Profile {
+function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = "en"): Profile {
   const socialLinks: SocialLink[] = (sanityProfile.socialLinks || [])
     .filter((link): link is SocialLink => isSocialPlatform(link.platform))
     .map((link) => ({
@@ -194,9 +211,9 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile): Profile {
 
   return new Profile({
     name: sanityProfile.name,
-    title: sanityProfile.title,
-    bio: sanityProfile.bio,
-    aboutBio: sanityProfile.aboutBio || null,
+    title: loc(sanityProfile.title, sanityProfile.title_pt, locale),
+    bio: loc(sanityProfile.bio, sanityProfile.bio_pt, locale),
+    aboutBio: loc(sanityProfile.aboutBio || null, sanityProfile.aboutBio_pt, locale),
     avatar: sanityProfile.avatar
       ? {
           asset: {
@@ -225,7 +242,7 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile): Profile {
  * Maps Sanity project document to domain Project model
  * Handles null/missing fields gracefully
  */
-function mapSanityProjectToModel(sanityProject: SanityProject): Project {
+function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = "en"): Project {
   const technologies: Technology[] = (sanityProject.technologies || []).map((tech) => ({
     name: tech.name,
     category: normalizeCategory(tech.category),
@@ -233,11 +250,11 @@ function mapSanityProjectToModel(sanityProject: SanityProject): Project {
 
   return new Project({
     id: sanityProject._id,
-    title: sanityProject.title,
-    subtitle: sanityProject.subtitle || null,
+    title: loc(sanityProject.title, sanityProject.title_pt, locale),
+    subtitle: loc(sanityProject.subtitle || null, sanityProject.subtitle_pt, locale),
     slug: sanityProject.slug.current,
     mainImageSize: (sanityProject.mainImageSize as "small" | "medium" | "large" | "full") || null,
-    description: sanityProject.description,
+    description: loc(sanityProject.description, sanityProject.description_pt, locale),
     mainImage: sanityProject.mainImage
       ? {
           asset: {
@@ -270,19 +287,22 @@ function mapSanityProjectToModel(sanityProject: SanityProject): Project {
     contentSections: (sanityProject.contentSections || []).map((s) => ({
       _type: s._type,
       _key: s._key,
-      sectionLabel: s.sectionLabel,
+      sectionLabel: loc(s.sectionLabel, s.sectionLabel_pt, locale),
       heading: s.heading,
-      body: s.body,
-      bullets: s.bullets as string[] | undefined,
+      body: loc(s.body, s.body_pt, locale),
+      bullets: loc(s.bullets as string[] | undefined, s.bullets_pt as string[] | undefined, locale),
       bgColor: s.bgColor,
       textColor: s.textColor,
-      subtitle: s.subtitle,
-      caption: s.caption,
+      subtitle: loc(s.subtitle, s.subtitle_pt, locale),
+      caption: loc(s.caption, s.caption_pt, locale),
       columns: s.columns,
       alt: s.alt,
       image: s.image,
       images: s.images,
-      cards: s.cards,
+      cards: s.cards?.map((c) => ({
+        metric: c.metric,
+        label: loc(c.label, c.label_pt, locale),
+      })),
       videoUrl: s.videoUrl,
       externalUrl: s.externalUrl,
       poster: s.poster,
@@ -312,7 +332,7 @@ function normalizeOverlay(raw?: boolean): SectionOverlay {
   return raw ? "dark" : "none";
 }
 
-function mapSanitySectionToModel(doc: SanitySection): Section {
+function mapSanitySectionToModel(doc: SanitySection, locale: string = "en"): Section {
   let background: SectionBackground | null = null;
 
   if (doc.background?.type === "color" && doc.background.color) {
@@ -329,8 +349,8 @@ function mapSanitySectionToModel(doc: SanitySection): Section {
   return new Section({
     id: doc._id,
     uid: doc.uid.current,
-    title: doc.title,
-    subtitle: doc.subtitle || null,
+    title: loc(doc.title, doc.title_pt, locale),
+    subtitle: loc(doc.subtitle || null, doc.subtitle_pt, locale),
     content: doc.content || [],
     background,
     overlay: normalizeOverlay(doc.overlay),
@@ -355,7 +375,7 @@ export class SanityDataService implements IDataService {
    * Retrieve portfolio owner's profile
    * @returns Profile or null if not found or fetch fails
    */
-  async getProfile(): Promise<Profile | null> {
+  async getProfile(locale: string = "en"): Promise<Profile | null> {
     try {
       const client = getSanityClient();
       const sanityProfile = await client.fetch<SanityProfile | null>(
@@ -367,7 +387,7 @@ export class SanityDataService implements IDataService {
         return null;
       }
 
-      return mapSanityProfileToModel(sanityProfile);
+      return mapSanityProfileToModel(sanityProfile, locale);
     } catch (error) {
       console.error("SanityDataService: Failed to fetch profile", error);
       return null; // Graceful degradation
@@ -383,6 +403,7 @@ export class SanityDataService implements IDataService {
     featuredOnly?: boolean;
     limit?: number;
     sort?: "newest" | "oldest" | "featured";
+    locale?: string;
   }): Promise<Project[]> {
     try {
       const client = getSanityClient();
@@ -401,8 +422,9 @@ export class SanityDataService implements IDataService {
       }
 
       // Map to domain models
+      const l = options?.locale || "en";
       let projects = sanityProjects
-        .map((sp) => Project.tryCreate(mapSanityProjectToModel(sp)))
+        .map((sp) => Project.tryCreate(mapSanityProjectToModel(sp, l)))
         .filter((project): project is Project => project !== null);
 
       // Apply limit if specified
@@ -428,11 +450,12 @@ export class SanityDataService implements IDataService {
    * @param limit Max number of projects to return (default: 3)
    * @returns Array of featured Project objects
    */
-  async getFeaturedProjects(limit: number = 3): Promise<Project[]> {
+  async getFeaturedProjects(limit: number = 3, locale: string = "en"): Promise<Project[]> {
     return this.getProjects({
       featuredOnly: true,
       limit,
       sort: "newest",
+      locale,
     });
   }
 
@@ -441,7 +464,7 @@ export class SanityDataService implements IDataService {
    * @param slug Project slug (URL-friendly identifier)
    * @returns Project or null if not found
    */
-  async getProjectBySlug(slug: string): Promise<Project | null> {
+  async getProjectBySlug(slug: string, locale: string = "en"): Promise<Project | null> {
     try {
       if (!slug || typeof slug !== "string") {
         console.warn("SanityDataService: Invalid slug provided");
@@ -459,7 +482,7 @@ export class SanityDataService implements IDataService {
         return null;
       }
 
-      return mapSanityProjectToModel(sanityProject);
+      return mapSanityProjectToModel(sanityProject, locale);
     } catch (error) {
       console.error(
         `SanityDataService: Failed to fetch project by slug "${slug}"`,
@@ -495,7 +518,7 @@ export class SanityDataService implements IDataService {
     }
   }
 
-  async getSections(uid?: string): Promise<Section[]> {
+  async getSections(uid?: string, locale: string = "en"): Promise<Section[]> {
     try {
       const client = getSanityClient();
       const sanitySections = await client.fetch<SanitySection[]>(SECTIONS_QUERY);
@@ -505,7 +528,7 @@ export class SanityDataService implements IDataService {
       }
 
       let sections = sanitySections
-        .map((doc) => Section.tryCreate(mapSanitySectionToModel(doc)))
+        .map((doc) => Section.tryCreate(mapSanitySectionToModel(doc, locale)))
         .filter((s): s is Section => s !== null);
 
       if (uid) {

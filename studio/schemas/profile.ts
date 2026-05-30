@@ -19,6 +19,12 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'title_pt',
+      title: 'Professional Title (PT)',
+      type: 'string',
+      description: 'Portuguese version. Falls back to English if empty.',
+    }),
+    defineField({
       name: 'bio',
       title: 'Bio (Hero)',
       type: 'text',
@@ -27,11 +33,25 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'bio_pt',
+      title: 'Bio (Hero) (PT)',
+      type: 'text',
+      rows: 4,
+      description: 'Portuguese version. Falls back to English if empty.',
+    }),
+    defineField({
       name: 'aboutBio',
       title: 'About Me (Long Bio)',
       type: 'text',
       rows: 8,
       description: 'Longer bio displayed in the About Me section. If empty, falls back to the hero bio.',
+    }),
+    defineField({
+      name: 'aboutBio_pt',
+      title: 'About Me (Long Bio) (PT)',
+      type: 'text',
+      rows: 8,
+      description: 'Portuguese version. Falls back to English if empty.',
     }),
     defineField({
       name: 'avatar',

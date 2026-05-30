@@ -13,18 +13,25 @@ export interface HomePageSection {
   _type: string;
   _key: string;
   greeting?: string;
+  greeting_pt?: string;
   ctaPrimaryLabel?: string;
+  ctaPrimaryLabel_pt?: string;
   ctaPrimaryHref?: string;
   ctaSecondaryLabel?: string;
+  ctaSecondaryLabel_pt?: string;
   ctaSecondaryHref?: string;
   heading?: string;
+  heading_pt?: string;
   body?: string;
+  body_pt?: string;
   showResume?: boolean;
   showSkills?: boolean;
   maxProjects?: number;
   availabilityText?: string;
+  availabilityText_pt?: string;
   showForm?: boolean;
   subtitle?: string;
+  subtitle_pt?: string;
   videoUrl?: string;
   externalUrl?: string;
   poster?: {
@@ -54,39 +61,20 @@ export interface IDataService {
    * @returns Profile or null if not found/fetch fails
    * @throws FetchError only in critical failures
    */
-  getProfile(): Promise<Profile | null>;
+  getProfile(locale?: string): Promise<Profile | null>;
 
-  /**
-   * Retrieve all published projects.
-   * Optionally filtered and sorted.
-   * @param options - Query options (featured only, limit, sort)
-   * @returns Array of Project objects (empty if none found)
-   * @throws FetchError only in critical failures
-   */
   getProjects(options?: {
     featuredOnly?: boolean;
     limit?: number;
     sort?: "newest" | "oldest" | "featured";
+    locale?: string;
   }): Promise<Project[]>;
 
-  /**
-   * Retrieve featured projects (subset of getProjects).
-   * Used for homepage display.
-   * @param limit - Max number of projects to return (default: 3)
-   * @returns Array of featured Project objects
-   * @throws FetchError only in critical failures
-   */
-  getFeaturedProjects(limit?: number): Promise<Project[]>;
+  getFeaturedProjects(limit?: number, locale?: string): Promise<Project[]>;
 
-  /**
-   * Retrieve a single project by slug.
-   * @param slug - Project slug (URL-friendly identifier)
-   * @returns Project or null if not found
-   * @throws FetchError only in critical failures
-   */
-  getProjectBySlug(slug: string): Promise<Project | null>;
+  getProjectBySlug(slug: string, locale?: string): Promise<Project | null>;
 
-  getSections(uid?: string): Promise<Section[]>;
+  getSections(uid?: string, locale?: string): Promise<Section[]>;
 
   getHomePage(): Promise<HomePage | null>;
 

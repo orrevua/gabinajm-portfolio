@@ -12,6 +12,12 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'title_pt',
+      title: 'Title (PT)',
+      type: 'string',
+      description: 'Portuguese version. Falls back to English if empty.',
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -25,11 +31,24 @@ export default defineType({
       description: 'Displayed below the title in gradient color (e.g. "Quinto Andar")',
     }),
     defineField({
+      name: 'subtitle_pt',
+      title: 'Subtitle (PT)',
+      type: 'string',
+      description: 'Portuguese version. Falls back to English if empty.',
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
       rows: 5,
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'description_pt',
+      title: 'Description (PT)',
+      type: 'text',
+      rows: 5,
+      description: 'Portuguese version. Falls back to English if empty.',
     }),
     defineField({
       name: 'mainImage',
@@ -130,6 +149,11 @@ export default defineType({
               description: 'Small colored label above the heading (e.g. "The Challenge")',
             }),
             defineField({
+              name: 'sectionLabel_pt',
+              title: 'Section Label (PT)',
+              type: 'string',
+            }),
+            defineField({
               name: 'heading',
               title: 'Heading',
               type: 'string',
@@ -141,8 +165,20 @@ export default defineType({
               rows: 8,
             }),
             defineField({
+              name: 'body_pt',
+              title: 'Body (PT)',
+              type: 'text',
+              rows: 8,
+            }),
+            defineField({
               name: 'bullets',
               title: 'Bullet Points',
+              type: 'array',
+              of: [{ type: 'string' }],
+            }),
+            defineField({
+              name: 'bullets_pt',
+              title: 'Bullet Points (PT)',
               type: 'array',
               of: [{ type: 'string' }],
             }),
@@ -180,6 +216,11 @@ export default defineType({
             defineField({
               name: 'caption',
               title: 'Caption',
+              type: 'string',
+            }),
+            defineField({
+              name: 'caption_pt',
+              title: 'Caption (PT)',
               type: 'string',
             }),
           ],
@@ -259,6 +300,11 @@ export default defineType({
                       type: 'string',
                       description: 'e.g. "increase in conversion"',
                     }),
+                    defineField({
+                      name: 'label_pt',
+                      title: 'Label (PT)',
+                      type: 'string',
+                    }),
                   ],
                   preview: {
                     select: { title: 'metric', subtitle: 'label' },
@@ -301,6 +347,7 @@ export default defineType({
               ],
             }),
             defineField({ name: 'caption', title: 'Caption', type: 'string' }),
+            defineField({ name: 'caption_pt', title: 'Caption (PT)', type: 'string' }),
             defineField({ name: 'autoplay', title: 'Autoplay', type: 'boolean', initialValue: false }),
             defineField({ name: 'loop', title: 'Loop', type: 'boolean', initialValue: false }),
             defineField({ name: 'muted', title: 'Muted', type: 'boolean', initialValue: true }),
@@ -329,8 +376,19 @@ export default defineType({
               type: 'string',
             }),
             defineField({
+              name: 'sectionLabel_pt',
+              title: 'Section Label (PT)',
+              type: 'string',
+            }),
+            defineField({
               name: 'subtitle',
               title: 'Subtitle',
+              type: 'text',
+              rows: 3,
+            }),
+            defineField({
+              name: 'subtitle_pt',
+              title: 'Subtitle (PT)',
               type: 'text',
               rows: 3,
             }),
@@ -363,7 +421,9 @@ export default defineType({
                   type: 'object',
                   fields: [
                     defineField({ name: 'title', title: 'Title', type: 'string' }),
+                    defineField({ name: 'title_pt', title: 'Title (PT)', type: 'string' }),
                     defineField({ name: 'text', title: 'Text', type: 'text', rows: 3 }),
+                    defineField({ name: 'text_pt', title: 'Text (PT)', type: 'text', rows: 3 }),
                   ],
                   preview: { select: { title: 'title' } },
                 },

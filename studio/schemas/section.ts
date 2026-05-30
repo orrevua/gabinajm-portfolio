@@ -12,6 +12,12 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'title_pt',
+      title: 'Title (PT)',
+      type: 'string',
+      description: 'Portuguese version. Falls back to English if empty.',
+    }),
+    defineField({
       name: 'uid',
       title: 'Unique ID',
       type: 'slug',
@@ -22,6 +28,11 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Subtitle',
+      type: 'string',
+    }),
+    defineField({
+      name: 'subtitle_pt',
+      title: 'Subtitle (PT)',
       type: 'string',
     }),
     defineField({
