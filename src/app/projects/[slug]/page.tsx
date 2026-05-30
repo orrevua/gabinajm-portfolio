@@ -11,6 +11,8 @@ import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
 import { NextProjectCard } from "@/src/adapters/routes/components/NextProjectCard";
 import { BackToProjectsLink } from "@/src/adapters/routes/components/BackToProjectsLink";
 import type { ContentSection } from "@/src/domain/types";
+import type { Project } from "@/src/domain/models/Project";
+import type { Profile } from "@/src/domain/models/Profile";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -314,163 +316,171 @@ function renderSection(section: ContentSection) {
 export default async function ProjectDetailPage(props: PageProps) {
   const params = await props.params;
   const cookieStore = await cookies();
+  const { locale, t } = await getServerTranslations();
+
+  let project: Project | null = null;
+  let profile: Profile | null = null;
+  let allProjects: Project[] = [];
+  let fetchError = false;
 
   try {
     const dataService = await getSanityDataService();
-    const [project, profile, allProjects, { t }] = await Promise.all([
-      dataService.getProjectBySlug(params.slug),
-      dataService.getProfile(),
-      dataService.getProjects(),
-      getServerTranslations(),
+    [project, profile, allProjects] = await Promise.all([
+      dataService.getProjectBySlug(params.slug, locale),
+      dataService.getProfile(locale),
+      dataService.getProjects({ locale }),
     ]);
-
-    if (!project) {
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center container-max">
-            <h1 className="text-heading font-serif font-bold text-[#0A0A0A] mb-6">
-              {t.projects.notFound}
-            </h1>
-            <p className="text-muted text-sm uppercase tracking-widest mb-8">
-              {t.projects.notFoundDescription}
-            </p>
-            <Link
-              href="/"
-              className="text-[#0A0A0A] uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
-            >
-              {t.projects.viewAllProjects}
-            </Link>
-          </div>
-        </div>
-      );
-    }
-
-    if (project.isProtected) {
-      const accessCookie = cookieStore.get(`project_access_${params.slug}`);
-      if (!accessCookie || !verifyCookie(params.slug, accessCookie.value)) {
-        return <PasswordGate slug={params.slug} projectTitle={project.title} />;
-      }
-    }
-
-    const technologies = project.getTechnologyNames();
-    const contentSections = project.contentSections;
-    const socialLinks = profile?.getSocialLinks?.() || profile?.socialLinks || [];
-    const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
-
-    const year = project.publishedAt.getFullYear();
-
-    return (
-      <article>
-        {/* Back link + header */}
-        <div className="max-w-[1158px] mx-auto px-5 pt-28 md:pt-36">
-          <BackToProjectsLink />
-
-          <div className="max-w-[924px]">
-            {technologies.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-8">
-                {technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-[#0A0A0A]/80"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold leading-[1.15] text-[#0A0A0A] mb-1">
-              {project.title}
-            </h1>
-            {project.subtitle && (
-              <p className="text-[clamp(28px,3.5vw,42px)] font-extrabold leading-[1.15] bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent mb-6">
-                {project.subtitle}
-              </p>
-            )}
-
-            <p className="text-base leading-[1.7] text-[#0A0A0A]/70 mb-6 max-w-3xl">
-              {project.description}
-            </p>
-
-            <div className="flex items-center gap-2 text-sm text-[#0A0A0A]/50 mb-16">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-              {year}
-            </div>
-          </div>
-        </div>
-
-        {/* Content sections */}
-        {contentSections.map((section: ContentSection) => renderSection(section))}
-
-        {/* Links */}
-        {(project.link || project.repository) && (
-          <div className="max-w-[924px] mx-auto px-6 md:px-12 py-12 border-t border-border">
-            <div className="flex flex-col sm:flex-row gap-4">
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 rounded-pill border border-foreground text-sm uppercase tracking-widest font-semibold text-[#0A0A0A] hover:bg-foreground hover:text-background transition-colors duration-300"
-                >
-                  {t.projects.viewProject} &rarr;
-                </a>
-              )}
-              {project.repository && (
-                <a
-                  href={project.repository}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 rounded-pill border border-border text-sm uppercase tracking-widest font-semibold text-muted hover:border-foreground hover:text-[#0A0A0A] transition-colors duration-300"
-                >
-                  {t.projects.sourceCode}
-                </a>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Next Project */}
-        {(() => {
-          const idx = allProjects.findIndex((p) => p.slug === params.slug);
-          const next = idx >= 0 ? allProjects[(idx + 1) % allProjects.length] : null;
-          return next && next.slug !== params.slug ? (
-            <NextProjectCard title={next.title} description={next.description} slug={next.slug} />
-          ) : null;
-        })()}
-
-        {/* Contact */}
-        <ScrollReveal>
-          <ContactSection
-            email={email}
-            socialLinks={socialLinks.filter((l) => l.platform !== "email")}
-          />
-        </ScrollReveal>
-      </article>
-    );
   } catch {
-    const { t: errorT } = await getServerTranslations();
+    fetchError = true;
+  }
+
+  if (fetchError) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center container-max">
           <h1 className="text-heading font-serif font-bold text-[#0A0A0A] mb-6">
-            {errorT.error.unableToLoadProject}
+            {t.error.unableToLoadProject}
           </h1>
           <p className="text-muted text-sm uppercase tracking-widest mb-8">
-            {errorT.error.tryAgain}
+            {t.error.tryAgain}
           </p>
           <Link
             href="/"
             className="text-[#0A0A0A] uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
           >
-            {errorT.projects.viewAllProjects}
+            {t.projects.viewAllProjects}
           </Link>
         </div>
       </div>
     );
   }
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center container-max">
+          <h1 className="text-heading font-serif font-bold text-[#0A0A0A] mb-6">
+            {t.projects.notFound}
+          </h1>
+          <p className="text-muted text-sm uppercase tracking-widest mb-8">
+            {t.projects.notFoundDescription}
+          </p>
+          <Link
+            href="/"
+            className="text-[#0A0A0A] uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
+          >
+            {t.projects.viewAllProjects}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (project.isProtected) {
+    const accessCookie = cookieStore.get(`project_access_${params.slug}`);
+    if (!accessCookie || !verifyCookie(params.slug, accessCookie.value)) {
+      return <PasswordGate slug={params.slug} projectTitle={project.title} />;
+    }
+  }
+
+  const technologies = project.getTechnologyNames();
+  const contentSections = project.contentSections;
+  const socialLinks = profile?.getSocialLinks?.() || profile?.socialLinks || [];
+  const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
+
+  const year = project.publishedAt.getFullYear();
+
+  return (
+    <article>
+      {/* Back link + header */}
+      <div className="max-w-[1158px] mx-auto px-5 pt-28 md:pt-36">
+        <BackToProjectsLink />
+
+        <div className="max-w-[924px]">
+          {technologies.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-8">
+              {technologies.map((tech) => (
+                <span
+                  key={tech}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-[#0A0A0A]/80"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold leading-[1.15] text-[#0A0A0A] mb-1">
+            {project.title}
+          </h1>
+          {project.subtitle && (
+            <p className="text-[clamp(28px,3.5vw,42px)] font-extrabold leading-[1.15] bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent mb-6">
+              {project.subtitle}
+            </p>
+          )}
+
+          <p className="text-base leading-[1.7] text-[#0A0A0A]/70 mb-6 max-w-3xl">
+            {project.description}
+          </p>
+
+          <div className="flex items-center gap-2 text-sm text-[#0A0A0A]/50 mb-16">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            {year}
+          </div>
+        </div>
+      </div>
+
+      {/* Content sections */}
+      {contentSections.map((section: ContentSection) => renderSection(section))}
+
+      {/* Links */}
+      {(project.link || project.repository) && (
+        <div className="max-w-[924px] mx-auto px-6 md:px-12 py-12 border-t border-border">
+          <div className="flex flex-col sm:flex-row gap-4">
+            {project.link && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 rounded-pill border border-foreground text-sm uppercase tracking-widest font-semibold text-[#0A0A0A] hover:bg-foreground hover:text-background transition-colors duration-300"
+              >
+                {t.projects.viewProject} &rarr;
+              </a>
+            )}
+            {project.repository && (
+              <a
+                href={project.repository}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 rounded-pill border border-border text-sm uppercase tracking-widest font-semibold text-muted hover:border-foreground hover:text-[#0A0A0A] transition-colors duration-300"
+              >
+                {t.projects.sourceCode}
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Next Project */}
+      {(() => {
+        const idx = allProjects.findIndex((p) => p.slug === params.slug);
+        const next = idx >= 0 ? allProjects[(idx + 1) % allProjects.length] : null;
+        return next && next.slug !== params.slug ? (
+          <NextProjectCard title={next.title} description={next.description} slug={next.slug} />
+        ) : null;
+      })()}
+
+      {/* Contact */}
+      <ScrollReveal>
+        <ContactSection
+          email={email}
+          socialLinks={socialLinks.filter((l) => l.platform !== "email")}
+        />
+      </ScrollReveal>
+    </article>
+  );
 }
 
 ProjectDetailPage.displayName = "ProjectDetailPage";

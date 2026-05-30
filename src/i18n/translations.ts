@@ -21,16 +21,21 @@ export const translations = {
     },
     about: {
       heading: "About Me",
+      subtitle: "A product designer passionate about crafting accessible and human-centered experiences.",
+      bio: [
+        "Hi, I'm Gabi — a Product Designer with 10+ years of experience creating accessible, user-centered digital experiences. Specialized in UX/UI and accessibility, I transform complex challenges into simple and intuitive solutions.",
+        "I've had the privilege of working at companies like Itaú, C6 Bank, and QuintoAndar, as well as international projects during my time in Portugal. My approach is deeply collaborative — I believe the best products emerge when designers, developers, and users work closely together.",
+        "I'm passionate about research and always looking for ways to understand the real needs behind every project. When I'm not designing, you'll probably find me spending time with my dogs, reading a good book, watching Bridgerton, or adding to my Sylvanian Families collection.",
+      ],
       showMore: "Show more",
       resume: "My resume",
       valuesHeading: "My values",
       values: [
-        { title: "Accessibility first", body: "Design is not complete if it is not accessible to everyone. Every design decision should consider diverse users and their needs." },
+        { title: "Accessibility first", body: "Design is not complete if it is not accessible to everyone. Every design decision considers inclusion." },
         { title: "Intentional simplicity", body: "Remove unnecessary complexity to create intuitive and enjoyable experiences." },
         { title: "Continuous collaboration", body: "The best solutions emerge when designers, developers, and users work together." },
       ],
       skillsHeading: "Skills & Tools",
-      experienceHeading: "Experience",
     },
     projects: {
       heading: "My projects",
@@ -118,16 +123,21 @@ export const translations = {
     },
     about: {
       heading: "Sobre Mim",
+      subtitle: "Uma product designer apaixonada por criar experiências acessíveis e centradas no ser humano.",
+      bio: [
+        "Olá, eu sou a Gabi — Product Designer com mais de 10 anos de experiência criando experiências digitais acessíveis e centradas no usuário. Especializada em UX/UI e acessibilidade, transformo desafios complexos em soluções simples e intuitivas.",
+        "Tive o privilégio de trabalhar em empresas como Itaú, C6 Bank e QuintoAndar, além de projetos internacionais durante meu tempo em Portugal. Minha abordagem é profundamente colaborativa — acredito que os melhores produtos surgem quando designers, desenvolvedores e usuários trabalham juntos.",
+        "Sou apaixonada por pesquisa e estou sempre buscando formas de entender as reais necessidades por trás de cada projeto. Quando não estou projetando, você provavelmente vai me encontrar com meus cachorros, lendo um bom livro, assistindo Bridgerton ou aumentando minha coleção de Sylvanian Families.",
+      ],
       showMore: "Ver mais",
       resume: "Meu currículo",
       valuesHeading: "Meus valores",
       values: [
-        { title: "Acessibilidade em primeiro lugar", body: "O design não está completo se não for acessível a todos. Cada decisão de design deve considerar usuários diversos e suas necessidades." },
+        { title: "Acessibilidade em primeiro lugar", body: "O design não está completo se não for acessível a todos. Cada decisão de design considera a inclusão." },
         { title: "Simplicidade intencional", body: "Remover complexidade desnecessária para criar experiências intuitivas e agradáveis." },
         { title: "Colaboração contínua", body: "As melhores soluções surgem quando designers, desenvolvedores e usuários trabalham juntos." },
       ],
       skillsHeading: "Habilidades & Ferramentas",
-      experienceHeading: "Experiência",
     },
     projects: {
       heading: "Meus projetos",

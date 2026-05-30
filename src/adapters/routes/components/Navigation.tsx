@@ -8,10 +8,14 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export interface NavigationProps {
   brandName?: string;
+  resumeUrl?: string | null;
+  pastExperience?: Array<{ name: string; logo: { url: string; alt: string } }>;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({
   brandName = "Gabinajm",
+  resumeUrl,
+  pastExperience = [],
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -23,9 +27,8 @@ export const Navigation: React.FC<NavigationProps> = ({
   ];
   const ctaLink = { href: "#contact", label: t.nav.contact };
 
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- close mobile menu on route change
+  useEffect(() => { setIsOpen(false); }, [pathname]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -119,6 +122,32 @@ export const Navigation: React.FC<NavigationProps> = ({
           >
             {ctaLink.label}
           </Link>
+
+          {resumeUrl && (
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg font-semibold text-[#0A0A0A]/70 hover:text-accent-pink transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {t.about.resume}
+            </a>
+          )}
+
+          {pastExperience.length > 0 && (
+            <div className="flex items-center gap-6 pt-4">
+              {pastExperience.map((company) => (
+                <img
+                  key={company.name}
+                  src={company.logo.url}
+                  alt={company.name}
+                  className="h-8 w-auto opacity-40 grayscale"
+                />
+              ))}
+            </div>
+          )}
+
           <LanguageSwitcher />
         </div>
       )}

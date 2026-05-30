@@ -6,6 +6,7 @@ import { TranslatedFooter } from "@/src/adapters/routes/components/TranslatedFoo
 import { SkipToContent } from "@/src/adapters/routes/components/SkipToContent";
 import { LocaleProvider } from "@/src/i18n";
 import type { Locale } from "@/src/i18n";
+import { getSanityDataService } from "@/src/services";
 import "@/src/styles/globals.css";
 
 const inter = Inter({
@@ -65,6 +66,23 @@ export default async function RootLayout({
   const localeCookie = cookieStore.get("locale")?.value;
   const locale: Locale = localeCookie === "pt" ? "pt" : "en";
 
+  let resumeUrl: string | null = null;
+  let pastExperience: Array<{ name: string; logo: { url: string; alt: string } }> = [];
+
+  try {
+    const dataService = await getSanityDataService();
+    const profile = await dataService.getProfile(locale);
+    if (profile) {
+      resumeUrl = profile.getResumeUrl?.() ?? profile.resumeUrl;
+      pastExperience = profile.pastExperience.map((c) => ({
+        name: c.name,
+        logo: { url: c.logo.url, alt: c.logo.alt },
+      }));
+    }
+  } catch {
+    // Profile data is optional for navigation
+  }
+
   return (
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
@@ -89,7 +107,7 @@ export default async function RootLayout({
         />
         <LocaleProvider initialLocale={locale}>
           <SkipToContent />
-          <Navigation brandName="Gabinajm" />
+          <Navigation brandName="Gabinajm" resumeUrl={resumeUrl} pastExperience={pastExperience} />
           <main id="main-content" className="flex-1">{children}</main>
           <TranslatedFooter />
         </LocaleProvider>
