@@ -36,6 +36,13 @@ describe("SanityDataService", () => {
       },
       alt: "Profile avatar",
     },
+    aboutHeroImage: {
+      asset: {
+        url: "https://cdn.sanity.io/about-hero.jpg",
+        lqip: "data:image/jpeg;base64,...",
+      },
+      alt: "About hero image",
+    },
     socialLinks: [
       { platform: "github", url: "https://github.com/gabi" },
       { platform: "linkedin", url: "https://linkedin.com/in/gabi" },
@@ -103,6 +110,7 @@ describe("SanityDataService", () => {
       expect(profile).toBeInstanceOf(Profile);
       expect(profile?.name).toBe("Gabi Silva");
       expect(profile?.title).toBe("Full-Stack Engineer");
+      expect(profile?.aboutHeroImage?.asset.url).toBe("https://cdn.sanity.io/about-hero.jpg");
     });
 
     it("should return null if profile not found", async () => {

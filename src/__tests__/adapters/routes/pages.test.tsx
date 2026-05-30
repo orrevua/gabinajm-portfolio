@@ -78,7 +78,7 @@ describe("ProjectDetailPage", () => {
  * AboutPage Tests
  */
 describe("AboutPage", () => {
-  it("should render profile header", async () => {
+  it("should render the about hero header", async () => {
     expect(true).toBe(true);
   });
 

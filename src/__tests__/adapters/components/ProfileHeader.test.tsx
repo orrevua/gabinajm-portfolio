@@ -37,6 +37,14 @@ describe("ProfileHeader Component", () => {
       },
       alt: "Jane Doe avatar",
     },
+    aboutHeroImage: {
+      asset: {
+        url: "https://example.com/about-hero.jpg",
+        alt: "Jane Doe about hero",
+        lqip: "data:image/jpeg;base64,...",
+      },
+      alt: "Jane Doe about hero",
+    },
     socialLinks: [
       { platform: "github", url: "https://github.com/jane" },
       { platform: "linkedin", url: "https://linkedin.com/in/jane" },
@@ -52,22 +60,40 @@ describe("ProfileHeader Component", () => {
   };
 
   describe("rendering", () => {
-    it("should render header with profile information", () => {
+    it("should render header with about heading and profession pill", () => {
       render(<ProfileHeader profile={mockProfile} />);
-      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Jane Doe");
+      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("About Me");
+      expect(screen.getByText("Full-Stack Engineer")).toBeInTheDocument();
+      expect(screen.queryByText("Jane Doe")).not.toBeInTheDocument();
     });
 
-    it("should render profile image when available", () => {
+    it("should render the dedicated about hero image when available", () => {
       render(<ProfileHeader profile={mockProfile} />);
       const images = screen.getAllByTestId("profile-image");
-      const avatar = images.find((img) => img.getAttribute("src") === "https://example.com/avatar.jpg");
-      expect(avatar).toBeDefined();
-      expect(avatar).toHaveAttribute("alt", "Jane Doe avatar");
+      const aboutHeroImage = images.find((img) => img.getAttribute("src") === "https://example.com/about-hero.jpg");
+      expect(aboutHeroImage).toBeDefined();
+      expect(aboutHeroImage).toHaveAttribute("alt", "Jane Doe about hero");
     });
 
     it("should render bio", () => {
       render(<ProfileHeader profile={mockProfile} />);
       expect(screen.getByText("Passionate about elegant solutions")).toBeInTheDocument();
+    });
+
+    it("should fall back to the avatar image when about hero image is missing", () => {
+      render(
+        <ProfileHeader
+          profile={{
+            ...mockProfile,
+            aboutHeroImage: null,
+          }}
+        />
+      );
+
+      const images = screen.getAllByTestId("profile-image");
+      const avatar = images.find((img) => img.getAttribute("src") === "https://example.com/avatar.jpg");
+      expect(avatar).toBeDefined();
+      expect(avatar).toHaveAttribute("alt", "Jane Doe avatar");
     });
 
     it("should not render bio section when empty", () => {
@@ -105,7 +131,7 @@ describe("ProfileHeader Component", () => {
     it("should have proper heading hierarchy", () => {
       render(<ProfileHeader profile={mockProfile} />);
       const h1 = screen.getByRole("heading", { level: 1 });
-      expect(h1).toHaveTextContent("Jane Doe");
+      expect(h1).toHaveTextContent("About Me");
     });
 
     it("should have aria-label on profile section", () => {

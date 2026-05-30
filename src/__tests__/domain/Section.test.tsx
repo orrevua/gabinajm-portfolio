@@ -12,6 +12,7 @@ describe("Section Model", () => {
       title: "About Me",
       subtitle: "Get to know me",
       content: [{ _type: "block", children: [] }],
+      contentBlocks: [],
       background: null,
       overlay: "none",
       padding: "medium",
