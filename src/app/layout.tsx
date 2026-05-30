@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/src/adapters/routes/components/Navigation";
-import { TranslatedFooter } from "@/src/adapters/routes/components/TranslatedFooter";
 import { SkipToContent } from "@/src/adapters/routes/components/SkipToContent";
 import { LocaleProvider } from "@/src/i18n";
 import type { Locale } from "@/src/i18n";
+import { translations } from "@/src/i18n/translations";
 import { getSanityDataService } from "@/src/services";
 import "@/src/styles/globals.css";
 
@@ -111,7 +111,10 @@ export default async function RootLayout({
           <SkipToContent />
           <Navigation brandName="Gabinajm" resumeUrl={resumeUrl} pastExperience={pastExperience} />
           <main id="main-content" className="flex-1">{children}</main>
-          <TranslatedFooter />
+          <footer className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted">
+            <p>{translations[locale].footer.copyright.replace("{year}", String(new Date().getFullYear()))}</p>
+            <p>{translations[locale].footer.tagline}</p>
+          </footer>
         </LocaleProvider>
       </body>
     </html>
