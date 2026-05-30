@@ -4,7 +4,6 @@ import { SectionBlock } from "@/src/adapters/routes/components/SectionBlock";
 import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
 import { ValuesSection } from "@/src/adapters/routes/components/ValuesSection";
-import { TranslatedHeading } from "@/src/adapters/routes/components/TranslatedHeading";
 import { getSanityDataService } from "@/src/services";
 import { getServerTranslations } from "@/src/i18n/serverLocale";
 import type { Profile } from "@/src/domain/models/Profile";
@@ -21,6 +20,16 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+const SKILL_CHIPS = [
+  { label: "Design thinking", color: "#fee8db" },
+  { label: "Accessibility", color: "#fce7f3" },
+  { label: "UX/UI", color: "#f3e8ff" },
+  { label: "Illustration", color: "#dbeafe" },
+  { label: "Design system", color: "#fedcdc" },
+  { label: "Research", color: "#d2fcd8" },
+  { label: "AI", color: "#f1f6be" },
+];
 
 export default async function AboutPage() {
   const { locale, t } = await getServerTranslations();
@@ -81,24 +90,22 @@ export default async function AboutPage() {
     );
   }
 
-  const technologies = profile.technologies || [];
   const socialLinks = profile.getSocialLinks?.() || profile.socialLinks || [];
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
+  const resumeUrl = profile.getResumeUrl?.() ?? profile.resumeUrl;
 
   return (
     <>
       <ProfileHeader profile={profile} profileUnavailableText={t.error.profileUnavailable} />
 
       <section className="container-max pb-24 md:pb-32">
-        <ScrollReveal variant="clip">
-          <div className="max-w-3xl mb-20 md:mb-28">
-            <h2 className="text-heading font-serif font-bold text-[#0A0A0A] mb-4 clip-target">
-              {t.about.heading}
+        {/* Bio card */}
+        <ScrollReveal>
+          <div className="bg-white rounded-3xl p-8 md:p-12 mb-20 md:mb-28 shadow-[0_4px_32px_rgba(0,0,0,0.08)]">
+            <h2 className="text-[clamp(28px,4vw,36px)] font-bold leading-tight mb-8 bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent">
+              {t.about.bioHeading}
             </h2>
-            <p className="text-lg text-[#0A0A0A]/60 mb-8">
-              {t.about.subtitle}
-            </p>
-            <div className="space-y-6 text-lg md:text-xl text-[#0A0A0A]/80 leading-relaxed">
+            <div className="space-y-6 text-lg md:text-xl text-[#0A0A0A]/70 leading-relaxed mb-10">
               {profile.aboutBio
                 ? profile.aboutBio.split("\n\n").map((paragraph, i) => (
                     <p key={i}>{paragraph}</p>
@@ -108,35 +115,38 @@ export default async function AboutPage() {
                   ))
               }
             </div>
+
+            <div className="flex flex-wrap gap-3 mb-10">
+              {SKILL_CHIPS.map((chip) => (
+                <span
+                  key={chip.label}
+                  className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full"
+                  style={{ backgroundColor: chip.color }}
+                >
+                  {chip.label}
+                </span>
+              ))}
+            </div>
+
+            {resumeUrl && (
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#0A0A0A] bg-white border-2 border-[#0A0A0A]/10 rounded-full px-6 py-4 shadow-[0_2px_8px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] hover:border-[#0A0A0A]/30 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-all duration-300"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                {t.about.resume}
+              </a>
+            )}
           </div>
         </ScrollReveal>
 
         <ScrollReveal>
           <ValuesSection />
         </ScrollReveal>
-
-        {technologies.length > 0 && (
-          <>
-          <ScrollReveal variant="line" as="hr" className="border-0 h-px bg-border mb-0" />
-          <ScrollReveal>
-            <div className="py-16 md:py-20 mb-0">
-              <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 md:gap-12 items-start">
-                <TranslatedHeading path="about.skillsHeading" className="uppercase tracking-widest text-sm text-accent-pink font-extrabold md:sticky md:top-28" />
-                <div className="flex flex-wrap gap-3">
-                  {technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-[11px] font-sans text-[#0A0A0A] uppercase tracking-widest border border-border rounded-pill px-4 py-2 hover:bg-[#0A0A0A] hover:text-background transition-colors duration-300"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-        </>
-        )}
       </section>
 
       {sections.map((section) => (
