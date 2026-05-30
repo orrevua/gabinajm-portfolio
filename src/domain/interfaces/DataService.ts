@@ -47,6 +47,23 @@ export interface HomePage {
   sections: HomePageSection[];
 }
 
+export interface AboutPageValue {
+  title: string;
+  description: string;
+}
+
+export interface AboutPageSkillChip {
+  label: string;
+  color: string;
+}
+
+export interface AboutPage {
+  bioHeading: string | null;
+  valuesHeading: string | null;
+  values: AboutPageValue[];
+  skillChips: AboutPageSkillChip[];
+}
+
 /**
  * Core data access service interface.
  * Implementations must handle:
@@ -76,7 +93,11 @@ export interface IDataService {
 
   getSections(uid?: string, locale?: string): Promise<Section[]>;
 
+  getSectionsByPage(page: string, locale?: string): Promise<Section[]>;
+
   getHomePage(): Promise<HomePage | null>;
+
+  getAboutPage(locale?: string): Promise<AboutPage | null>;
 
   getAllProjectSlugs(): Promise<string[]>;
 
@@ -117,7 +138,15 @@ export class NullDataService implements IDataService {
     return [];
   }
 
+  async getSectionsByPage(_page: string): Promise<Section[]> {
+    return [];
+  }
+
   async getHomePage(): Promise<HomePage | null> {
+    return null;
+  }
+
+  async getAboutPage(): Promise<AboutPage | null> {
     return null;
   }
 

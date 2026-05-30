@@ -4,7 +4,7 @@
  * Handles GROQ queries, data mapping to domain models, and error handling
  */
 
-import { IDataService, type HomePage, type HomePageSection } from "@domain/interfaces/DataService";
+import { IDataService, type HomePage, type HomePageSection, type AboutPage } from "@domain/interfaces/DataService";
 import {
   Profile,
   Project,
@@ -15,6 +15,7 @@ import {
   type SectionBackground,
   type SectionPadding,
   type SectionOverlay,
+  type PortableTextBlock,
 } from "@domain";
 import {
   getSanityClient,
@@ -28,7 +29,9 @@ import {
   PROJECT_BY_SLUG_QUERY,
   ALL_PROJECT_SLUGS_QUERY,
   SECTIONS_QUERY,
+  SECTIONS_BY_PAGE_QUERY,
   HOME_PAGE_QUERY,
+  ABOUT_PAGE_QUERY,
 } from "./sanityQueries";
 
 /**
@@ -45,9 +48,16 @@ interface SanityProfile {
   title_pt?: string;
   bio: string;
   bio_pt?: string;
-  aboutBio?: string;
-  aboutBio_pt?: string;
+  aboutBio?: PortableTextBlock[];
+  aboutBio_pt?: PortableTextBlock[];
   avatar?: {
+    asset?: {
+      url: string;
+      lqip?: string;
+    };
+    alt?: string;
+  };
+  aboutHeroImage?: {
     asset?: {
       url: string;
       lqip?: string;
@@ -157,6 +167,20 @@ interface SanityProjectSlug {
   };
 }
 
+interface SanityContentBlock {
+  _type: string;
+  _key: string;
+  heading?: string;
+  heading_pt?: string;
+  body?: string;
+  body_pt?: string;
+  chips?: Array<{ label: string; label_pt?: string; color?: string }>;
+  ctaLabel?: string;
+  ctaLabel_pt?: string;
+  ctaHref?: string;
+  items?: Array<{ title: string; title_pt?: string; description: string; description_pt?: string }>;
+}
+
 interface SanitySection {
   _id: string;
   uid: { current: string };
@@ -165,6 +189,7 @@ interface SanitySection {
   subtitle?: string;
   subtitle_pt?: string;
   content?: unknown[];
+  contentBlocks?: SanityContentBlock[];
   background?: {
     type?: string;
     color?: string;
@@ -177,6 +202,7 @@ interface SanitySection {
     imageAlt?: string;
   };
   overlay?: boolean;
+  hasDropShadow?: boolean;
   padding?: string;
   order?: number;
 }
@@ -213,7 +239,11 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
     name: sanityProfile.name,
     title: loc(sanityProfile.title, sanityProfile.title_pt, locale),
     bio: loc(sanityProfile.bio, sanityProfile.bio_pt, locale),
-    aboutBio: loc(sanityProfile.aboutBio || null, sanityProfile.aboutBio_pt, locale),
+    aboutBio: loc(
+      sanityProfile.aboutBio && sanityProfile.aboutBio.length > 0 ? sanityProfile.aboutBio : null,
+      sanityProfile.aboutBio_pt && sanityProfile.aboutBio_pt.length > 0 ? sanityProfile.aboutBio_pt : null,
+      locale
+    ),
     avatar: sanityProfile.avatar
       ? {
           asset: {
@@ -222,6 +252,16 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
             lqip: sanityProfile.avatar.asset?.lqip || "",
           },
           alt: sanityProfile.avatar.alt || "",
+        }
+      : null,
+    aboutHeroImage: sanityProfile.aboutHeroImage
+      ? {
+          asset: {
+            url: sanityProfile.aboutHeroImage.asset?.url || "",
+            alt: sanityProfile.aboutHeroImage.alt || "",
+            lqip: sanityProfile.aboutHeroImage.asset?.lqip || "",
+          },
+          alt: sanityProfile.aboutHeroImage.alt || "",
         }
       : null,
     socialLinks,
@@ -346,14 +386,33 @@ function mapSanitySectionToModel(doc: SanitySection, locale: string = "en"): Sec
     };
   }
 
+  const contentBlocks = (doc.contentBlocks ?? []).map((block) => ({
+    _type: block._type,
+    _key: block._key,
+    heading: loc(block.heading, block.heading_pt, locale),
+    body: loc(block.body, block.body_pt, locale),
+    chips: block.chips?.map((c) => ({
+      label: loc(c.label, c.label_pt, locale),
+      color: c.color,
+    })),
+    ctaLabel: loc(block.ctaLabel, block.ctaLabel_pt, locale),
+    ctaHref: block.ctaHref,
+    items: block.items?.map((item) => ({
+      title: loc(item.title, item.title_pt, locale),
+      description: loc(item.description, item.description_pt, locale),
+    })),
+  }));
+
   return new Section({
     id: doc._id,
     uid: doc.uid.current,
     title: loc(doc.title, doc.title_pt, locale),
     subtitle: loc(doc.subtitle || null, doc.subtitle_pt, locale),
     content: doc.content || [],
+    contentBlocks,
     background,
     overlay: normalizeOverlay(doc.overlay),
+    hasDropShadow: typeof doc.hasDropShadow === "boolean" ? doc.hasDropShadow : true,
     padding: normalizePadding(doc.padding),
     order: doc.order ?? 0,
   });
@@ -539,6 +598,69 @@ export class SanityDataService implements IDataService {
     } catch (error) {
       console.error("SanityDataService: Failed to fetch sections", error);
       return [];
+    }
+  }
+
+  async getSectionsByPage(page: string, locale: string = "en"): Promise<Section[]> {
+    try {
+      const client = getSanityClient();
+      const sanitySections = await client.fetch<SanitySection[]>(
+        SECTIONS_BY_PAGE_QUERY,
+        { page }
+      );
+
+      if (!Array.isArray(sanitySections)) {
+        return [];
+      }
+
+      return sanitySections
+        .map((doc) => Section.tryCreate(mapSanitySectionToModel(doc, locale)))
+        .filter((s): s is Section => s !== null);
+    } catch (error) {
+      console.error("SanityDataService: Failed to fetch sections by page", error);
+      return [];
+    }
+  }
+
+  async getAboutPage(locale: string = "en"): Promise<AboutPage | null> {
+    try {
+      const client = getSanityClient();
+      const data = await client.fetch<{
+        _id: string;
+        bioHeading?: string;
+        bioHeading_pt?: string;
+        valuesHeading?: string;
+        valuesHeading_pt?: string;
+        values?: Array<{
+          title: string;
+          title_pt?: string;
+          description: string;
+          description_pt?: string;
+        }>;
+        skillChips?: Array<{
+          label: string;
+          label_pt?: string;
+          color: string;
+        }>;
+      } | null>(ABOUT_PAGE_QUERY);
+
+      if (!data) return null;
+
+      return {
+        bioHeading: loc(data.bioHeading ?? null, data.bioHeading_pt, locale),
+        valuesHeading: loc(data.valuesHeading ?? null, data.valuesHeading_pt, locale),
+        values: (data.values ?? []).map((v) => ({
+          title: loc(v.title, v.title_pt, locale),
+          description: loc(v.description, v.description_pt, locale),
+        })),
+        skillChips: (data.skillChips ?? []).map((c) => ({
+          label: loc(c.label, c.label_pt, locale),
+          color: c.color,
+        })),
+      };
+    } catch (error) {
+      console.error("SanityDataService: Failed to fetch about page", error);
+      return null;
     }
   }
 

@@ -2,6 +2,7 @@ import {
   SectionBackground,
   SectionPadding,
   SectionOverlay,
+  SectionContentBlock,
   FetchError,
   FetchErrorCode,
 } from "../types";
@@ -12,9 +13,11 @@ export interface ISection {
   readonly title: string;
   readonly subtitle: string | null;
   readonly content: unknown[];
+  readonly contentBlocks: SectionContentBlock[];
   readonly background: SectionBackground | null;
   readonly overlay: SectionOverlay;
   readonly padding: SectionPadding;
+  readonly hasDropShadow?: boolean;
   readonly order: number;
 }
 
@@ -24,9 +27,11 @@ export class Section implements ISection {
   readonly title: string;
   readonly subtitle: string | null;
   readonly content: unknown[];
+  readonly contentBlocks: SectionContentBlock[];
   readonly background: SectionBackground | null;
   readonly overlay: SectionOverlay;
   readonly padding: SectionPadding;
+  readonly hasDropShadow: boolean;
   readonly order: number;
 
   constructor(data: ISection) {
@@ -36,9 +41,11 @@ export class Section implements ISection {
     this.title = data.title.trim();
     this.subtitle = data.subtitle?.trim() || null;
     this.content = data.content;
+    this.contentBlocks = data.contentBlocks || [];
     this.background = data.background;
     this.overlay = data.overlay;
     this.padding = data.padding;
+    this.hasDropShadow = data.hasDropShadow ?? true;
     this.order = data.order;
   }
 

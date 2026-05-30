@@ -25,6 +25,14 @@ export const PROFILE_QUERY = `
       },
       alt
     },
+    aboutHeroImage {
+      asset-> {
+        _id,
+        url,
+        "lqip": metadata.lqip
+      },
+      alt
+    },
     socialLinks[] {
       platform,
       url
@@ -224,6 +232,22 @@ export const ALL_PROJECT_SLUGS_QUERY = `
   }
 `;
 
+const CONTENT_BLOCKS_PROJECTION = `
+  contentBlocks[] {
+    _type,
+    _key,
+    heading,
+    heading_pt,
+    body,
+    body_pt,
+    chips[] { label, label_pt, color },
+    ctaLabel,
+    ctaLabel_pt,
+    ctaHref,
+    items[] { title, title_pt, description, description_pt }
+  }
+`;
+
 export const SECTIONS_QUERY = `
   *[_type == "section"] | order(order asc) {
     _id,
@@ -233,6 +257,7 @@ export const SECTIONS_QUERY = `
     subtitle,
     subtitle_pt,
     content[],
+    ${CONTENT_BLOCKS_PROJECTION},
     background {
       type,
       color,
@@ -246,7 +271,39 @@ export const SECTIONS_QUERY = `
       imageAlt
     },
     overlay,
+    hasDropShadow,
     padding,
+    page,
+    order
+  }
+`;
+
+export const SECTIONS_BY_PAGE_QUERY = `
+  *[_type == "section" && page == $page] | order(order asc) {
+    _id,
+    uid,
+    title,
+    title_pt,
+    subtitle,
+    subtitle_pt,
+    content[],
+    ${CONTENT_BLOCKS_PROJECTION},
+    background {
+      type,
+      color,
+      image {
+        asset-> {
+          _id,
+          url,
+          "lqip": metadata.lqip
+        }
+      },
+      imageAlt
+    },
+    overlay,
+    hasDropShadow,
+    padding,
+    page,
     order
   }
 `;
@@ -260,6 +317,7 @@ export const SECTION_BY_UID_QUERY = `
     subtitle,
     subtitle_pt,
     content[],
+    ${CONTENT_BLOCKS_PROJECTION},
     background {
       type,
       color,
@@ -273,8 +331,31 @@ export const SECTION_BY_UID_QUERY = `
       imageAlt
     },
     overlay,
+    hasDropShadow,
     padding,
+    page,
     order
+  }
+`;
+
+export const ABOUT_PAGE_QUERY = `
+  *[_type == "aboutPage"][0] {
+    _id,
+    bioHeading,
+    bioHeading_pt,
+    valuesHeading,
+    valuesHeading_pt,
+    values[] {
+      title,
+      title_pt,
+      description,
+      description_pt
+    },
+    skillChips[] {
+      label,
+      label_pt,
+      color
+    }
   }
 `;
 
