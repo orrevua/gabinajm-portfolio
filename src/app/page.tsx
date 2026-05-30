@@ -7,6 +7,7 @@ import { ContactSection } from "@/src/adapters/routes/components/ContactSection"
 import { VideoSection } from "@/src/adapters/routes/components/VideoSection";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
 import { buildSanityImageUrl, getSanityDataService } from "@/src/services";
+import { getServerTranslations } from "@/src/i18n/serverLocale";
 
 const CARD_IMAGE_WIDTH = 1200;
 const CARD_IMAGE_HEIGHT = 750;
@@ -27,22 +28,23 @@ export default async function HomePage() {
   try {
     const dataService = getSanityDataService();
 
-    const [profile, projects, homePage] = await Promise.all([
+    const [profile, projects, homePage, { t }] = await Promise.all([
       dataService.getProfile(),
       dataService.getFeaturedProjects(4),
       dataService.getHomePage(),
+      getServerTranslations(),
     ]);
 
     if (!profile) {
       return (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center container-max">
-            <h1 className="text-heading font-bold text-foreground mb-6">
-              Unable to Load Content
+            <h1 className="text-heading font-bold text-[#0A0A0A] mb-6">
+              {t.error.unableToLoad}
             </h1>
-            <p className="text-muted text-sm mb-8">Please try again later.</p>
-            <a href="/" className="text-foreground font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors">
-              Refresh Page
+            <p className="text-muted text-sm mb-8">{t.error.tryAgain}</p>
+            <a href="/" className="text-[#0A0A0A] font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors">
+              {t.error.refreshPage}
             </a>
           </div>
         </div>
@@ -64,26 +66,30 @@ export default async function HomePage() {
       <>
         <HeroSection
           profile={profile}
-          greeting={heroConfig?.greeting}
-          ctaPrimaryLabel={heroConfig?.ctaPrimaryLabel}
+          greeting={heroConfig?.greeting || t.hero.greeting}
+          intro={t.hero.intro.trim()}
+          ctaPrimaryLabel={heroConfig?.ctaPrimaryLabel || t.hero.ctaPrimary}
           ctaPrimaryHref={heroConfig?.ctaPrimaryHref}
-          ctaSecondaryLabel={heroConfig?.ctaSecondaryLabel}
+          ctaSecondaryLabel={heroConfig?.ctaSecondaryLabel || t.hero.ctaSecondary}
           ctaSecondaryHref={heroConfig?.ctaSecondaryHref}
         />
 
         <ScrollReveal>
           <AboutSection
             profile={profile}
-            heading={aboutConfig?.heading}
+            heading={aboutConfig?.heading || t.about.heading}
             body={aboutConfig?.body}
             showResume={aboutConfig?.showResume}
             showSkills={aboutConfig?.showSkills}
+            showMoreLabel={t.about.showMore}
+            resumeLabel={t.about.resume}
           />
         </ScrollReveal>
 
         {projects && projects.length > 0 && (
           <ScrollReveal>
             <ProjectGrid
+              title={projectsConfig?.heading || t.projects.heading}
               projects={projects.map((project) => ({
                 title: project.title,
                 slug: project.slug,
@@ -113,7 +119,6 @@ export default async function HomePage() {
                 featured: project.featured,
                 isProtected: project.isProtected,
               }))}
-              title={projectsConfig?.heading}
             />
           </ScrollReveal>
         )}
@@ -122,7 +127,7 @@ export default async function HomePage() {
           <ScrollReveal>
             <PastExperience
               companies={profile.pastExperience}
-              heading={experienceConfig?.heading}
+              heading={experienceConfig?.heading || t.pastExperience.heading}
             />
           </ScrollReveal>
         )}
@@ -144,8 +149,6 @@ export default async function HomePage() {
 
         <ScrollReveal>
           <ContactSection
-            heading={contactConfig?.heading}
-            subtitle={contactConfig?.subtitle}
             email={email}
             socialLinks={socialLinks.filter((l) => l.platform !== "email")}
             availabilityText={contactConfig?.availabilityText}
@@ -154,15 +157,16 @@ export default async function HomePage() {
       </>
     );
   } catch {
+    const { t: errorT } = await getServerTranslations();
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center container-max">
-          <h1 className="text-heading font-bold text-foreground mb-6">
-            Unable to Load Content
+          <h1 className="text-heading font-bold text-[#0A0A0A] mb-6">
+            {errorT.error.unableToLoad}
           </h1>
-          <p className="text-muted text-sm mb-8">Please try again later.</p>
-          <a href="/" className="text-foreground font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors">
-            Refresh Page
+          <p className="text-muted text-sm mb-8">{errorT.error.tryAgain}</p>
+          <a href="/" className="text-[#0A0A0A] font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors">
+            {errorT.error.refreshPage}
           </a>
         </div>
       </div>

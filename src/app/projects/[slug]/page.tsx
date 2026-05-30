@@ -4,18 +4,21 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { getSanityDataService } from "@/src/services";
 import { verifyCookie } from "@/src/services/projectAccess";
+import { getServerTranslations } from "@/src/i18n/serverLocale";
 import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
 import { PasswordGate } from "@/src/adapters/routes/components/PasswordGate";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
+import { NextProjectCard } from "@/src/adapters/routes/components/NextProjectCard";
+import { BackToProjectsLink } from "@/src/adapters/routes/components/BackToProjectsLink";
 import type { ContentSection } from "@/src/domain/types";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -28,9 +31,10 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: PageProps
+): Promise<Metadata> {
+  const params = await props.params;
   try {
     const dataService = await getSanityDataService();
     const project = await dataService.getProjectBySlug(params.slug);
@@ -68,17 +72,17 @@ function TextBlock({ section }: { section: ContentSection }) {
     <div className="max-w-[1158px] mx-auto px-5 py-10 md:py-14">
       <div className="max-w-[924px]">
         {section.sectionLabel && (
-          <h2 className="text-xl md:text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+          <h2 className="text-xl md:text-2xl font-bold text-[#0A0A0A] mb-4 flex items-center gap-2">
             {section.sectionLabel}
           </h2>
         )}
         {section.body && (
-          <p className="text-base leading-[1.7] whitespace-pre-wrap text-foreground/70">
+          <p className="text-base leading-[1.7] whitespace-pre-wrap text-[#0A0A0A]/70">
             {section.body}
           </p>
         )}
         {section.bullets && section.bullets.length > 0 && (
-          <ul className="mt-6 list-disc pl-6 space-y-2 text-foreground/70 text-base">
+          <ul className="mt-6 list-disc pl-6 space-y-2 text-[#0A0A0A]/70 text-base">
             {section.bullets.map((bullet, i) => (
               <li key={i} className="leading-[1.7]">
                 {bullet}
@@ -307,31 +311,34 @@ function renderSection(section: ContentSection) {
   }
 }
 
-export default async function ProjectDetailPage({ params }: PageProps) {
-  const cookieStore = cookies();
+export default async function ProjectDetailPage(props: PageProps) {
+  const params = await props.params;
+  const cookieStore = await cookies();
 
   try {
     const dataService = await getSanityDataService();
-    const [project, profile] = await Promise.all([
+    const [project, profile, allProjects, { t }] = await Promise.all([
       dataService.getProjectBySlug(params.slug),
       dataService.getProfile(),
+      dataService.getProjects(),
+      getServerTranslations(),
     ]);
 
     if (!project) {
       return (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center container-max">
-            <h1 className="text-heading font-serif font-bold text-foreground mb-6">
-              Project Not Found
+            <h1 className="text-heading font-serif font-bold text-[#0A0A0A] mb-6">
+              {t.projects.notFound}
             </h1>
             <p className="text-muted text-sm uppercase tracking-widest mb-8">
-              The project you&apos;re looking for doesn&apos;t exist or has been removed.
+              {t.projects.notFoundDescription}
             </p>
             <Link
-              href="/projects"
-              className="text-foreground uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
+              href="/"
+              className="text-[#0A0A0A] uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
             >
-              View All Projects
+              {t.projects.viewAllProjects}
             </Link>
           </div>
         </div>
@@ -356,15 +363,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       <article>
         {/* Back link + header */}
         <div className="max-w-[1158px] mx-auto px-5 pt-28 md:pt-36">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-colors mb-10"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
-            </svg>
-            Back to projects
-          </Link>
+          <BackToProjectsLink />
 
           <div className="max-w-[924px]">
             {technologies.length > 0 && (
@@ -372,7 +371,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 {technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-foreground/80"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-[#0A0A0A]/80"
                   >
                     {tech}
                   </span>
@@ -380,7 +379,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </div>
             )}
 
-            <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold leading-[1.15] text-foreground mb-1">
+            <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold leading-[1.15] text-[#0A0A0A] mb-1">
               {project.title}
             </h1>
             {project.subtitle && (
@@ -389,11 +388,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </p>
             )}
 
-            <p className="text-base leading-[1.7] text-foreground/70 mb-6 max-w-3xl">
+            <p className="text-base leading-[1.7] text-[#0A0A0A]/70 mb-6 max-w-3xl">
               {project.description}
             </p>
 
-            <div className="flex items-center gap-2 text-sm text-foreground/50 mb-16">
+            <div className="flex items-center gap-2 text-sm text-[#0A0A0A]/50 mb-16">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
               </svg>
@@ -414,9 +413,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 rounded-pill border border-foreground text-sm uppercase tracking-widest font-semibold text-foreground hover:bg-foreground hover:text-background transition-colors duration-300"
+                  className="inline-flex items-center px-6 py-3 rounded-pill border border-foreground text-sm uppercase tracking-widest font-semibold text-[#0A0A0A] hover:bg-foreground hover:text-background transition-colors duration-300"
                 >
-                  View Project &rarr;
+                  {t.projects.viewProject} &rarr;
                 </a>
               )}
               {project.repository && (
@@ -424,14 +423,23 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   href={project.repository}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 rounded-pill border border-border text-sm uppercase tracking-widest font-semibold text-muted hover:border-foreground hover:text-foreground transition-colors duration-300"
+                  className="inline-flex items-center px-6 py-3 rounded-pill border border-border text-sm uppercase tracking-widest font-semibold text-muted hover:border-foreground hover:text-[#0A0A0A] transition-colors duration-300"
                 >
-                  Source Code
+                  {t.projects.sourceCode}
                 </a>
               )}
             </div>
           </div>
         )}
+
+        {/* Next Project */}
+        {(() => {
+          const idx = allProjects.findIndex((p) => p.slug === params.slug);
+          const next = idx >= 0 ? allProjects[(idx + 1) % allProjects.length] : null;
+          return next && next.slug !== params.slug ? (
+            <NextProjectCard title={next.title} description={next.description} slug={next.slug} />
+          ) : null;
+        })()}
 
         {/* Contact */}
         <ScrollReveal>
@@ -443,20 +451,21 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       </article>
     );
   } catch {
+    const { t: errorT } = await getServerTranslations();
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center container-max">
-          <h1 className="text-heading font-serif font-bold text-foreground mb-6">
-            Unable to Load Project
+          <h1 className="text-heading font-serif font-bold text-[#0A0A0A] mb-6">
+            {errorT.error.unableToLoadProject}
           </h1>
           <p className="text-muted text-sm uppercase tracking-widest mb-8">
-            Please try again later.
+            {errorT.error.tryAgain}
           </p>
           <Link
-            href="/projects"
-            className="text-foreground uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
+            href="/"
+            className="text-[#0A0A0A] uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
           >
-            View All Projects
+            {errorT.projects.viewAllProjects}
           </Link>
         </div>
       </div>

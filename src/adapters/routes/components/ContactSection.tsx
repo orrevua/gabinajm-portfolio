@@ -1,6 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTranslation } from "@/src/i18n";
+
+function Toast({ type, onDismiss, successMsg, errorMsg }: { type: "sent" | "error"; onDismiss: () => void; successMsg: string; errorMsg: string }) {
+  useEffect(() => {
+    const timer = setTimeout(onDismiss, 5000);
+    return () => clearTimeout(timer);
+  }, [onDismiss]);
+
+  const isSent = type === "sent";
+  return (
+    <div
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-pill shadow-lg text-white text-base font-medium animate-fade-in ${isSent ? "bg-[#16A34A]" : "bg-[#DC2626]"}`}
+      role="alert"
+    >
+      {isSent ? (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      ) : (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      )}
+      {isSent ? successMsg : errorMsg}
+    </div>
+  );
+}
 
 export interface ContactSectionProps {
   heading?: string;
@@ -60,12 +87,15 @@ const SendIcon = () => (
 );
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
-  heading = "Let's talk",
-  subtitle = "I will reply to you as soon as possible.",
+  heading,
+  subtitle,
   email,
   socialLinks = [],
   availabilityText,
 }) => {
+  const { t } = useTranslation();
+  const displayHeading = heading || t.contact.heading;
+  const displaySubtitle = subtitle || t.contact.subtitle;
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
@@ -94,57 +124,57 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   return (
-    <section className="container-max py-16 md:py-24" aria-label="Contact" id="contact">
-      <h2 className="text-heading font-extrabold text-foreground mb-2">
-        {heading}
+    <section className="container-max py-16 md:py-24" aria-label={displayHeading} id="contact">
+      <h2 className="text-heading font-extrabold text-[#0A0A0A] mb-2">
+        {displayHeading}
       </h2>
       <p className="text-base text-muted mb-10">
-        {subtitle}
+        {displaySubtitle}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="contact-name" className="block text-sm font-semibold text-foreground mb-2">
-              Name
+            <label htmlFor="contact-name" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
+              {t.contact.nameLabel}
             </label>
             <input
               id="contact-name"
               type="text"
-              placeholder="Enter your name"
+              placeholder={t.contact.namePlaceholder}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-foreground placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="contact-email" className="block text-sm font-semibold text-foreground mb-2">
-              E-mail
+            <label htmlFor="contact-email" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
+              {t.contact.emailLabel}
             </label>
             <input
               id="contact-email"
               type="email"
-              placeholder="email@example.com"
+              placeholder={t.contact.emailPlaceholder}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-foreground placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="contact-message" className="block text-sm font-semibold text-foreground mb-2">
-              Message
+            <label htmlFor="contact-message" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
+              {t.contact.messageLabel}
             </label>
             <textarea
               id="contact-message"
-              placeholder="Tell me about your project..."
+              placeholder={t.contact.messagePlaceholder}
               rows={4}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-foreground placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
+              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
               required
             />
           </div>
@@ -154,25 +184,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             disabled={status === "sending" || status === "sent"}
             className="w-full flex items-center justify-center gap-2 px-7 py-4 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {status === "sending" ? "Sending..." : status === "sent" ? "Message Sent!" : "Send Message"}
+            {status === "sending" ? t.contact.sending : status === "sent" ? t.contact.sent : t.contact.send}
             {status === "idle" && <SendIcon />}
           </button>
 
-          {status === "error" && (
-            <p className="text-sm text-red-500 text-center">
-              Failed to send. Please try again or email directly.
-            </p>
-          )}
-          {status === "sent" && (
-            <p className="text-sm text-green-600 text-center">
-              Thank you! I&apos;ll get back to you soon.
-            </p>
+          {(status === "sent" || status === "error") && (
+            <Toast type={status} onDismiss={() => setStatus("idle")} successMsg={t.contact.toastSuccess} errorMsg={t.contact.toastError} />
           )}
         </form>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-bold text-foreground mb-4">
-            Connect with me
+          <h3 className="text-lg font-bold text-[#0A0A0A] mb-4">
+            {t.contact.connectHeading}
           </h3>
 
           {socialLinks.map((link) => {
@@ -186,14 +209,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 href={link.url}
                 target={link.platform === "email" ? undefined : "_blank"}
                 rel={link.platform === "email" ? undefined : "noopener noreferrer"}
-                className="flex items-center gap-4 p-4 rounded-2xl border border-border hover:border-accent/30 transition-colors group"
+                className="flex items-center gap-4 p-4 rounded-2xl border border-border transition-colors group card-lift"
                 aria-label={`${link.platform}: ${handle}`}
               >
                 <div className={`w-12 h-12 rounded-full ${colorClass} flex items-center justify-center flex-shrink-0`}>
                   {icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground capitalize">
+                  <p className="text-sm font-semibold text-[#0A0A0A] capitalize">
                     {link.platform}
                   </p>
                   <p className="text-sm text-muted truncate">
@@ -208,14 +231,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           {email && !socialLinks.some((l) => l.platform === "email") && (
             <a
               href={`mailto:${email}`}
-              className="flex items-center gap-4 p-4 rounded-2xl border border-border hover:border-accent/30 transition-colors"
+              className="flex items-center gap-4 p-4 rounded-2xl border border-border transition-colors card-lift"
               aria-label={`Email: ${email}`}
             >
               <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
                 {PLATFORM_ICONS.email}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground">Email</p>
+                <p className="text-sm font-semibold text-[#0A0A0A]">{t.contact.emailLabel}</p>
                 <p className="text-sm text-muted truncate">{email}</p>
               </div>
               <ArrowIcon />
@@ -225,7 +248,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           {availabilityText && (
             <div className="mt-6 p-5 rounded-2xl bg-gradient-to-r from-[#FCE7F3] to-[#F3E8FF] text-[#364153]">
               <p className="text-sm leading-relaxed">
-                <span className="font-bold">Availability: </span>
+                <span className="font-bold">{t.contact.availability} </span>
                 {availabilityText}
               </p>
             </div>

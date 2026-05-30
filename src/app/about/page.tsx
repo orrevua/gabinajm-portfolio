@@ -3,7 +3,10 @@ import { ProfileHeader } from "@/src/adapters/routes/components/ProfileHeader";
 import { SectionBlock } from "@/src/adapters/routes/components/SectionBlock";
 import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
+import { ValuesSection } from "@/src/adapters/routes/components/ValuesSection";
+import { TranslatedHeading } from "@/src/adapters/routes/components/TranslatedHeading";
 import { getSanityDataService } from "@/src/services";
+import { getServerTranslations } from "@/src/i18n/serverLocale";
 
 export const revalidate = 3600;
 
@@ -20,9 +23,10 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   try {
     const dataService = await getSanityDataService();
-    const [profile, sections] = await Promise.all([
+    const [profile, sections, { t }] = await Promise.all([
       dataService.getProfile(),
       dataService.getSections(),
+      getServerTranslations(),
     ]);
 
     if (!profile) {
@@ -30,16 +34,16 @@ export default async function AboutPage() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center container-max">
             <h1 className="text-heading font-serif font-bold text-foreground mb-6">
-              Profile Not Found
+              {t.error.profileNotFound}
             </h1>
             <p className="text-muted text-sm uppercase tracking-widest mb-8">
-              Profile information is currently unavailable.
+              {t.error.profileUnavailable}
             </p>
             <a
               href="/"
               className="text-foreground uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
             >
-              Back to Home
+              {t.error.backToHome}
             </a>
           </div>
         </div>
@@ -52,13 +56,13 @@ export default async function AboutPage() {
 
     return (
       <>
-        <ProfileHeader profile={profile} />
+        <ProfileHeader profile={profile} profileUnavailableText={t.error.profileUnavailable} />
 
         <section className="container-max pb-24 md:pb-32">
           <ScrollReveal variant="clip">
             <div className="max-w-3xl mb-20 md:mb-28">
               <h2 className="text-heading font-serif font-bold text-foreground mb-8 clip-target">
-                About
+                {t.about.heading}
               </h2>
               <div className="space-y-6 text-lg md:text-xl text-foreground/80 leading-relaxed">
                 <p>
@@ -75,15 +79,17 @@ export default async function AboutPage() {
             </div>
           </ScrollReveal>
 
+          <ScrollReveal>
+            <ValuesSection />
+          </ScrollReveal>
+
           {technologies.length > 0 && (
             <>
             <ScrollReveal variant="line" as="hr" className="border-0 h-px bg-border mb-0" />
             <ScrollReveal>
               <div className="py-16 md:py-20 mb-0">
                 <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 md:gap-12 items-start">
-                  <h2 className="uppercase tracking-widest text-sm text-accent-pink font-extrabold md:sticky md:top-28">
-                    Skills & Tools
-                  </h2>
+                  <TranslatedHeading path="about.skillsHeading" className="uppercase tracking-widest text-sm text-accent-pink font-extrabold md:sticky md:top-28" />
                   <div className="flex flex-wrap gap-3">
                     {technologies.map((tech) => (
                       <span
@@ -104,9 +110,7 @@ export default async function AboutPage() {
           <ScrollReveal>
             <div className="py-16 md:py-20">
               <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 md:gap-12 items-start">
-                <h2 className="uppercase tracking-widest text-sm text-accent-pink font-extrabold md:sticky md:top-28">
-                  Experience
-                </h2>
+                <TranslatedHeading path="about.experienceHeading" className="uppercase tracking-widest text-sm text-accent-pink font-extrabold md:sticky md:top-28" />
                 <div className="space-y-12">
                   <div className="border-l-2 border-accent/30 pl-8">
                     <p className="text-xs text-muted uppercase tracking-widest mb-2">
@@ -167,20 +171,21 @@ export default async function AboutPage() {
       </>
     );
   } catch {
+    const { t: errorT } = await getServerTranslations();
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center container-max">
           <h1 className="text-heading font-serif font-bold text-foreground mb-6">
-            Unable to Load Content
+            {errorT.error.unableToLoad}
           </h1>
           <p className="text-muted text-sm uppercase tracking-widest mb-8">
-            Please try again later.
+            {errorT.error.tryAgain}
           </p>
           <a
             href="/"
             className="text-foreground uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
           >
-            Back to Home
+            {errorT.error.backToHome}
           </a>
         </div>
       </div>

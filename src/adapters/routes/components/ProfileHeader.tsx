@@ -3,14 +3,15 @@ import { type IProfile } from "@domain";
 
 export interface ProfileHeaderProps {
   profile: IProfile | null;
+  profileUnavailableText?: string;
 }
 
-export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile }) => {
+export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, profileUnavailableText = "Profile information is currently unavailable." }) => {
   if (!profile) {
     return (
       <section className="container-max py-32 text-center" aria-label="Profile">
         <p className="text-muted uppercase tracking-widest text-sm">
-          Profile information is currently unavailable.
+          {profileUnavailableText}
         </p>
       </section>
     );
@@ -58,12 +59,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile }) => {
           {profile.title}
         </p>
 
-        <h1 className="text-display font-serif font-extrabold text-foreground mb-8 max-w-[668px]">
+        <h1 className="text-display font-serif font-extrabold text-[#0A0A0A] mb-8 max-w-[668px]">
           {profile.name}
         </h1>
 
         {hasBio && (
-          <p className="text-subheading text-foreground/75 leading-relaxed max-w-xl mb-12 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          <p className="text-subheading text-[#0A0A0A]/75 leading-relaxed max-w-xl mb-12 animate-fade-up" style={{ animationDelay: "0.1s" }}>
             {profile.bio}
           </p>
         )}

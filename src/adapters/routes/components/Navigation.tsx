@@ -3,29 +3,25 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "@/src/i18n";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export interface NavigationProps {
   brandName?: string;
-  links?: Array<{ href: string; label: string }>;
-  ctaLink?: { href: string; label: string };
 }
-
-const SparkleIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M12 2L13.09 8.26L18 6L14.74 10.91L21 12L14.74 13.09L18 18L13.09 15.74L12 22L10.91 15.74L6 18L9.26 13.09L3 12L9.26 10.91L6 6L10.91 8.26L12 2Z" fill="currentColor" />
-  </svg>
-);
 
 export const Navigation: React.FC<NavigationProps> = ({
   brandName = "Gabinajm",
-  links = [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-  ],
-  ctaLink = { href: "#contact", label: "Contact" },
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { t } = useTranslation();
+
+  const links = [
+    { href: "/", label: t.nav.home },
+    { href: "/about", label: t.nav.about },
+  ];
+  const ctaLink = { href: "#contact", label: t.nav.contact };
 
   useEffect(() => {
     setIsOpen(false);
@@ -50,11 +46,16 @@ export const Navigation: React.FC<NavigationProps> = ({
       <div className="max-w-[1158px] mx-auto h-[72px] md:h-[80px] px-6 md:px-8 flex justify-between items-center">
         <Link
           href="/"
-          className="relative z-[2] flex items-center gap-2 text-accent-pink"
+          className="relative z-[2] flex items-center"
           aria-label={`${brandName} home`}
         >
-          <SparkleIcon />
-          <span className="text-lg font-bold text-foreground">{brandName}</span>
+          <img
+            src="/images/nav_logo.svg"
+            alt={`${brandName} logo`}
+            width={161}
+            height={40}
+            className="h-10 w-auto"
+          />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
@@ -64,8 +65,8 @@ export const Navigation: React.FC<NavigationProps> = ({
               href={link.href}
               className={`text-sm font-semibold transition-colors ${
                 isActive(link.href)
-                  ? "text-foreground"
-                  : "text-foreground/70 hover:text-foreground"
+                  ? "text-[#0A0A0A]"
+                  : "text-[#0A0A0A]/70 hover:text-accent"
               }`}
               aria-current={isActive(link.href) ? "page" : undefined}
             >
@@ -74,20 +75,21 @@ export const Navigation: React.FC<NavigationProps> = ({
           ))}
           <Link
             href={ctaLink.href}
-            className="px-5 py-2.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="px-5 py-2.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white text-sm font-semibold hover:shadow-[0_0_20px_rgba(246,51,154,0.2)] transition-shadow duration-300"
           >
             {ctaLink.label}
           </Link>
+          <LanguageSwitcher />
         </div>
 
         <button
-          className="md:hidden text-foreground hover:text-accent-pink focus:outline-none transition-colors"
+          className="md:hidden text-[#0A0A0A] hover:text-accent-pink focus:outline-none transition-colors"
           onClick={() => setIsOpen(!isOpen)}
           aria-expanded={isOpen}
           aria-label="Toggle navigation menu"
         >
           <span className="uppercase text-xs tracking-widest font-semibold">
-            {isOpen ? "Close" : "Menu"}
+            {isOpen ? t.nav.close : t.nav.menu}
           </span>
         </button>
       </div>
@@ -103,7 +105,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               key={link.href}
               href={link.href}
               className={`text-3xl font-bold transition-colors ${
-                isActive(link.href) ? "text-accent-pink" : "text-foreground hover:text-accent-pink"
+                isActive(link.href) ? "text-accent-pink" : "text-[#0A0A0A] hover:text-accent-pink"
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -117,6 +119,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           >
             {ctaLink.label}
           </Link>
+          <LanguageSwitcher />
         </div>
       )}
     </nav>

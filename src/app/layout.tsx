@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/src/adapters/routes/components/Navigation";
+import { TranslatedFooter } from "@/src/adapters/routes/components/TranslatedFooter";
+import { SkipToContent } from "@/src/adapters/routes/components/SkipToContent";
+import { LocaleProvider } from "@/src/i18n";
+import type { Locale } from "@/src/i18n";
 import "@/src/styles/globals.css";
 
 const inter = Inter({
@@ -51,28 +56,21 @@ export const metadata: Metadata = {
   },
 };
 
-const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-];
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("locale")?.value;
+  const locale: Locale = localeCookie === "pt" ? "pt" : "en";
+
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-pill focus:bg-foreground focus:text-background focus:text-sm focus:font-semibold"
-        >
-          Skip to content
-        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -89,12 +87,12 @@ export default function RootLayout({
             }),
           }}
         />
-        <Navigation brandName="Gabinajm" links={navigationLinks} ctaLink={{ href: "#contact", label: "Contact" }} />
-        <main id="main-content">{children}</main>
-        <footer className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted">
-          <p>&copy; {new Date().getFullYear()} Gabinajm. All rights reserved.</p>
-          <p>Designed &amp; built with passion and accessibility in mind</p>
-        </footer>
+        <LocaleProvider initialLocale={locale}>
+          <SkipToContent />
+          <Navigation brandName="Gabinajm" />
+          <main id="main-content">{children}</main>
+          <TranslatedFooter />
+        </LocaleProvider>
       </body>
     </html>
   );

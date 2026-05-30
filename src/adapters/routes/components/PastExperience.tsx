@@ -10,12 +10,13 @@ export const PastExperience: React.FC<PastExperienceProps> = ({
   heading = "Past Experience",
   companies,
 }) => {
+  const displayHeading = heading;
   if (!companies || companies.length === 0) return null;
 
   return (
-    <section className="container-max py-12 md:py-20 text-center" aria-label={heading}>
+    <section className="container-max py-12 md:py-20 text-center" aria-label={displayHeading}>
       <h2 className="text-2xl md:text-3xl font-extrabold text-accent mb-10">
-        {heading}
+        {displayHeading}
       </h2>
 
       <div className="flex items-center justify-center gap-6 md:gap-8 flex-wrap">

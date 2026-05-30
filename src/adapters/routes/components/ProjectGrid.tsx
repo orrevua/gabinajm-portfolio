@@ -13,11 +13,12 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
   emptyMessage = "No projects available at the moment.",
   isLoading = false,
 }) => {
+  const displayTitle = title;
   return (
-    <section className="container-max py-12 md:py-20" aria-label={title || "Projects"}>
-      {title && (
-        <h2 className="text-heading font-extrabold text-foreground mb-10">
-          {title}
+    <section className="container-max py-12 md:py-20" aria-label={displayTitle || "Projects"}>
+      {displayTitle && (
+        <h2 className="text-heading font-extrabold text-[#0A0A0A] mb-10">
+          {displayTitle}
         </h2>
       )}
 
