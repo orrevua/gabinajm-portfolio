@@ -43,7 +43,7 @@ export const VideoSection: React.FC<VideoSectionProps> = ({
   return (
     <section className="container-max py-12 md:py-20" aria-label={heading || "Video"}>
       {heading && (
-        <h2 className="text-heading font-extrabold text-foreground mb-2">
+        <h2 className="text-heading font-extrabold text-[#0A0A0A] mb-2">
           {heading}
         </h2>
       )}

@@ -62,7 +62,7 @@ export const SectionBlock: React.FC<SectionBlockProps> = ({ section }) => {
 
   const textColorClass = hasImageBg && section.overlay === "dark"
     ? "text-background"
-    : "text-foreground";
+    : "text-[#0A0A0A]";
 
   return (
     <section

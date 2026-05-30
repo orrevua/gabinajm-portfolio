@@ -113,7 +113,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       )}
 
       <div className="p-6">
-        <h3 className="text-lg font-bold text-foreground leading-tight mb-1">
+        <h3 className="text-lg font-bold text-[#0A0A0A] group-hover:text-accent leading-tight mb-1">
           {title}
         </h3>
         <p className="text-sm text-muted leading-snug mb-4">
@@ -124,7 +124,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             {technologies.map((tech) => (
               <span
                 key={tech}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground/70 bg-background rounded-pill px-3 py-1.5"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0A0A0A]/70 bg-background rounded-pill px-3 py-1.5"
               >
                 {getTechIcon(tech)}
                 {tech}
