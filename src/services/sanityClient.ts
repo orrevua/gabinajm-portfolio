@@ -87,7 +87,6 @@ export function getSanityClient(): ReturnType<typeof createClient> {
     try {
       sanityClientInstance = createSanityClient();
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Failed to initialize Sanity client:", error);
       throw error;
     }
@@ -110,16 +109,13 @@ export async function checkSanityHealth(): Promise<boolean> {
     const result = await client.fetch('*[_type == "profile"][0] { _id }', {});
 
     if (!result) {
-      // eslint-disable-next-line no-console
       console.warn("Sanity health check: profile document not found (schema may be empty)");
       return true; // Schema exists, just no data yet
     }
 
-    // eslint-disable-next-line no-console
-    console.log("Sanity health check passed");
+    console.warn("Sanity health check passed");
     return true;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error("Sanity health check failed:", error);
     throw new FetchError(
       FetchErrorCode.NETWORK_ERROR,
