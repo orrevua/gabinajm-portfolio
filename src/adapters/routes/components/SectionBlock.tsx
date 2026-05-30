@@ -187,7 +187,7 @@ export const SectionBlock: React.FC<SectionBlockProps> = ({ section }) => {
         {section.contentBlocks.length > 0 && (
           <div className="mt-12 md:mt-12 space-y-8 md:space-y-8">
             {section.contentBlocks.map((block) => (
-              <ContentBlockRenderer key={block._key} block={block} hasDropShadow={section.hasDropShadow} />
+              <ContentBlockRenderer key={block._key} block={block} hasDropShadow={section.hasDropShadow ?? true} />
             ))}
           </div>
         )}

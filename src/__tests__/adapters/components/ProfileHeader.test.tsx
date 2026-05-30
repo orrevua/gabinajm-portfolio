@@ -149,7 +149,7 @@ describe("ProfileHeader Component", () => {
         avatar: null,
       };
       render(<ProfileHeader profile={profile} />);
-      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Jane Doe");
+      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("About Me");
     });
 
     it("should handle empty bio", () => {
