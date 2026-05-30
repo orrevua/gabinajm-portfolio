@@ -40,6 +40,27 @@ export interface ExperienceCompany {
   logo: SanityImageAsset;
 }
 
+export interface PortableTextMarkDefinition {
+  _key: string;
+  _type: string;
+  href?: string;
+}
+
+export interface PortableTextSpan {
+  _key: string;
+  _type: "span";
+  text: string;
+  marks: string[];
+}
+
+export interface PortableTextBlock {
+  _key: string;
+  _type: "block";
+  style?: string;
+  children: PortableTextSpan[];
+  markDefs?: PortableTextMarkDefinition[];
+}
+
 export interface ProjectImage {
   asset: SanityImageAsset;
   alt: string;
@@ -86,6 +107,27 @@ export interface ContentSection {
   autoplay?: boolean;
   loop?: boolean;
   muted?: boolean;
+}
+
+export interface SectionChip {
+  label: string;
+  color?: string;
+}
+
+export interface SectionValueItem {
+  title: string;
+  description: string;
+}
+
+export interface SectionContentBlock {
+  _type: string;
+  _key: string;
+  heading?: string;
+  body?: string;
+  chips?: SectionChip[];
+  ctaLabel?: string;
+  ctaHref?: string;
+  items?: SectionValueItem[];
 }
 
 export type SectionPadding = "none" | "small" | "medium" | "large";

@@ -42,15 +42,79 @@ export default defineType({
     defineField({
       name: 'aboutBio',
       title: 'About Me (Long Bio)',
-      type: 'text',
-      rows: 8,
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'H2', value: 'h2' },
+            { title: 'H3', value: 'h3' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+          marks: {
+            decorators: [
+              { title: 'Bold', value: 'strong' },
+              { title: 'Italic', value: 'em' },
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  defineField({
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                    validation: (rule) =>
+                      rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto'] }),
+                  }),
+                ],
+              },
+            ],
+          },
+        },
+      ],
       description: 'Longer bio displayed in the About Me section. If empty, falls back to the hero bio.',
     }),
     defineField({
       name: 'aboutBio_pt',
       title: 'About Me (Long Bio) (PT)',
-      type: 'text',
-      rows: 8,
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'H2', value: 'h2' },
+            { title: 'H3', value: 'h3' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+          marks: {
+            decorators: [
+              { title: 'Bold', value: 'strong' },
+              { title: 'Italic', value: 'em' },
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  defineField({
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                    validation: (rule) =>
+                      rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto'] }),
+                  }),
+                ],
+              },
+            ],
+          },
+        },
+      ],
       description: 'Portuguese version. Falls back to English if empty.',
     }),
     defineField({
@@ -58,6 +122,13 @@ export default defineType({
       title: 'Avatar',
       type: 'image',
       options: { hotspot: true },
+    }),
+    defineField({
+      name: 'aboutHeroImage',
+      title: 'About Hero Image',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Dedicated image for the About page hero/header. Falls back to Avatar if empty.',
     }),
     defineField({
       name: 'socialLinks',

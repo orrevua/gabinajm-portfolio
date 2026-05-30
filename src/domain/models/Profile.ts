@@ -4,14 +4,15 @@
  * Validated and immutable at runtime.
  */
 
-import { SocialLink, ProfileAvatar, ExperienceCompany, FetchError, FetchErrorCode } from "../types";
+import { SocialLink, ProfileAvatar, ExperienceCompany, PortableTextBlock, FetchError, FetchErrorCode } from "../types";
 
 export interface IProfile {
   name: string;
   title: string;
   bio: string;
-  aboutBio: string | null;
+  aboutBio: PortableTextBlock[] | null;
   avatar: ProfileAvatar | null;
+  aboutHeroImage?: ProfileAvatar | null;
   socialLinks: SocialLink[];
   resumeUrl: string | null;
   technologies: string[];
@@ -27,8 +28,9 @@ export class Profile implements IProfile {
   readonly name: string;
   readonly title: string;
   readonly bio: string;
-  readonly aboutBio: string | null;
+  readonly aboutBio: PortableTextBlock[] | null;
   readonly avatar: ProfileAvatar | null;
+  readonly aboutHeroImage: ProfileAvatar | null;
   readonly socialLinks: SocialLink[];
   readonly resumeUrl: string | null;
   readonly technologies: string[];
@@ -39,8 +41,11 @@ export class Profile implements IProfile {
     this.name = data.name.trim();
     this.title = data.title.trim();
     this.bio = data.bio.trim();
-    this.aboutBio = data.aboutBio ? data.aboutBio.trim() : null;
+    this.aboutBio = Array.isArray(data.aboutBio) && data.aboutBio.length > 0
+      ? data.aboutBio
+      : null;
     this.avatar = data.avatar;
+    this.aboutHeroImage = data.aboutHeroImage ?? null;
     this.socialLinks = data.socialLinks;
     this.resumeUrl = data.resumeUrl;
     this.technologies = data.technologies;
