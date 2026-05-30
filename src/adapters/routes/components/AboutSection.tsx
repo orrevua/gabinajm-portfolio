@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { type IProfile } from "@domain";
+import { PortableTextRenderer } from "./PortableTextRenderer";
 
 export interface AboutSectionProps {
   profile: IProfile;
@@ -12,8 +13,8 @@ export interface AboutSectionProps {
 }
 
 const SKILL_ICONS: Record<string, React.ReactNode> = {
-  acessibility: (
-    <Image src="/images/acessibility.svg" alt="" width={16} height={16} aria-hidden="true" />
+  accessibility: (
+    <Image src="/images/accessibility.svg" alt="" width={16} height={16} aria-hidden="true" />
   ),
   "ux/ui": (
     <Image src="/images/smartphone.svg" alt="" width={16} height={16} aria-hidden="true" />
@@ -62,27 +63,30 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   showMoreLabel = "Show more",
   resumeLabel = "My resume",
 }) => {
-  const bioText = body || profile.aboutBio || profile.bio;
   const hasResume = showResume && profile.resumeUrl;
   const hasSkills = showSkills && profile.technologies.length > 0;
   const showCtaRow = hasResume || showSkills;
 
   return (
     <section className="container-max py-12 md:py-20" aria-label={heading} id="about">
-      <div className="bg-white rounded-3xl p-8 md:p-12 shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+      <div className="bg-white rounded-3xl p-8 md:p-12 drop-shadow-2xl">
         <h2 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent mb-6 p-1">
           {heading}
         </h2>
 
-        <p className="text-base md:text-lg text-[#0A0A0A]/80 leading-relaxed max-w-3xl mb-8">
-          {bioText}
-        </p>
+        <div className="text-base md:text-lg text-[#0A0A0A]/80 leading-relaxed max-w-3xl mb-8 space-y-4">
+          {body ? (
+            body.split("\n\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)
+          ) : (
+            <PortableTextRenderer value={profile.aboutBio || null} />
+          )}
+        </div>
         {hasSkills && (
           <div className="flex flex-wrap gap-3 mb-8">
             {profile.technologies.map((skill) => (
               <span
                 key={skill}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-pill text-sm font-medium shadow-[0_6px_12px_rgba(0,0,0,0.08)] ${getSkillBadgeClasses(skill)}`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-pill text-sm font-medium ${getSkillBadgeClasses(skill)}`}
               >
                 {getSkillIcon(skill)}
                 {skill}

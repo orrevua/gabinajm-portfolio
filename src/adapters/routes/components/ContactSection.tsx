@@ -38,26 +38,26 @@ export interface ContactSectionProps {
 }
 
 const PLATFORM_COLORS: Record<string, string> = {
-  email: "bg-accent",
+  email: "bg-gradient-to-br from-[#F6339A] via-[#F6339A] to-[#FF2056]",
   linkedin: "bg-[#0077B5]",
-  instagram: "bg-gradient-to-br from-[#f09433] via-[#e6683c] to-[#dc2743]",
+  instagram: "bg-gradient-to-br from-[#AD46FF] via-[#F6339A] to-[#F6339A]",
   github: "bg-foreground",
   twitter: "bg-[#1DA1F2]",
 };
 
 const PLATFORM_ICONS: Record<string, React.ReactNode> = {
   email: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 6L2 7" />
     </svg>
   ),
   linkedin: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 24 24" fill="white" aria-hidden="true">
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
     </svg>
   ),
   instagram: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
     </svg>
   ),
@@ -212,7 +212,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 className="flex items-center gap-4 p-4 rounded-2xl border border-border transition-colors group card-lift"
                 aria-label={`${link.platform}: ${handle}`}
               >
-                <div className={`w-12 h-12 rounded-full ${colorClass} flex items-center justify-center flex-shrink-0`}>
+                <div className={`w-12 h-12 rounded-[14px] ${colorClass} flex items-center justify-center flex-shrink-0`}>
                   {icon}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -234,7 +234,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               className="flex items-center gap-4 p-4 rounded-2xl border border-border transition-colors card-lift"
               aria-label={`Email: ${email}`}
             >
-              <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-[14px] bg-gradient-to-br from-[#F6339A] to-[#FF2056] flex items-center justify-center flex-shrink-0">
                 {PLATFORM_ICONS.email}
               </div>
               <div className="flex-1 min-w-0">
