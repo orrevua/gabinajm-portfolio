@@ -9,7 +9,7 @@ interface ScrollRevealProps {
   className?: string;
   stagger?: boolean;
   variant?: RevealVariant;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 }
 
 const VARIANT_CLASS: Record<RevealVariant, string> = {

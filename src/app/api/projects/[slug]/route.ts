@@ -61,11 +61,11 @@ export async function generateStaticParams() {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse<ApiResponse>> {
   void request;
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     // Validate slug
     if (!slug || typeof slug !== "string" || slug.trim().length === 0) {

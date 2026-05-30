@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       colors: {
         background: "#faf7ef",
-        foreground: "#3d0038",
+        foreground: "#0A0A0A",
         muted: "#6b6b7a",
         border: "#e6e2db",
         accent: "#f6339a",
@@ -41,6 +41,7 @@ module.exports = {
         'float-a': 'floatA 5s ease-in-out infinite',
         'float-b': 'floatB 6.5s ease-in-out infinite',
         'wave': 'wave 2.5s ease-in-out infinite',
+        'spin-slow': 'spin 20s linear infinite',
       },
       keyframes: {
         fadeUp: {
