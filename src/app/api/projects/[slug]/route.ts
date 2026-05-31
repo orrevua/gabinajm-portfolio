@@ -86,7 +86,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: `Project with slug "${slug}" not found`,
+          error: "Project not found",
           code: "NOT_FOUND",
         },
         { status: 404 }
@@ -148,15 +148,5 @@ export async function GET(
  */
 export async function OPTIONS(request: NextRequest): Promise<NextResponse> {
   void request;
-  return NextResponse.json(
-    { message: "OK" },
-    {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    }
-  );
+  return NextResponse.json(null, { status: 204 });
 }

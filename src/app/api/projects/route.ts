@@ -133,15 +133,5 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
  */
 export async function OPTIONS(request: NextRequest): Promise<NextResponse> {
   void request;
-  return NextResponse.json(
-    { message: "OK" },
-    {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    }
-  );
+  return NextResponse.json(null, { status: 204 });
 }
