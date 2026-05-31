@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "@/src/i18n";
@@ -42,6 +42,12 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!error) return;
+    const timer = setTimeout(() => setError(""), 5000);
+    return () => clearTimeout(timer);
+  }, [error]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -70,7 +76,7 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
 
   return (
     <div className="min-h-screen flex flex-col pt-28 md:pt-36">
-      <div className="container-max mb-8">
+      <div className="container-max mb-6 px-[22rem]">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm font-medium text-[#0A0A0A]/70 hover:text-[#0A0A0A] transition-colors"
@@ -84,15 +90,15 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
 
       <div className="flex-1 flex items-start justify-center px-6">
         <div
-          className="w-full max-w-md bg-white rounded-3xl p-8 md:p-10 shadow-sm"
+          className="w-full max-w-md bg-white rounded-3xl p-8 md:p-10 drop-shadow-2xl"
           role="dialog"
           aria-label={`Password required for ${projectTitle}`}
         >
           <div className="flex flex-col items-center text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-accent-purple flex items-center justify-center mb-5">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-accent-purple flex items-center justify-center mb-5 drop-shadow-xl rotate-[5deg]">
               <ShieldIcon />
             </div>
-            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent mb-2">
+            <h1 className="text-3xl font-extrabold bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent mb-2">
               {t.password.title}
             </h1>
             <p className="text-sm text-[#0A0A0A]/60">
@@ -128,12 +134,6 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
               </button>
             </div>
 
-            {error && (
-              <p className="text-sm text-[#0A0A0A] mt-1.5 mb-4" role="alert">
-                {error}
-              </p>
-            )}
-
             <button
               type="submit"
               disabled={loading || !password}
@@ -144,6 +144,19 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
           </form>
         </div>
       </div>
+
+      {error && (
+        <div
+          role="alert"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#DC2626] text-white px-6 py-3.5 rounded-xl shadow-lg animate-fade-in"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span className="text-sm font-medium">{error}</span>
+        </div>
+      )}
     </div>
   );
 };

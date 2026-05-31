@@ -154,6 +154,8 @@ interface SanityProject {
     caption?: string;
     caption_pt?: string;
     columns?: number;
+    imageAspectRatio?: string;
+    imageFit?: string;
     metric?: string;
     label?: string;
     alt?: string;
@@ -347,6 +349,8 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
       subtitle: loc(s.subtitle, s.subtitle_pt, locale),
       caption: loc(s.caption, s.caption_pt, locale),
       columns: s.columns,
+      imageAspectRatio: normalizeImageAspectRatio(s.imageAspectRatio),
+      imageFit: normalizeImageFit(s.imageFit),
       alt: s.alt,
       image: s.image,
       images: s.images,
@@ -381,6 +385,18 @@ function normalizePadding(raw?: string): SectionPadding {
 
 function normalizeOverlay(raw?: boolean): SectionOverlay {
   return raw ? "dark" : "none";
+}
+
+function normalizeImageFit(raw?: string): "cover" | "contain" {
+  return raw === "contain" ? "contain" : "cover";
+}
+
+function normalizeImageAspectRatio(raw?: string): "3/4" | "1/1" | "16/9" | "4/1" | undefined {
+  if (raw === "3/4" || raw === "1/1" || raw === "16/9" || raw === "4/1") {
+    return raw;
+  }
+
+  return undefined;
 }
 
 function mapSanitySectionToModel(doc: SanitySection, locale: string = "en"): Section {

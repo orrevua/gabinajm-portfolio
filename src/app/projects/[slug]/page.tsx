@@ -126,8 +126,12 @@ function FullWidthImage({ section }: { section: ContentSection }) {
 
 function ImageGallery({ section }: { section: ContentSection }) {
   const cols = section.columns || 2;
-  const images = section.images || [];
+  const imageFitClass = section.imageFit === "contain" ? "object-contain" : "object-cover";
+  const images = (section.images || []).filter((img) => img.asset?.url);
   if (images.length === 0) return null;
+
+  const hasSpans = images.some((img) => img.span && img.span > 1);
+  const hasDimensions = images.some((img) => img.asset?.dimensions);
 
   return (
     <div
@@ -135,23 +139,45 @@ function ImageGallery({ section }: { section: ContentSection }) {
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">
-        <div
-          className="grid gap-5"
-          style={{ gridTemplateColumns: `repeat(${Math.min(cols, 4)}, 1fr)` }}
-        >
-          {images.map((img, i) => (
-            img.asset?.url && (
-              <div key={i} className="relative aspect-[4/3] rounded-lg overflow-hidden">
+        {hasSpans || hasDimensions ? (
+          <div className="flex gap-3 md:gap-4 w-full">
+            {images.map((img, i) => {
+              const d = img.asset?.dimensions;
+              const ratio = d ? d.width / d.height : 1;
+              const flex = (img.span || 1) * ratio;
+              return (
+                <div
+                  key={i}
+                  className="relative overflow-hidden rounded-lg"
+                  style={{ flex, aspectRatio: `${ratio}` }}
+                >
+                  <Image
+                    src={img.asset!.url}
+                    alt={img.alt || ""}
+                    fill
+                    className={imageFitClass}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div
+            className="grid gap-3 md:gap-4"
+            style={{ gridTemplateColumns: `repeat(${Math.min(cols, 4)}, 1fr)` }}
+          >
+            {images.map((img, i) => (
+              <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-lg">
                 <Image
-                  src={img.asset.url}
+                  src={img.asset!.url}
                   alt={img.alt || ""}
                   fill
-                  className="object-cover"
+                  className={imageFitClass}
                 />
               </div>
-            )
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

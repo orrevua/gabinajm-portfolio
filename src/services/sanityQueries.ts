@@ -177,6 +177,8 @@ export const PROJECT_BY_SLUG_QUERY = `
       caption,
       caption_pt,
       columns,
+      imageAspectRatio,
+      imageFit,
       metric,
       label,
       alt,
@@ -192,9 +194,11 @@ export const PROJECT_BY_SLUG_QUERY = `
         asset-> {
           _id,
           url,
-          "lqip": metadata.lqip
+          "lqip": metadata.lqip,
+          "dimensions": metadata.dimensions
         },
-        alt
+        alt,
+        span
       },
       cards[] {
         metric,

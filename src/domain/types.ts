@@ -77,8 +77,9 @@ export interface Technology {
 }
 
 export interface ContentSectionImage {
-  asset?: { url: string; lqip?: string };
+  asset?: { url: string; lqip?: string; dimensions?: { width: number; height: number } };
   alt?: string;
+  span?: number;
 }
 
 export interface ContentSectionCard {
@@ -98,6 +99,8 @@ export interface ContentSection {
   subtitle?: string;
   caption?: string;
   columns?: number;
+  imageAspectRatio?: "3/4" | "1/1" | "16/9" | "4/1";
+  imageFit?: "cover" | "contain";
   alt?: string;
   image?: ContentSectionImage;
   images?: ContentSectionImage[];

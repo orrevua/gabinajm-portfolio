@@ -237,6 +237,35 @@ export default defineType({
           title: 'Image Gallery',
           fields: [
             defineField({
+              name: 'imageAspectRatio',
+              title: 'Image Aspect Ratio',
+              type: 'string',
+              description: 'Controls the visible frame ratio for gallery images',
+              options: {
+                list: [
+                  { title: '3:4', value: '3/4' },
+                  { title: 'Square', value: '1/1' },
+                  { title: '16:9', value: '16/9' },
+                  { title: 'Panorama', value: '4/1' },
+                ],
+                layout: 'radio',
+              },
+            }),
+            defineField({
+              name: 'imageFit',
+              title: 'Image Fit',
+              type: 'string',
+              description: 'Choose whether gallery images crop to fill the frame or fit fully inside it',
+              options: {
+                list: [
+                  { title: 'Cover', value: 'cover' },
+                  { title: 'Contain', value: 'contain' },
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'cover',
+            }),
+            defineField({
               name: 'columns',
               title: 'Columns',
               type: 'number',
@@ -256,6 +285,14 @@ export default defineType({
                       name: 'alt',
                       title: 'Alt Text',
                       type: 'string',
+                    }),
+                    defineField({
+                      name: 'span',
+                      title: 'Column Span',
+                      type: 'number',
+                      description: 'How many columns this image spans (1 = normal, 2 = double width). Images in the same row share the same height.',
+                      options: { list: [1, 2, 3] },
+                      initialValue: 1,
                     }),
                   ],
                 },

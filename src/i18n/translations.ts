@@ -40,7 +40,7 @@ export const translations = {
     },
     projects: {
       heading: "My projects",
-      backToProjects: "Back to projects",
+      backToProjects: "Back",
       nextProject: "Next Project",
       viewProject: "View Project",
       sourceCode: "Source Code",
@@ -143,7 +143,7 @@ export const translations = {
     },
     projects: {
       heading: "Meus projetos",
-      backToProjects: "Voltar aos projetos",
+      backToProjects: "Voltar",
       nextProject: "Próximo Projeto",
       viewProject: "Ver Projeto",
       sourceCode: "Código Fonte",
