@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     default: "Gabinajm | Product Designer",
     template: "%s | Gabinajm",
   },
-  description: "Product Designer crafting accessible and human-centered experiences",
+  description: "Gabi Abinajm is a Product Designer crafting accessible, human-centered digital experiences. Explore her portfolio of UX/UI design projects built with intentional simplicity and inclusive design principles.",
   keywords: [
     "Product Designer",
     "UX Design",
@@ -41,12 +41,12 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: "Gabinajm",
     title: "Gabinajm | Product Designer",
-    description: "Product Designer crafting accessible and human-centered experiences",
+    description: "Gabi Abinajm is a Product Designer crafting accessible, human-centered digital experiences with intentional simplicity and inclusive design.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Gabinajm | Product Designer",
-    description: "Product Designer crafting accessible and human-centered experiences",
+    description: "Gabi Abinajm is a Product Designer crafting accessible, human-centered digital experiences with intentional simplicity and inclusive design.",
   },
   robots: {
     index: true,
@@ -112,7 +112,7 @@ export default async function RootLayout({
           <SkipToContent />
           <Navigation brandName="Gabinajm" resumeUrl={resumeUrl} pastExperience={pastExperience} />
           <main id="main-content" className="flex-1">{children}</main>
-          <footer className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted">
+          <footer className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted min-h-[88px]">
             <p>{translations[locale].footer.copyright.replace("{year}", String(new Date().getFullYear()))}</p>
             <p>{translations[locale].footer.tagline}</p>
           </footer>
