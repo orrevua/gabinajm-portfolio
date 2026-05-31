@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useRef } from "react";
+import Hls from "hls.js";
 
 interface VideoPlayerProps {
   src: string;
@@ -21,19 +22,49 @@ export function VideoPlayer({
   muted,
   className,
 }: VideoPlayerProps) {
-  const videoSrc = useMemo(() => {
-    if (src.includes("cdn.sanity.io/files/") && src.endsWith(".ts")) {
-      return `/api/video?url=${encodeURIComponent(src)}`;
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hlsRef = useRef<Hls | null>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    const isSanityTS =
+      src.includes("cdn.sanity.io/files/") && src.endsWith(".ts");
+
+    if (!isSanityTS) {
+      video.src = src;
+      return undefined;
     }
-    return src;
-  }, [src]);
+
+    const manifestUrl = `/api/video?url=${encodeURIComponent(src)}&format=m3u8`;
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hlsRef.current = hls;
+      hls.loadSource(manifestUrl);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        if (autoPlay) video.play();
+      });
+      return () => {
+        hls.destroy();
+        hlsRef.current = null;
+      };
+    }
+
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = manifestUrl;
+      if (autoPlay) video.play();
+    }
+    return undefined;
+  }, [src, autoPlay]);
 
   return (
     <video
-      src={videoSrc}
+      ref={videoRef}
       poster={poster}
       controls={controls}
-      autoPlay={autoPlay}
       loop={loop}
       muted={muted}
       playsInline
