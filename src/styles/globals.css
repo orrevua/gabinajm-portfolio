@@ -35,12 +35,22 @@
     @apply text-sm uppercase tracking-widest hover:text-accent-pink transition-colors;
   }
 
-  /* Scroll-reveal: fade + translate */
+  /* Scroll-reveal: fade + translate — only animate when JS has loaded */
   .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal:not(.is-visible) {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .reveal {
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
   }
 
   .reveal.is-visible {
@@ -60,24 +70,34 @@
   }
 
   .clip-reveal .clip-target {
-    opacity: 0;
-    transform: translateY(110%);
     display: block;
   }
 
-  .clip-reveal.is-visible .clip-target {
-    opacity: 1;
-    animation: clip-slide-up 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  @media (prefers-reduced-motion: no-preference) {
+    .clip-reveal .clip-target {
+      opacity: 0;
+      transform: translateY(110%);
+    }
+
+    .clip-reveal.is-visible .clip-target {
+      opacity: 1;
+      animation: clip-slide-up 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
   }
 
   /* Line expand: horizontal rule scales from 0 to full width */
   .line-reveal {
-    transform: scaleX(0);
     transform-origin: left center;
   }
 
-  .line-reveal.is-visible {
-    animation: line-expand 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  @media (prefers-reduced-motion: no-preference) {
+    .line-reveal:not(.is-visible) {
+      transform: scaleX(0);
+    }
+
+    .line-reveal.is-visible {
+      animation: line-expand 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
   }
 
   @keyframes clip-slide-up {
