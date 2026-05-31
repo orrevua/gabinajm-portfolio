@@ -202,6 +202,7 @@ export const PROJECT_BY_SLUG_QUERY = `
         label_pt
       },
       "videoUrl": video.asset->url,
+      "videoAssetId": video.asset->_id,
       externalUrl,
       poster {
         asset-> { _id, url, "lqip": metadata.lqip },
@@ -387,6 +388,7 @@ export const HOME_PAGE_QUERY = `
       subtitle,
       subtitle_pt,
       "videoUrl": video.asset->url,
+      "videoAssetId": video.asset->_id,
       externalUrl,
       poster {
         asset-> { _id, url, "lqip": metadata.lqip },

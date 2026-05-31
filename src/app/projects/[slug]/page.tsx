@@ -272,6 +272,7 @@ function VideoBlock({ section }: { section: ContentSection }) {
               loop={section.loop}
               muted={section.muted}
               playsInline
+              preload="metadata"
               className="w-full h-full object-cover"
             />
           ) : (

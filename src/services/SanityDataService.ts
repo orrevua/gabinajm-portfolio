@@ -34,6 +34,16 @@ import {
   ABOUT_PAGE_QUERY,
 } from "./sanityQueries";
 
+function buildFileUrl(assetId: string): string {
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
+  const parts = assetId.replace(/^file-/, "");
+  const lastDash = parts.lastIndexOf("-");
+  const hash = parts.slice(0, lastDash);
+  const ext = parts.slice(lastDash + 1);
+  return `https://cdn.sanity.io/files/${projectId}/${dataset}/${hash}.${ext}`;
+}
+
 /**
  * Raw Sanity document types before mapping to domain models
  */
@@ -151,6 +161,7 @@ interface SanityProject {
     images?: Array<{ asset?: { url: string; lqip?: string }; alt?: string }>;
     cards?: Array<{ metric: string; label: string; label_pt?: string }>;
     videoUrl?: string;
+    videoAssetId?: string;
     externalUrl?: string;
     poster?: { asset?: { url: string; lqip?: string }; alt?: string };
     autoplay?: boolean;
@@ -343,7 +354,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
         metric: c.metric,
         label: loc(c.label, c.label_pt, locale),
       })),
-      videoUrl: s.videoUrl,
+      videoUrl: s.videoUrl || (s.videoAssetId ? buildFileUrl(s.videoAssetId) : undefined),
       externalUrl: s.externalUrl,
       poster: s.poster,
       autoplay: s.autoplay,
