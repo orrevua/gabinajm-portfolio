@@ -29,7 +29,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const avatarUrl = profile.avatar?.asset?.url;
 
   return (
-    <header
+    <section
       className="min-h-[70vh] md:min-h-[85vh] flex items-center relative pt-28 pb-16 overflow-hidden"
       aria-label="Portfolio hero"
     >
@@ -90,7 +90,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         )}
       </div>
-    </header>
+    </section>
   );
 };
 

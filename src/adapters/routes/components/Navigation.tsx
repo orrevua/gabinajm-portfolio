@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/src/i18n";
@@ -51,12 +52,13 @@ export const Navigation: React.FC<NavigationProps> = ({
             className="relative z-[2] flex items-center"
             aria-label={`${brandName} home`}
           >
-            <img
+            <Image
               src="/images/nav_logo.svg"
               alt={`${brandName} logo`}
               width={161}
               height={40}
               className="h-10 w-auto"
+              priority
             />
           </Link>
 
@@ -88,6 +90,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             className="md:hidden text-[#0A0A0A] hover:text-accent-pink focus:outline-none transition-colors"
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
+            aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"
           >
             <span className="uppercase text-xs tracking-widest font-semibold">
@@ -102,7 +105,9 @@ export const Navigation: React.FC<NavigationProps> = ({
           id="mobile-menu"
           className="fixed inset-0 z-[60] flex flex-col md:hidden animate-fade-in"
           style={{ background: "linear-gradient(180deg, #FDF2F8 0%, #FAF5FF 50%, #EFF6FF 100%)" }}
-          role="region"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
         >
           <div className="flex justify-between items-center px-6 pt-5">
             <LanguageSwitcher />

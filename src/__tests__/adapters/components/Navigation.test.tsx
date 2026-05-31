@@ -141,13 +141,13 @@ describe("Navigation Component", () => {
       expect(button).toHaveAttribute("aria-expanded");
     });
 
-    it("should have role region on mobile menu", async () => {
+    it("should have role dialog on mobile menu", async () => {
       render(<Navigation />);
       const button = getMenuButton();
 
       fireEvent.click(button!);
 
-      expect(screen.getByRole("region")).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
   });
 
