@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useMemo } from "react";
 
 interface VideoPlayerProps {
   src: string;
@@ -21,22 +21,16 @@ export function VideoPlayer({
   muted,
   className,
 }: VideoPlayerProps) {
-  const retriedRef = useRef(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const handleError = useCallback(() => {
-    if (retriedRef.current || !videoRef.current) return;
-    if (src.includes("cdn.sanity.io/files/")) {
-      retriedRef.current = true;
-      videoRef.current.src = `/api/video?url=${encodeURIComponent(src)}`;
-      videoRef.current.load();
+  const videoSrc = useMemo(() => {
+    if (src.includes("cdn.sanity.io/files/") && src.endsWith(".ts")) {
+      return `/api/video?url=${encodeURIComponent(src)}`;
     }
+    return src;
   }, [src]);
 
   return (
     <video
-      ref={videoRef}
-      src={src}
+      src={videoSrc}
       poster={poster}
       controls={controls}
       autoPlay={autoPlay}
@@ -44,7 +38,6 @@ export function VideoPlayer({
       muted={muted}
       playsInline
       preload="metadata"
-      onError={handleError}
       className={className}
     />
   );
