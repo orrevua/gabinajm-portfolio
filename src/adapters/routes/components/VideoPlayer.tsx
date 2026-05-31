@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useCallback } from "react";
 
 interface VideoPlayerProps {
   src: string;
@@ -21,52 +21,30 @@ export function VideoPlayer({
   muted,
   className,
 }: VideoPlayerProps) {
+  const retriedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !src) return;
-
-    const needsMpegts = src.endsWith(".ts");
-
-    if (!needsMpegts) {
-      video.src = src;
-      return;
+  const handleError = useCallback(() => {
+    if (retriedRef.current || !videoRef.current) return;
+    if (src.includes("cdn.sanity.io/files/")) {
+      retriedRef.current = true;
+      videoRef.current.src = `/api/video?url=${encodeURIComponent(src)}`;
+      videoRef.current.load();
     }
-
-    let player: unknown;
-
-    import("mpegts.js").then((mpegts) => {
-      if (!mpegts.default.isSupported()) {
-        video.src = src;
-        return;
-      }
-      const p = mpegts.default.createPlayer({
-        type: "mpegts",
-        url: src,
-      });
-      player = p;
-      p.attachMediaElement(video);
-      p.load();
-      if (autoPlay) p.play();
-    });
-
-    return () => {
-      if (player && typeof (player as { destroy: () => void }).destroy === "function") {
-        (player as { destroy: () => void }).destroy();
-      }
-    };
-  }, [src, autoPlay]);
+  }, [src]);
 
   return (
     <video
       ref={videoRef}
+      src={src}
       poster={poster}
       controls={controls}
+      autoPlay={autoPlay}
       loop={loop}
       muted={muted}
       playsInline
       preload="metadata"
+      onError={handleError}
       className={className}
     />
   );
