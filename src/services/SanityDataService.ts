@@ -72,6 +72,7 @@ interface SanityProfile {
   technologies?: string[];
   pastExperience?: Array<{
     name: string;
+    url?: string;
     logo?: {
       asset?: { url: string; lqip?: string };
       alt?: string;
@@ -267,6 +268,7 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
     technologies: sanityProfile.technologies || [],
     pastExperience: (sanityProfile.pastExperience || []).map((exp) => ({
       name: exp.name,
+      url: exp.url || null,
       logo: {
         url: exp.logo?.asset?.url || "",
         alt: exp.logo?.alt || exp.name,

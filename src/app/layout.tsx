@@ -67,7 +67,7 @@ export default async function RootLayout({
   const locale: Locale = localeCookie === "pt" ? "pt" : "en";
 
   let resumeUrl: string | null = null;
-  let pastExperience: Array<{ name: string; logo: { url: string; alt: string } }> = [];
+  let pastExperience: Array<{ name: string; url: string | null; logo: { url: string; alt: string } }> = [];
 
   try {
     const dataService = await getSanityDataService();
@@ -76,6 +76,7 @@ export default async function RootLayout({
       resumeUrl = profile.getResumeUrl?.() ?? profile.resumeUrl;
       pastExperience = profile.pastExperience.map((c) => ({
         name: c.name,
+        url: c.url,
         logo: { url: c.logo.url, alt: c.logo.alt },
       }));
     }

@@ -20,21 +20,30 @@ export const PastExperience: React.FC<PastExperienceProps> = ({
       </h2>
 
       <div className="flex items-center justify-center gap-6 md:gap-8 flex-wrap">
-        {companies.map((company) => (
-          <div
-            key={company.name}
-            className="w-[75px] h-[75px] rounded-2xl overflow-hidden shadow-sm transition-all duration-500 grayscale hover:grayscale-0"
-            title={company.name}
-          >
-            <Image
-              src={company.logo.url}
-              alt={company.logo.alt || company.name}
-              width={75}
-              height={75}
-              className="object-cover w-full h-full"
-            />
-          </div>
-        ))}
+        {companies.map((company) => {
+          const logoContent = (
+            <div
+              className="w-[75px] h-[75px] rounded-2xl overflow-hidden shadow-sm transition-all duration-500 grayscale hover:grayscale-0"
+              title={company.name}
+            >
+              <Image
+                src={company.logo.url}
+                alt={company.logo.alt || company.name}
+                width={75}
+                height={75}
+                className="object-cover w-full h-full"
+              />
+            </div>
+          );
+
+          return company.url ? (
+            <a key={company.name} href={company.url} target="_blank" rel="noopener noreferrer">
+              {logoContent}
+            </a>
+          ) : (
+            <div key={company.name}>{logoContent}</div>
+          );
+        })}
       </div>
     </section>
   );

@@ -38,6 +38,7 @@ export interface ProfileAvatar {
 export interface ExperienceCompany {
   name: string;
   logo: SanityImageAsset;
+  url: string | null;
 }
 
 export interface PortableTextMarkDefinition {

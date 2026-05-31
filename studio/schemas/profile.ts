@@ -189,6 +189,7 @@ export default defineType({
         type: 'object',
         fields: [
           defineField({ name: 'name', title: 'Company Name', type: 'string', validation: (rule) => rule.required() }),
+          defineField({ name: 'url', title: 'URL', type: 'url', description: 'Link to company website or relevant page' }),
           defineField({ name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true }, validation: (rule) => rule.required() }),
         ],
         preview: { select: { title: 'name', media: 'logo' } },

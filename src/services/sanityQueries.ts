@@ -41,6 +41,7 @@ export const PROFILE_QUERY = `
     technologies[],
     pastExperience[] {
       name,
+      url,
       logo {
         asset-> { _id, url, "lqip": metadata.lqip },
         alt
