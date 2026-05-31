@@ -146,8 +146,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check for Studio changes
+        id: studio-changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q '^studio/'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Setup Node.js
+        if: steps.studio-changes.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -155,9 +167,11 @@ jobs:
           cache-dependency-path: studio/package-lock.json
 
       - name: Install Studio dependencies
+        if: steps.studio-changes.outputs.changed == 'true'
         run: cd studio && npm ci
 
       - name: Deploy Studio
+        if: steps.studio-changes.outputs.changed == 'true'
         run: cd studio && npx sanity deploy --url orrevua --yes
         env:
           SANITY_STUDIO_PROJECT_ID: ${{ secrets.SANITY_STUDIO_PROJECT_ID }}
