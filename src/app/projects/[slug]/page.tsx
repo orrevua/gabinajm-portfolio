@@ -268,7 +268,7 @@ function VideoBlock({ section }: { section: ContentSection }) {
             <VideoPlayer
               src={section.videoUrl!}
               poster={section.poster?.asset?.url}
-              controls
+              controls={!section.autoplay}
               autoPlay={section.autoplay}
               loop={section.loop}
               muted={section.muted}

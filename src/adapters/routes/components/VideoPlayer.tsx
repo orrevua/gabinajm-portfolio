@@ -65,6 +65,7 @@ export function VideoPlayer({
       ref={videoRef}
       poster={poster}
       controls={controls}
+      autoPlay={autoPlay}
       loop={loop}
       muted={muted}
       playsInline
