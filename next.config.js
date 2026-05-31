@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
+    optimizeCss: true,
     optimizePackageImports: ["@portabletext/react", "@sanity/client"],
   },
   images: {
