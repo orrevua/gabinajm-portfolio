@@ -80,13 +80,8 @@ export default async function HomePage() {
   const socialLinks = profile.getSocialLinks?.() || profile.socialLinks || [];
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
 
-  const heroImageUrl = profile.avatar?.asset?.url;
-
   return (
     <>
-      {heroImageUrl && (
-        <link rel="preload" as="image" href={heroImageUrl} fetchPriority="high" />
-      )}
       <HeroSection
         profile={profile}
         greeting={lf(heroConfig, "greeting", t.hero.greeting)}
