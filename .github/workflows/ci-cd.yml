@@ -151,9 +151,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: studio/package-lock.json
 
       - name: Install Studio dependencies
-        run: cd studio && npm install
+        run: cd studio && npm ci
 
       - name: Deploy Studio
         run: cd studio && npx sanity deploy --url orrevua --yes
