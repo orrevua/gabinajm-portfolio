@@ -99,7 +99,7 @@ export interface ContentSection {
   subtitle?: string;
   caption?: string;
   columns?: number;
-  imageAspectRatio?: "3/4" | "1/1" | "16/9" | "4/1";
+  imageAspectRatio?: "auto" | "214/100" | "3/4" | "1/1" | "16/9" | "4/1";
   imageFit?: "cover" | "contain";
   alt?: string;
   image?: ContentSectionImage;
@@ -111,6 +111,7 @@ export interface ContentSection {
   autoplay?: boolean;
   loop?: boolean;
   muted?: boolean;
+  useCard?: boolean;
 }
 
 export interface SectionChip {

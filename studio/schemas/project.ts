@@ -182,6 +182,25 @@ export default defineType({
               type: 'array',
               of: [{ type: 'string' }],
             }),
+            defineField({
+              name: 'useCard',
+              title: 'Display as Card',
+              type: 'boolean',
+              description: 'Wrap content in a white card with shadow',
+              initialValue: false,
+            }),
+            defineField({
+              name: 'bgColor',
+              title: 'Background Color',
+              type: 'string',
+              description: 'Solid hex (e.g. #F5F5F5) or CSS gradient (e.g. linear-gradient(135deg, #667eea, #764ba2))',
+            }),
+            defineField({
+              name: 'textColor',
+              title: 'Text Color',
+              type: 'string',
+              description: 'Hex color for text (e.g. #ffffff for light text on dark backgrounds)',
+            }),
           ],
           preview: {
             select: { title: 'heading', subtitle: 'sectionLabel' },
@@ -222,6 +241,37 @@ export default defineType({
               name: 'caption_pt',
               title: 'Caption (PT)',
               type: 'string',
+            }),
+            defineField({
+              name: 'imageAspectRatio',
+              title: 'Image Aspect Ratio',
+              type: 'string',
+              description: 'Controls the visible frame ratio. Leave empty for auto (uses the image\'s natural ratio).',
+              options: {
+                list: [
+                  { title: 'Auto (natural)', value: 'auto' },
+                  { title: '21:10 (cinematic)', value: '214/100' },
+                  { title: '16:9', value: '16/9' },
+                  { title: '4:3', value: '4/3' },
+                  { title: '3:4 (portrait)', value: '3/4' },
+                  { title: 'Square', value: '1/1' },
+                ],
+                layout: 'radio',
+              },
+            }),
+            defineField({
+              name: 'imageFit',
+              title: 'Image Fit',
+              type: 'string',
+              description: 'Cover crops to fill the frame, Contain fits the whole image inside.',
+              options: {
+                list: [
+                  { title: 'Cover (crop to fill)', value: 'cover' },
+                  { title: 'Contain (fit inside)', value: 'contain' },
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'cover',
             }),
           ],
           preview: {

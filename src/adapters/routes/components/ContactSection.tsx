@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "@/src/i18n";
 
-function Toast({ type, onDismiss, successMsg, errorMsg }: { type: "sent" | "error"; onDismiss: () => void; successMsg: string; errorMsg: string }) {
+function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: string; onDismiss: () => void }) {
   useEffect(() => {
     const timer = setTimeout(onDismiss, 5000);
     return () => clearTimeout(timer);
@@ -12,7 +12,7 @@ function Toast({ type, onDismiss, successMsg, errorMsg }: { type: "sent" | "erro
   const isSent = type === "sent";
   return (
     <div
-      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-pill shadow-lg text-white text-base font-medium animate-fade-in ${isSent ? "bg-[#16A34A]" : "bg-[#DC2626]"}`}
+      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-pill shadow-lg text-white text-base font-medium animate-fade-in max-w-[90vw] ${isSent ? "bg-[#16A34A]" : "bg-[#DC2626]"}`}
       role="alert"
     >
       {isSent ? (
@@ -24,7 +24,7 @@ function Toast({ type, onDismiss, successMsg, errorMsg }: { type: "sent" | "erro
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
         </svg>
       )}
-      {isSent ? successMsg : errorMsg}
+      {message}
     </div>
   );
 }
@@ -98,10 +98,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const displaySubtitle = subtitle || t.contact.subtitle;
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sending");
+    setErrorMessage("");
 
     try {
       const res = await fetch("/api/contact", {
@@ -115,10 +117,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         setFormData({ name: "", email: "", message: "" });
       } else {
         const data = await res.json();
-        console.error("Contact form error:", data.error);
+        setErrorMessage(data.error || t.contact.toastError);
         setStatus("error");
       }
     } catch {
+      setErrorMessage(t.contact.toastError);
       setStatus("error");
     }
   };
@@ -189,7 +192,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           </button>
 
           {(status === "sent" || status === "error") && (
-            <Toast type={status} onDismiss={() => setStatus("idle")} successMsg={t.contact.toastSuccess} errorMsg={t.contact.toastError} />
+            <Toast type={status} message={status === "sent" ? t.contact.toastSuccess : errorMessage} onDismiss={() => setStatus("idle")} />
           )}
         </form>
 

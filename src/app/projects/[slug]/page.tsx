@@ -71,28 +71,65 @@ export async function generateMetadata(
 }
 
 function TextBlock({ section }: { section: ContentSection }) {
+  const textColor = section.textColor || "#0A0A0A";
+  const textMuted = section.textColor ? `${textColor}CC` : "#0A0A0A/70";
+  const isGradient = section.bgColor?.includes("gradient");
+  const bgStyle: React.CSSProperties = section.bgColor
+    ? isGradient
+      ? { background: section.bgColor }
+      : { backgroundColor: section.bgColor }
+    : {};
+
+  const content = (
+    <>
+      {section.sectionLabel && (
+        <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2" style={{ color: textColor }}>
+          {section.sectionLabel}
+        </h2>
+      )}
+      {section.body && (
+        <p className="text-base leading-[1.7] whitespace-pre-wrap" style={{ color: section.textColor ? textMuted : undefined, opacity: section.textColor ? undefined : 0.7 }}>
+          {section.body}
+        </p>
+      )}
+      {section.bullets && section.bullets.length > 0 && (
+        <ul className="mt-6 list-disc pl-6 space-y-2 text-base" style={{ color: section.textColor ? textMuted : undefined, opacity: section.textColor ? undefined : 0.7 }}>
+          {section.bullets.map((bullet, i) => (
+            <li key={i} className="leading-[1.7]">
+              {bullet}
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+
+  if (section.useCard) {
+    return (
+      <div className="max-w-[1158px] mx-auto px-5 py-6 md:py-8">
+        <div className="rounded-3xl p-8 md:p-12" style={{ ...bgStyle, backgroundColor: bgStyle.backgroundColor || "white" }}>
+          {content}
+        </div>
+      </div>
+    );
+  }
+
+  if (section.bgColor) {
+    return (
+      <div className="w-full py-6 md:py-8" style={bgStyle}>
+        <div className="max-w-[1158px] mx-auto px-5">
+          <div className="max-w-[924px]">
+            {content}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-[1158px] mx-auto px-5 py-10 md:py-14">
+    <div className="max-w-[1158px] mx-auto px-5 py-6 md:py-8">
       <div className="max-w-[924px]">
-        {section.sectionLabel && (
-          <h2 className="text-xl md:text-2xl font-bold text-[#0A0A0A] mb-4 flex items-center gap-2">
-            {section.sectionLabel}
-          </h2>
-        )}
-        {section.body && (
-          <p className="text-base leading-[1.7] whitespace-pre-wrap text-[#0A0A0A]/70">
-            {section.body}
-          </p>
-        )}
-        {section.bullets && section.bullets.length > 0 && (
-          <ul className="mt-6 list-disc pl-6 space-y-2 text-[#0A0A0A]/70 text-base">
-            {section.bullets.map((bullet, i) => (
-              <li key={i} className="leading-[1.7]">
-                {bullet}
-              </li>
-            ))}
-          </ul>
-        )}
+        {content}
       </div>
     </div>
   );
@@ -100,25 +137,46 @@ function TextBlock({ section }: { section: ContentSection }) {
 
 function FullWidthImage({ section }: { section: ContentSection }) {
   if (!section.image?.asset?.url) return null;
+  const ratio = section.imageAspectRatio || "214/100";
+  const isAuto = ratio === "auto";
+  const fitClass = section.imageFit === "contain" ? "object-contain" : "object-cover";
+
   return (
     <div
-      className="w-full py-12 md:py-16"
+      className="w-full py-6 md:py-8"
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">
-        <div className="relative w-full aspect-[214/100] rounded-xl overflow-hidden">
-          <Image
-            src={section.image.asset.url}
-            alt={section.alt || section.image.alt || ""}
-            fill
-            className="object-cover"
-          />
+        <div className="bg-white rounded-3xl p-8 md:p-12 drop-shadow-2xl">
+          {isAuto ? (
+            <div className="rounded-xl overflow-hidden">
+              <Image
+                src={section.image.asset.url}
+                alt={section.alt || section.image.alt || ""}
+                width={section.image.asset.dimensions?.width || 1200}
+                height={section.image.asset.dimensions?.height || 630}
+                className={`w-full h-auto ${fitClass}`}
+              />
+            </div>
+          ) : (
+            <div
+              className="relative w-full rounded-xl overflow-hidden"
+              style={{ aspectRatio: ratio }}
+            >
+              <Image
+                src={section.image.asset.url}
+                alt={section.alt || section.image.alt || ""}
+                fill
+                className={fitClass}
+              />
+            </div>
+          )}
+          {section.caption && (
+            <p className="text-center text-sm mt-4 font-semibold" style={{ color: "#4f4f4f" }}>
+              {section.caption}
+            </p>
+          )}
         </div>
-        {section.caption && (
-          <p className="text-center text-sm mt-4 font-semibold" style={{ color: "#4f4f4f" }}>
-            {section.caption}
-          </p>
-        )}
       </div>
     </div>
   );
@@ -135,12 +193,12 @@ function ImageGallery({ section }: { section: ContentSection }) {
 
   return (
     <div
-      className="w-full py-12 md:py-16"
+      className="w-full py-6 md:py-8"
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">
         {hasSpans || hasDimensions ? (
-          <div className="flex gap-3 md:gap-4 w-full">
+          <div className="flex gap-2 w-full">
             {images.map((img, i) => {
               const d = img.asset?.dimensions;
               const ratio = d ? d.width / d.height : 1;
@@ -163,7 +221,7 @@ function ImageGallery({ section }: { section: ContentSection }) {
           </div>
         ) : (
           <div
-            className="grid gap-3 md:gap-4"
+            className="grid gap-2"
             style={{ gridTemplateColumns: `repeat(${Math.min(cols, 4)}, 1fr)` }}
           >
             {images.map((img, i) => (
@@ -188,7 +246,7 @@ function ImpactCards({ section }: { section: ContentSection }) {
   if (cards.length === 0) return null;
 
   return (
-    <div className="max-w-[1158px] mx-auto px-5 py-12 md:py-16">
+    <div className="max-w-[1158px] mx-auto px-5 py-6 md:py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {cards.map((card, i) => (
           <div
@@ -229,7 +287,7 @@ function ColorStrip({ section }: { section: ContentSection }) {
         className="w-full"
         style={{ backgroundColor: section.bgColor, color: textColor }}
       >
-        <div className="max-w-[1400px] mx-auto px-2.5 py-12 md:py-16">
+        <div className="max-w-[1400px] mx-auto px-2.5 py-6 md:py-8">
           {section.image?.asset?.url && (
             <div className="mb-8">
               <div className="relative w-full aspect-[214/100] rounded-xl overflow-hidden">
@@ -285,7 +343,7 @@ function VideoBlock({ section }: { section: ContentSection }) {
 
   return (
     <div
-      className="w-full py-12 md:py-16"
+      className="w-full py-6 md:py-8"
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">

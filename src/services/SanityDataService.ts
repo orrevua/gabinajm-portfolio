@@ -159,8 +159,8 @@ interface SanityProject {
     metric?: string;
     label?: string;
     alt?: string;
-    image?: { asset?: { url: string; lqip?: string }; alt?: string };
-    images?: Array<{ asset?: { url: string; lqip?: string }; alt?: string }>;
+    image?: { asset?: { url: string; lqip?: string; dimensions?: { width: number; height: number } }; alt?: string };
+    images?: Array<{ asset?: { url: string; lqip?: string; dimensions?: { width: number; height: number } }; alt?: string; span?: number }>;
     cards?: Array<{ metric: string; label: string; label_pt?: string }>;
     videoUrl?: string;
     videoAssetId?: string;
@@ -169,6 +169,7 @@ interface SanityProject {
     autoplay?: boolean;
     loop?: boolean;
     muted?: boolean;
+    useCard?: boolean;
   }>;
   isProtected?: boolean;
   featured: boolean;
@@ -364,6 +365,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
       autoplay: s.autoplay,
       loop: s.loop,
       muted: s.muted,
+      useCard: s.useCard,
     })),
     featured: sanityProject.featured,
     publishedAt: new Date(sanityProject.publishedAt),
@@ -391,8 +393,8 @@ function normalizeImageFit(raw?: string): "cover" | "contain" {
   return raw === "contain" ? "contain" : "cover";
 }
 
-function normalizeImageAspectRatio(raw?: string): "3/4" | "1/1" | "16/9" | "4/1" | undefined {
-  if (raw === "3/4" || raw === "1/1" || raw === "16/9" || raw === "4/1") {
+function normalizeImageAspectRatio(raw?: string): "auto" | "214/100" | "3/4" | "1/1" | "16/9" | "4/1" | undefined {
+  if (raw === "auto" || raw === "214/100" || raw === "3/4" || raw === "1/1" || raw === "16/9" || raw === "4/1") {
     return raw;
   }
 
