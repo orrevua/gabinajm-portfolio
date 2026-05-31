@@ -124,7 +124,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             {technologies.map((tech) => (
               <span
                 key={tech}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0A0A0A]/70 bg-background rounded-pill px-3 py-1.5"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0A0A0A]/70 bg-[#F3F4F6] rounded-pill px-3 py-1.5"
               >
                 {getTechIcon(tech)}
                 {tech}

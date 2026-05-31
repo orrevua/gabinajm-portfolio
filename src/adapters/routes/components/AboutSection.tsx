@@ -74,7 +74,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           {heading}
         </h2>
 
-        <div className="text-base md:text-lg text-[#0A0A0A]/80 leading-relaxed max-w-3xl mb-8 space-y-4">
+        <div className="text-base md:text-lg text-[#0A0A0A]/80 leading-relaxed mb-8 space-y-4">
           {body ? (
             body.split("\n\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)
           ) : (
