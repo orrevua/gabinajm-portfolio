@@ -10,6 +10,7 @@ import { PasswordGate } from "@/src/adapters/routes/components/PasswordGate";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
 import { NextProjectCard } from "@/src/adapters/routes/components/NextProjectCard";
 import { BackToProjectsLink } from "@/src/adapters/routes/components/BackToProjectsLink";
+import { VideoPlayer } from "@/src/adapters/routes/components/VideoPlayer";
 import type { ContentSection } from "@/src/domain/types";
 import type { Project } from "@/src/domain/models/Project";
 import type { Profile } from "@/src/domain/models/Profile";
@@ -264,15 +265,13 @@ function VideoBlock({ section }: { section: ContentSection }) {
       <div className="max-w-[1158px] mx-auto px-5">
         <div className="relative w-full aspect-video rounded-xl overflow-hidden">
           {hasUpload ? (
-            <video
-              src={section.videoUrl}
+            <VideoPlayer
+              src={section.videoUrl!}
               poster={section.poster?.asset?.url}
               controls
               autoPlay={section.autoplay}
               loop={section.loop}
               muted={section.muted}
-              playsInline
-              preload="metadata"
               className="w-full h-full object-cover"
             />
           ) : (
