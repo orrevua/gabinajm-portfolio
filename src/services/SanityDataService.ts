@@ -239,11 +239,9 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
     name: sanityProfile.name,
     title: loc(sanityProfile.title, sanityProfile.title_pt, locale),
     bio: loc(sanityProfile.bio, sanityProfile.bio_pt, locale),
-    aboutBio: loc(
-      sanityProfile.aboutBio && sanityProfile.aboutBio.length > 0 ? sanityProfile.aboutBio : null,
-      sanityProfile.aboutBio_pt && sanityProfile.aboutBio_pt.length > 0 ? sanityProfile.aboutBio_pt : null,
-      locale
-    ),
+    aboutBio: locale === "pt"
+      ? (sanityProfile.aboutBio_pt && sanityProfile.aboutBio_pt.length > 0 ? sanityProfile.aboutBio_pt : null)
+      : (sanityProfile.aboutBio && sanityProfile.aboutBio.length > 0 ? sanityProfile.aboutBio : null),
     avatar: sanityProfile.avatar
       ? {
           asset: {
