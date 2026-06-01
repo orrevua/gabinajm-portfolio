@@ -1,8 +1,8 @@
-# gabinajm.com
+# gabinajm-portfolio
 
 Portfolio website for Gabi Abinajm, Product Designer.
 
-**Live:** [gabinajm.com](https://gabinajm.com)
+**Live:** [gabinajm-portfolio](https://gabinajm-portfolio.vercel.app/)
 
 ## Stack
 
