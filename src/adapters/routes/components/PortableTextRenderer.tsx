@@ -10,6 +10,14 @@ const components: PortableTextComponents = {
       <blockquote className="border-l-2 border-current pl-4 italic my-4">{children}</blockquote>
     ),
   },
+  list: {
+    bullet: ({ children }) => <ul className="list-disc pl-6 space-y-2 mb-4">{children}</ul>,
+    number: ({ children }) => <ol className="list-decimal pl-6 space-y-2 mb-4">{children}</ol>,
+  },
+  listItem: {
+    bullet: ({ children }) => <li className="leading-[1.7]">{children}</li>,
+    number: ({ children }) => <li className="leading-[1.7]">{children}</li>,
+  },
   marks: {
     strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
     em: ({ children }) => <em>{children}</em>,

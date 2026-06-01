@@ -11,6 +11,7 @@ import { getServerTranslations } from "@/src/i18n/serverLocale";
 import type { Profile } from "@/src/domain/models/Profile";
 import type { Project } from "@/src/domain/models/Project";
 import type { HomePage as HomePageData } from "@/src/domain/interfaces/DataService";
+import { toPlainText } from "@/src/domain/types";
 
 const CARD_IMAGE_WIDTH = 1200;
 const CARD_IMAGE_HEIGHT = 750;
@@ -111,7 +112,7 @@ export default async function HomePage() {
             projects={projects.map((project) => ({
               title: project.title,
               slug: project.slug,
-              description: project.description,
+              description: toPlainText(project.description),
               mainImage: project.mainImage?.asset
                 ? {
                     url: buildSanityImageUrl(

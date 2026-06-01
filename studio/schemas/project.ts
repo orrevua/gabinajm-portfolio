@@ -1,4 +1,31 @@
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity'
+
+const richText = {
+  type: 'array' as const,
+  of: [
+    defineArrayMember({
+      type: 'block',
+      styles: [{ title: 'Normal', value: 'normal' as const }],
+      lists: [
+        { title: 'Bullet', value: 'bullet' as const },
+        { title: 'Numbered', value: 'number' as const },
+      ],
+      marks: {
+        decorators: [
+          { title: 'Bold', value: 'strong' as const },
+          { title: 'Italic', value: 'em' as const },
+        ],
+        annotations: [
+          {
+            type: 'object' as const,
+            name: 'link',
+            fields: [defineField({ name: 'href', type: 'url', title: 'URL' })],
+          },
+        ],
+      },
+    }),
+  ],
+}
 
 export default defineType({
   name: 'project',
@@ -39,15 +66,13 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Description',
-      type: 'text',
-      rows: 5,
+      ...richText,
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description_pt',
       title: 'Description (PT)',
-      type: 'text',
-      rows: 5,
+      ...richText,
       description: 'Portuguese version. Falls back to English if empty.',
     }),
     defineField({
@@ -161,14 +186,12 @@ export default defineType({
             defineField({
               name: 'body',
               title: 'Body',
-              type: 'text',
-              rows: 8,
+              ...richText,
             }),
             defineField({
               name: 'body_pt',
               title: 'Body (PT)',
-              type: 'text',
-              rows: 8,
+              ...richText,
             }),
             defineField({
               name: 'bullets',
@@ -183,10 +206,42 @@ export default defineType({
               of: [{ type: 'string' }],
             }),
             defineField({
+              name: 'textColumns',
+              title: 'Text Columns',
+              type: 'array',
+              description: 'Add multiple text blocks to display side-by-side in columns. When set, overrides the single heading/body above.',
+              of: [
+                {
+                  type: 'object',
+                  name: 'textColumn',
+                  fields: [
+                    defineField({ name: 'heading', title: 'Heading', type: 'string' }),
+                    defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
+                    defineField({ name: 'body', title: 'Body', ...richText }),
+                    defineField({ name: 'body_pt', title: 'Body (PT)', ...richText }),
+                    defineField({
+                      name: 'useCard',
+                      title: 'Display as Card',
+                      type: 'boolean',
+                      initialValue: false,
+                    }),
+                    defineField({ name: 'bgColor', title: 'Background Color', type: 'string' }),
+                    defineField({ name: 'textColor', title: 'Text Color', type: 'string' }),
+                  ],
+                  preview: {
+                    select: { title: 'heading' },
+                    prepare({ title }: { title?: string }) {
+                      return { title: title || 'Column' }
+                    },
+                  },
+                },
+              ],
+            }),
+            defineField({
               name: 'useCard',
               title: 'Display as Card',
               type: 'boolean',
-              description: 'Wrap content in a white card with shadow',
+              description: 'Wrap content in a white card with shadow (applies to single-column mode)',
               initialValue: false,
             }),
             defineField({
@@ -272,6 +327,13 @@ export default defineType({
                 layout: 'radio',
               },
               initialValue: 'cover',
+            }),
+            defineField({
+              name: 'noPadding',
+              title: 'Remove card padding',
+              type: 'boolean',
+              description: 'When checked, the image fills the card edge-to-edge without inner padding or shadow.',
+              initialValue: false,
             }),
           ],
           preview: {
@@ -470,14 +532,12 @@ export default defineType({
             defineField({
               name: 'subtitle',
               title: 'Subtitle',
-              type: 'text',
-              rows: 3,
+              ...richText,
             }),
             defineField({
               name: 'subtitle_pt',
               title: 'Subtitle (PT)',
-              type: 'text',
-              rows: 3,
+              ...richText,
             }),
             defineField({
               name: 'bgColor',

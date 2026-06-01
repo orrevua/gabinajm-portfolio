@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSanityDataService } from "@/src/services";
+import { toPlainText } from "@/src/domain/types";
 
 export const dynamic = "force-static";
 export const revalidate = 3600; // ISR: 1 hour
@@ -98,7 +99,7 @@ export async function GET(
       _id: project.id,
       title: project.title,
       slug: project.slug,
-      description: project.description,
+      description: toPlainText(project.description),
       mainImage:
         project.mainImage && project.mainImage.asset
           ? {

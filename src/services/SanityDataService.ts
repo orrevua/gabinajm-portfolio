@@ -99,8 +99,8 @@ interface SanityProject {
   slug: {
     current: string;
   };
-  description: string;
-  description_pt?: string;
+  description: unknown;
+  description_pt?: unknown;
   mainImageSize?: string;
   mainImage?: {
     asset?: {
@@ -143,14 +143,14 @@ interface SanityProject {
     sectionLabel?: string;
     sectionLabel_pt?: string;
     heading?: string;
-    body?: string;
-    body_pt?: string;
+    body?: unknown;
+    body_pt?: unknown;
     bullets?: unknown[];
     bullets_pt?: unknown[];
     bgColor?: string;
     textColor?: string;
-    subtitle?: string;
-    subtitle_pt?: string;
+    subtitle?: unknown;
+    subtitle_pt?: unknown;
     caption?: string;
     caption_pt?: string;
     columns?: number;
@@ -170,6 +170,16 @@ interface SanityProject {
     loop?: boolean;
     muted?: boolean;
     useCard?: boolean;
+    noPadding?: boolean;
+    textColumns?: Array<{
+      heading?: string;
+      heading_pt?: string;
+      body?: unknown;
+      body_pt?: unknown;
+      useCard?: boolean;
+      bgColor?: string;
+      textColor?: string;
+    }>;
   }>;
   isProtected?: boolean;
   featured: boolean;
@@ -308,7 +318,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
     subtitle: loc(sanityProject.subtitle || null, sanityProject.subtitle_pt, locale),
     slug: sanityProject.slug.current,
     mainImageSize: (sanityProject.mainImageSize as "small" | "medium" | "large" | "full") || null,
-    description: loc(sanityProject.description, sanityProject.description_pt, locale),
+    description: loc(sanityProject.description, sanityProject.description_pt, locale) as import("@domain").RichTextBody,
     mainImage: sanityProject.mainImage
       ? {
           asset: {
@@ -343,11 +353,11 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
       _key: s._key,
       sectionLabel: loc(s.sectionLabel, s.sectionLabel_pt, locale),
       heading: s.heading,
-      body: loc(s.body, s.body_pt, locale),
+      body: loc(s.body, s.body_pt, locale) as import("@domain").RichTextBody | undefined,
       bullets: loc(s.bullets as string[] | undefined, s.bullets_pt as string[] | undefined, locale),
       bgColor: s.bgColor,
       textColor: s.textColor,
-      subtitle: loc(s.subtitle, s.subtitle_pt, locale),
+      subtitle: loc(s.subtitle, s.subtitle_pt, locale) as import("@domain").RichTextBody | undefined,
       caption: loc(s.caption, s.caption_pt, locale),
       columns: s.columns,
       imageAspectRatio: normalizeImageAspectRatio(s.imageAspectRatio),
@@ -366,6 +376,14 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
       loop: s.loop,
       muted: s.muted,
       useCard: s.useCard,
+      noPadding: s.noPadding,
+      textColumns: s.textColumns?.map((col) => ({
+        heading: loc(col.heading, col.heading_pt, locale),
+        body: loc(col.body, col.body_pt, locale) as import("@domain").RichTextBody | undefined,
+        useCard: col.useCard,
+        bgColor: col.bgColor,
+        textColor: col.textColor,
+      })),
     })),
     featured: sanityProject.featured,
     publishedAt: new Date(sanityProject.publishedAt),

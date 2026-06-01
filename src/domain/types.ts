@@ -87,16 +87,35 @@ export interface ContentSectionCard {
   label: string;
 }
 
+export type RichTextBody = PortableTextBlock[] | string;
+
+export function toPlainText(body: RichTextBody | undefined): string {
+  if (!body) return "";
+  if (typeof body === "string") return body;
+  return body
+    .filter((b) => b._type === "block")
+    .map((b) => b.children.map((c) => c.text).join(""))
+    .join("\n");
+}
+
+export interface TextColumnItem {
+  heading?: string;
+  body?: RichTextBody;
+  useCard?: boolean;
+  bgColor?: string;
+  textColor?: string;
+}
+
 export interface ContentSection {
   _type: string;
   _key: string;
   sectionLabel?: string;
   heading?: string;
-  body?: string;
+  body?: RichTextBody;
   bullets?: string[];
   bgColor?: string;
   textColor?: string;
-  subtitle?: string;
+  subtitle?: RichTextBody;
   caption?: string;
   columns?: number;
   imageAspectRatio?: "auto" | "214/100" | "3/4" | "1/1" | "16/9" | "4/1";
@@ -112,6 +131,8 @@ export interface ContentSection {
   loop?: boolean;
   muted?: boolean;
   useCard?: boolean;
+  noPadding?: boolean;
+  textColumns?: TextColumnItem[];
 }
 
 export interface SectionChip {

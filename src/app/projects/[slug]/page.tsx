@@ -11,7 +11,9 @@ import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
 import { NextProjectCard } from "@/src/adapters/routes/components/NextProjectCard";
 import { BackToProjectsLink } from "@/src/adapters/routes/components/BackToProjectsLink";
 import { VideoPlayer } from "@/src/adapters/routes/components/VideoPlayer";
-import type { ContentSection } from "@/src/domain/types";
+import { PortableTextRenderer } from "@/src/adapters/routes/components/PortableTextRenderer";
+import type { ContentSection, PortableTextBlock } from "@/src/domain/types";
+import { toPlainText } from "@/src/domain/types";
 import type { Project } from "@/src/domain/models/Project";
 import type { Profile } from "@/src/domain/models/Profile";
 
@@ -53,13 +55,14 @@ export async function generateMetadata(
     const imageUrl = project.mainImage?.asset?.url
       || "https://cdn.sanity.io/images/default-og.png";
 
+    const plainDesc = toPlainText(project.description).substring(0, 160);
     return {
       title: project.title,
-      description: project.description.substring(0, 160),
+      description: plainDesc,
       keywords: project.getTechnologyNames(),
       openGraph: {
         title: project.title,
-        description: project.description.substring(0, 160),
+        description: plainDesc,
         type: "article",
         images: [{ url: imageUrl, alt: project.mainImage?.alt || project.title, width: 1200, height: 630 }],
         publishedTime: project.publishedAt.toISOString(),
@@ -70,9 +73,43 @@ export async function generateMetadata(
   }
 }
 
+function RichBody({ body, style }: { body: PortableTextBlock[] | string | undefined; style?: React.CSSProperties }) {
+  if (!body) return null;
+  if (typeof body === "string") {
+    return <p className="text-base leading-[1.7] whitespace-pre-wrap" style={style}>{body}</p>;
+  }
+  return (
+    <div className="text-base leading-[1.7]" style={style}>
+      <PortableTextRenderer value={body as PortableTextBlock[]} />
+    </div>
+  );
+}
+
+function TextBlockContent({ heading, body, bullets, textColor }: { heading?: string; body?: PortableTextBlock[] | string; bullets?: string[]; textColor?: string }) {
+  const color = textColor || "#0A0A0A";
+  const muted = textColor ? `${color}CC` : undefined;
+
+  return (
+    <>
+      {heading && (
+        <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2" style={{ color }}>
+          {heading}
+        </h2>
+      )}
+      <RichBody body={body} style={{ color: muted, opacity: textColor ? undefined : 0.7 }} />
+      {bullets && bullets.length > 0 && (
+        <ul className="mt-6 list-disc pl-6 space-y-2 text-base" style={{ color: muted, opacity: textColor ? undefined : 0.7 }}>
+          {bullets.map((bullet, i) => (
+            <li key={i} className="leading-[1.7]">{bullet}</li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
+
 function TextBlock({ section }: { section: ContentSection }) {
   const textColor = section.textColor || "#0A0A0A";
-  const textMuted = section.textColor ? `${textColor}CC` : "#0A0A0A/70";
   const isGradient = section.bgColor?.includes("gradient");
   const bgStyle: React.CSSProperties = section.bgColor
     ? isGradient
@@ -80,28 +117,42 @@ function TextBlock({ section }: { section: ContentSection }) {
       : { backgroundColor: section.bgColor }
     : {};
 
+  if (section.textColumns && section.textColumns.length > 0) {
+    return (
+      <div className="max-w-[1158px] mx-auto px-5 py-6 md:py-8">
+        {section.sectionLabel && (
+          <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: textColor }}>
+            {section.sectionLabel}
+          </h2>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {section.textColumns.map((col, i) => {
+            const colGradient = col.bgColor?.includes("gradient");
+            const colBgStyle: React.CSSProperties = col.bgColor
+              ? colGradient ? { background: col.bgColor } : { backgroundColor: col.bgColor }
+              : {};
+
+            if (col.useCard) {
+              return (
+                <div key={i} className="rounded-3xl p-8 md:p-10" style={{ ...colBgStyle, backgroundColor: colBgStyle.backgroundColor || "white" }}>
+                  <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} />
+                </div>
+              );
+            }
+
+            return (
+              <div key={i} style={colBgStyle}>
+                <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   const content = (
-    <>
-      {section.sectionLabel && (
-        <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2" style={{ color: textColor }}>
-          {section.sectionLabel}
-        </h2>
-      )}
-      {section.body && (
-        <p className="text-base leading-[1.7] whitespace-pre-wrap" style={{ color: section.textColor ? textMuted : undefined, opacity: section.textColor ? undefined : 0.7 }}>
-          {section.body}
-        </p>
-      )}
-      {section.bullets && section.bullets.length > 0 && (
-        <ul className="mt-6 list-disc pl-6 space-y-2 text-base" style={{ color: section.textColor ? textMuted : undefined, opacity: section.textColor ? undefined : 0.7 }}>
-          {section.bullets.map((bullet, i) => (
-            <li key={i} className="leading-[1.7]">
-              {bullet}
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
+    <TextBlockContent heading={section.sectionLabel} body={section.body} bullets={section.bullets} textColor={section.textColor} />
   );
 
   if (section.useCard) {
@@ -147,7 +198,7 @@ function FullWidthImage({ section }: { section: ContentSection }) {
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">
-        <div className="bg-white rounded-3xl p-8 md:p-12 drop-shadow-2xl">
+        <div className={`bg-white rounded-3xl drop-shadow-2xl ${section.noPadding ? "" : "p-8 md:p-12"}`}>
           {isAuto ? (
             <div className="rounded-xl overflow-hidden">
               <Image
@@ -278,7 +329,9 @@ function ColorStrip({ section }: { section: ContentSection }) {
               </p>
             )}
             {section.subtitle && (
-              <p className="text-base leading-[1.5]" style={{ color: "#666" }}>{section.subtitle}</p>
+              <div className="text-base leading-[1.5]" style={{ color: "#666" }}>
+                <RichBody body={section.subtitle} />
+              </div>
             )}
           </div>
         </div>
@@ -503,9 +556,13 @@ export default async function ProjectDetailPage(props: PageProps) {
             </p>
           )}
 
-          <p className="text-base leading-[1.7] text-[#0A0A0A]/70 mb-6 max-w-3xl">
-            {project.description}
-          </p>
+          <div className="text-base leading-[1.7] text-[#0A0A0A]/70 mb-6 max-w-3xl">
+            {typeof project.description === "string" ? (
+              <p>{project.description}</p>
+            ) : (
+              <PortableTextRenderer value={project.description as PortableTextBlock[]} />
+            )}
+          </div>
 
           <div className="flex items-center gap-2 text-sm text-[#0A0A0A]/50 mb-16">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -552,7 +609,7 @@ export default async function ProjectDetailPage(props: PageProps) {
         const idx = allProjects.findIndex((p) => p.slug === params.slug);
         const next = idx >= 0 ? allProjects[(idx + 1) % allProjects.length] : null;
         return next && next.slug !== params.slug ? (
-          <NextProjectCard title={next.title} description={next.description} slug={next.slug} />
+          <NextProjectCard title={next.title} description={toPlainText(next.description)} slug={next.slug} />
         ) : null;
       })()}
 

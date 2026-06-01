@@ -10,6 +10,7 @@ import {
   ContentSection,
   FetchError,
   FetchErrorCode,
+  type RichTextBody,
 } from "../types";
 
 export interface IProject {
@@ -17,7 +18,7 @@ export interface IProject {
   title: string;
   subtitle: string | null;
   slug: string;
-  description: string;
+  description: RichTextBody;
   mainImage: ProjectImage | null;
   mainImageSize: "small" | "medium" | "large" | "full" | null;
   mainImageCrop?: "top" | "center" | "bottom" | "full" | null;
@@ -38,7 +39,7 @@ export class Project implements IProject {
   readonly title: string;
   readonly subtitle: string | null;
   readonly slug: string;
-  readonly description: string;
+  readonly description: RichTextBody;
   readonly mainImage: ProjectImage | null;
   readonly mainImageSize: "small" | "medium" | "large" | "full" | null;
   readonly mainImageCrop: "top" | "center" | "bottom" | "full" | null;
@@ -59,7 +60,7 @@ export class Project implements IProject {
     this.title = data.title.trim();
     this.subtitle = data.subtitle ? data.subtitle.trim() : null;
     this.slug = data.slug.trim().toLowerCase();
-    this.description = data.description.trim();
+    this.description = typeof data.description === "string" ? data.description.trim() : data.description;
     this.mainImage = data.mainImage;
     this.mainImageSize = data.mainImageSize || "large";
     this.mainImageCrop = data.mainImageCrop || null;
@@ -114,10 +115,10 @@ export class Project implements IProject {
       );
     }
 
-    if (!project.description || typeof project.description !== "string") {
+    if (!project.description) {
       throw new FetchError(
         FetchErrorCode.INVALID_DATA,
-        "Project description is required and must be a string",
+        "Project description is required",
         400
       );
     }
