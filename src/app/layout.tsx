@@ -7,6 +7,8 @@ import { LocaleProvider } from "@/src/i18n";
 import type { Locale } from "@/src/i18n";
 import { translations } from "@/src/i18n/translations";
 import { getSanityDataService } from "@/src/services";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import "@/src/styles/globals.css";
 
 const inter = Inter({
@@ -124,6 +126,8 @@ export default async function RootLayout({
           </div>
           </footer>
         </LocaleProvider>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
