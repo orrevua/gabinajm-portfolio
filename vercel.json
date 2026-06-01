@@ -55,14 +55,6 @@
           "value": "application/json"
         },
         {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://gabinajm.com"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, OPTIONS"
-        },
-        {
           "key": "Cache-Control",
           "value": "public, s-maxage=3600, stale-while-revalidate=86400"
         }
