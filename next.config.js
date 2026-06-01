@@ -23,12 +23,12 @@ const nextConfig = {
   async headers() {
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://cdn.sanity.io",
       "media-src 'self' blob: https://cdn.sanity.io",
       "font-src 'self'",
-      "connect-src 'self' https://cdn.sanity.io https://*.sanity.io https://*.api.sanity.io",
+      "connect-src 'self' https://cdn.sanity.io https://*.sanity.io https://*.api.sanity.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
       "frame-src https://www.youtube-nocookie.com https://player.vimeo.com",
       "object-src 'none'",
       "base-uri 'self'",
