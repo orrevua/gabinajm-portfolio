@@ -11,10 +11,8 @@ export interface HeroSectionProps {
   ctaSecondaryHref?: string;
 }
 
-const SparkleIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M12 2L13.09 8.26L18 6L14.74 10.91L21 12L14.74 13.09L18 18L13.09 15.74L12 22L10.91 15.74L6 18L9.26 13.09L3 12L9.26 10.91L6 6L10.91 8.26L12 2Z" fill="currentColor" />
-  </svg>
+const StarIcon = () => (
+  <Image src="/images/star_icon.svg" alt="" width={16} height={16} aria-hidden="true" />
 );
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -36,7 +34,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="container-max relative z-10 flex flex-col-reverse md:flex-row items-center gap-12 md:gap-8">
         <div className="flex-1 max-w-xl">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-pill bg-accent/10 text-accent text-sm font-semibold mb-6">
-            <SparkleIcon />
+            <StarIcon />
             {profile.title}
           </span>
 

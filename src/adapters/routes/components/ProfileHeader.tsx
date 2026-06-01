@@ -7,13 +7,8 @@ export interface ProfileHeaderProps {
   heading?: string;
 }
 
-const SparkleIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path
-      d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z"
-      fill="currentColor"
-    />
-  </svg>
+const StarIcon = () => (
+  <Image src="/images/star_icon.svg" alt="" width={16} height={16} aria-hidden="true" />
 );
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -56,7 +51,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-pill bg-accent/10 text-accent text-sm font-semibold mb-6">
-            <SparkleIcon />
+            <StarIcon />
             {profile.title}
           </span>
 

@@ -88,6 +88,7 @@ export const translations = {
     },
     footer: {
       copyright: "© {year} Gabinajm. All rights reserved.",
+      developedBy: "Developed by",
       tagline: "Designed & built with passion and accessibility in mind",
     },
     loading: {
@@ -199,6 +200,7 @@ export const translations = {
     },
     footer: {
       copyright: "© {year} Gabinajm. Todos os direitos reservados.",
+      developedBy: "Desenvolvido por",
       tagline: "Projetado e construído com paixão e acessibilidade em mente",
     },
     loading: {
