@@ -67,6 +67,14 @@ export const translations = {
       availability: "Availability:",
       toastSuccess: "Your message was sent successfully!",
       toastError: "Error sending message",
+      errors: {
+        RATE_LIMITED: "Too many requests. Please try again later.",
+        NOT_CONFIGURED: "Contact form is not configured.",
+        NAME_REQUIRED: "Name is required (min 2 characters).",
+        EMAIL_INVALID: "A valid email address is required.",
+        MESSAGE_REQUIRED: "Message is required (min 10 characters).",
+        SEND_FAILED: "Failed to send message. Please try again later.",
+      },
     },
     password: {
       title: "Page blocked",
@@ -170,6 +178,14 @@ export const translations = {
       availability: "Disponibilidade:",
       toastSuccess: "Sua mensagem foi enviada com sucesso!",
       toastError: "Erro ao enviar mensagem",
+      errors: {
+        RATE_LIMITED: "Muitas requisições. Tente novamente mais tarde.",
+        NOT_CONFIGURED: "O formulário de contato não está configurado.",
+        NAME_REQUIRED: "Nome é obrigatório (mínimo 2 caracteres).",
+        EMAIL_INVALID: "Um endereço de e-mail válido é obrigatório.",
+        MESSAGE_REQUIRED: "Mensagem é obrigatória (mínimo 10 caracteres).",
+        SEND_FAILED: "Falha ao enviar mensagem. Tente novamente mais tarde.",
+      },
     },
     password: {
       title: "Página bloqueada",

@@ -48,14 +48,14 @@ export async function POST(request: NextRequest) {
     const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
     if (isRateLimited(clientIp)) {
       return NextResponse.json(
-        { error: "Too many requests. Please try again later." },
+        { error: "RATE_LIMITED" },
         { status: 429 }
       );
     }
 
     if (!SENDGRID_API_KEY || !CONTACT_TO_EMAIL || !CONTACT_FROM_EMAIL) {
       return NextResponse.json(
-        { error: "Contact form is not configured." },
+        { error: "NOT_CONFIGURED" },
         { status: 503 }
       );
     }
@@ -64,21 +64,21 @@ export async function POST(request: NextRequest) {
 
     if (!body.name || body.name.trim().length < 2) {
       return NextResponse.json(
-        { error: "Name is required (min 2 characters)." },
+        { error: "NAME_REQUIRED" },
         { status: 400 }
       );
     }
 
     if (!body.email || !isValidEmail(body.email)) {
       return NextResponse.json(
-        { error: "A valid email address is required." },
+        { error: "EMAIL_INVALID" },
         { status: 400 }
       );
     }
 
     if (!body.message || body.message.trim().length < 10) {
       return NextResponse.json(
-        { error: "Message is required (min 10 characters)." },
+        { error: "MESSAGE_REQUIRED" },
         { status: 400 }
       );
     }
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(
-      { error: "Failed to send message. Please try again later." },
+      { error: "SEND_FAILED" },
       { status: 500 }
     );
   }

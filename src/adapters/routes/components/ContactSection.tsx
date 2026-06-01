@@ -117,7 +117,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         setFormData({ name: "", email: "", message: "" });
       } else {
         const data = await res.json();
-        setErrorMessage(data.error || t.contact.toastError);
+        const code = data.error as string;
+        const errors = t.contact.errors as Record<string, string>;
+        setErrorMessage(errors[code] || t.contact.toastError);
         setStatus("error");
       }
     } catch {
