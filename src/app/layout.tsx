@@ -112,7 +112,8 @@ export default async function RootLayout({
           <SkipToContent />
           <Navigation brandName="Gabinajm" resumeUrl={resumeUrl} pastExperience={pastExperience} />
           <main id="main-content" className="flex-1">{children}</main>
-          <footer className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted min-h-[88px]">
+          <footer className="w-full bg-[#FFFFFF80] border-t-[1px] border-[#FCE7F3]">
+          <div className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted min-h-[88px]">
             <p>
               {translations[locale].footer.copyright.replace("{year}", String(new Date().getFullYear()))}
               {" · "}
@@ -120,6 +121,7 @@ export default async function RootLayout({
               <a href="https://github.com/orrevua/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-accent transition-colors">@orrevua</a>
             </p>
             <p>{translations[locale].footer.tagline}</p>
+          </div>
           </footer>
         </LocaleProvider>
       </body>
