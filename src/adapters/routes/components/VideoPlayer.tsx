@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Hls from "hls.js";
 
 interface VideoPlayerProps {
   src: string;
@@ -23,7 +22,7 @@ export function VideoPlayer({
   className,
 }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const hlsRef = useRef<Hls | null>(null);
+  const hlsRef = useRef<unknown>(null);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -39,25 +38,32 @@ export function VideoPlayer({
 
     const manifestUrl = `/api/video?url=${encodeURIComponent(src)}&format=m3u8`;
 
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hlsRef.current = hls;
-      hls.loadSource(manifestUrl);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        if (autoPlay) video.play();
-      });
-      return () => {
-        hls.destroy();
-        hlsRef.current = null;
-      };
-    }
+    let cancelled = false;
 
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = manifestUrl;
-      if (autoPlay) video.play();
-    }
-    return undefined;
+    import("hls.js").then(({ default: Hls }) => {
+      if (cancelled || !video) return;
+
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hlsRef.current = hls;
+        hls.loadSource(manifestUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          if (autoPlay) video.play();
+        });
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = manifestUrl;
+        if (autoPlay) video.play();
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      if (hlsRef.current) {
+        (hlsRef.current as { destroy: () => void }).destroy();
+        hlsRef.current = null;
+      }
+    };
   }, [src, autoPlay]);
 
   return (

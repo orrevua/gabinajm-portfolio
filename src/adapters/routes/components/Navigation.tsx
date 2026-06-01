@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -29,6 +29,29 @@ export const Navigation: React.FC<NavigationProps> = ({
   // eslint-disable-next-line react-hooks/set-state-in-effect -- close mobile menu on route change
   useEffect(() => { setIsOpen(false); }, [pathname]);
 
+  const isPopRef = useRef(false);
+
+  useEffect(() => {
+    const onPop = () => { isPopRef.current = true; };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  useEffect(() => {
+    if (isPopRef.current) {
+      isPopRef.current = false;
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  const handleLogoClick = useCallback((e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [pathname]);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsOpen(false);
@@ -51,6 +74,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             href="/"
             className="relative z-[2] flex items-center"
             aria-label={`${brandName} home`}
+            onClick={handleLogoClick}
           >
             <Image
               src="/images/nav_logo.svg"

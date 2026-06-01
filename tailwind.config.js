@@ -41,7 +41,6 @@ export default {
         'float-a': 'floatA 5s ease-in-out infinite',
         'float-b': 'floatB 6.5s ease-in-out infinite',
         'wave': 'wave 2.5s ease-in-out infinite',
-        'spin-slow': 'spin 20s linear infinite',
       },
       keyframes: {
         fadeUp: {
