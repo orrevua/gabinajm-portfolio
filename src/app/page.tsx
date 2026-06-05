@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     title: "Gabinajm | Portfolio",
     description: "Product Designer crafting accessible and human-centered experiences",
     type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Gabinajm — Product Designer Portfolio" }],
   },
 };
 
