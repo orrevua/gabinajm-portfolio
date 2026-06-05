@@ -133,14 +133,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       <h2 className="text-heading font-extrabold text-[#0A0A0A] mb-2">
         {displayHeading}
       </h2>
-      <p className="text-base text-muted mb-10">
+      <p className="text-xl text-muted mb-10">
         {displaySubtitle}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="contact-name" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
+            <label htmlFor="contact-name" className="block text-sm font-medium text-[#0A0A0A] mb-2">
               {t.contact.nameLabel}
             </label>
             <input
@@ -149,13 +149,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               placeholder={t.contact.namePlaceholder}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+              className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="contact-email" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
+            <label htmlFor="contact-email" className="block text-sm font-medium text-[#0A0A0A] mb-2">
               {t.contact.emailLabel}
             </label>
             <input
@@ -164,13 +164,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               placeholder={t.contact.emailPlaceholder}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
+              className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="contact-message" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
+            <label htmlFor="contact-message" className="block text-sm font-medium text-[#0A0A0A] mb-2">
               {t.contact.messageLabel}
             </label>
             <textarea
@@ -179,7 +179,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               rows={4}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="w-full px-4 py-3.5 rounded-2xl border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
+              className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
               required
             />
           </div>
@@ -187,7 +187,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <button
             type="submit"
             disabled={status === "sending" || status === "sent"}
-            className="w-full flex items-center justify-center gap-2 px-7 py-4 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-7 py-4 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {status === "sending" ? t.contact.sending : status === "sent" ? t.contact.sent : t.contact.send}
             {status === "idle" && <SendIcon />}
@@ -199,7 +199,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         </form>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-bold text-[#0A0A0A] mb-4">
+          <h3 className="text-xl font-semibold text-[#0A0A0A] mb-4">
             {t.contact.connectHeading}
           </h3>
 

@@ -15,7 +15,7 @@ export const PastExperience: React.FC<PastExperienceProps> = ({
 
   return (
     <section className="container-max py-12 md:py-20 text-center" aria-label={displayHeading}>
-      <h2 className="text-2xl md:text-3xl font-extrabold text-accent mb-10">
+      <h2 className="text-[36px] font-bold bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent mb-10">
         {displayHeading}
       </h2>
 

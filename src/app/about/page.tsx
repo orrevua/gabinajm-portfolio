@@ -113,7 +113,7 @@ export default async function AboutPage() {
             <h2 className="text-[clamp(28px,4vw,36px)] font-bold leading-tight mb-8 bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent">
               {aboutPage?.bioHeading || t.about.bioHeading}
             </h2>
-            <div className="space-y-6 text-lg md:text-xl text-[#0A0A0A]/70 leading-relaxed mb-10">
+            <div className="space-y-6 text-lg text-[#0A0A0A]/70 leading-relaxed mb-10">
               {profile.aboutBio ? (
                 <PortableTextRenderer value={profile.aboutBio} />
               ) : (
@@ -128,7 +128,7 @@ export default async function AboutPage() {
               ).map((chip) => (
                 <span
                   key={chip.label}
-                  className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full"
+                  className="inline-flex items-center gap-2 text-base font-normal px-5 py-2.5 rounded-full"
                   style={{ backgroundColor: chip.color }}
                 >
                   {chip.label}

@@ -55,12 +55,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             {profile.title}
           </span>
 
-          <h1 className="text-display font-extrabold text-[#0A0A0A] mb-6 leading-[1.05] text-7xl">
+          <h1 className="text-display font-extrabold text-[#0A0A0A] mb-6 leading-[1.05]">
             {heading}
           </h1>
 
           {hasBio && (
-            <p className="text-subheading text-[#0A0A0A]/75 leading-relaxed max-w-lg text-xl">
+            <p className="text-xl text-[#0A0A0A]/75 leading-relaxed max-w-lg">
               {profile.bio}
             </p>
           )}
