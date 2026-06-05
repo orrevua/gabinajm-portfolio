@@ -44,11 +44,13 @@ export const metadata: Metadata = {
     siteName: "Gabinajm",
     title: "Gabinajm | Product Designer",
     description: "Gabi Abinajm is a Product Designer crafting accessible, human-centered digital experiences with intentional simplicity and inclusive design.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Gabinajm — Product Designer Portfolio" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Gabinajm | Product Designer",
     description: "Gabi Abinajm is a Product Designer crafting accessible, human-centered digital experiences with intentional simplicity and inclusive design.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
