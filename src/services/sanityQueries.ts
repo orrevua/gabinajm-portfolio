@@ -15,8 +15,6 @@ export const PROFILE_QUERY = `
     title_pt,
     bio,
     bio_pt,
-    aboutBio,
-    aboutBio_pt,
     avatar {
       asset-> {
         _id,
@@ -24,28 +22,6 @@ export const PROFILE_QUERY = `
         "lqip": metadata.lqip
       },
       alt
-    },
-    aboutHeroImage {
-      asset-> {
-        _id,
-        url,
-        "lqip": metadata.lqip
-      },
-      alt
-    },
-    socialLinks[] {
-      platform,
-      url
-    },
-    resumeUrl,
-    technologies[],
-    pastExperience[] {
-      name,
-      url,
-      logo {
-        asset-> { _id, url, "lqip": metadata.lqip },
-        alt
-      }
     }
   }
 `;
@@ -458,6 +434,11 @@ export const HOME_PAGE_QUERY = `
     availabilityText,
     availabilityText_pt,
     showForm,
+    socialLinks[] {
+      platform,
+      url
+    },
+    resumeUrl,
     // backward compat: old sections array
     sections[] {
       _type,

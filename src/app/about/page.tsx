@@ -95,18 +95,17 @@ export default async function AboutPage() {
     );
   }
 
-  const socialLinks = (aboutPage?.socialLinks && aboutPage.socialLinks.length > 0)
-    ? aboutPage.socialLinks
-    : (profile.getSocialLinks?.() || profile.socialLinks || []);
+  const socialLinks = aboutPage?.socialLinks || [];
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
-  const resumeUrl = aboutPage?.resumeUrl || profile.getResumeUrl?.() || profile.resumeUrl;
-  const aboutBio = aboutPage?.bio || profile.aboutBio;
-  const aboutHeroImage = aboutPage?.heroImage || profile.aboutHeroImage;
+  const resumeUrl = aboutPage?.resumeUrl;
+  const aboutBio = aboutPage?.bio;
+  const aboutHeroImage = aboutPage?.heroImage;
 
   return (
     <>
       <ProfileHeader
-        profile={{ ...profile, aboutHeroImage: aboutHeroImage ?? profile.aboutHeroImage } as typeof profile}
+        profile={profile}
+        heroImage={aboutHeroImage}
         profileUnavailableText={t.error.profileUnavailable}
         heading={t.about.heading}
       />

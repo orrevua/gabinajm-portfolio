@@ -11,11 +11,12 @@ import {
   Section,
   type SocialLink,
   type SocialPlatform,
+  type SkillTag,
+  type ExperienceCompany,
   type Technology,
   type SectionBackground,
   type SectionPadding,
   type SectionOverlay,
-  type PortableTextBlock,
 } from "@domain";
 import {
   getSanityClient,
@@ -58,8 +59,6 @@ interface SanityProfile {
   title_pt?: string;
   bio: string;
   bio_pt?: string;
-  aboutBio?: PortableTextBlock[];
-  aboutBio_pt?: PortableTextBlock[];
   avatar?: {
     asset?: {
       url: string;
@@ -67,27 +66,6 @@ interface SanityProfile {
     };
     alt?: string;
   };
-  aboutHeroImage?: {
-    asset?: {
-      url: string;
-      lqip?: string;
-    };
-    alt?: string;
-  };
-  socialLinks?: Array<{
-    platform: string;
-    url: string;
-  }>;
-  resumeUrl?: string;
-  technologies?: Array<string | { name: string; icon?: { asset?: { url: string } }; color?: string }>;
-  pastExperience?: Array<{
-    name: string;
-    url?: string;
-    logo?: {
-      asset?: { url: string; lqip?: string };
-      alt?: string;
-    };
-  }>;
 }
 
 interface SanityProject {
@@ -256,20 +234,10 @@ const normalizeCategory = (category: string): Technology["category"] => {
  * Handles null/missing fields gracefully
  */
 function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = "en"): Profile {
-  const socialLinks: SocialLink[] = (sanityProfile.socialLinks || [])
-    .filter((link): link is SocialLink => isSocialPlatform(link.platform))
-    .map((link) => ({
-      platform: link.platform,
-      url: link.url,
-    }));
-
   return new Profile({
     name: sanityProfile.name,
     title: loc(sanityProfile.title, sanityProfile.title_pt, locale),
     bio: loc(sanityProfile.bio, sanityProfile.bio_pt, locale),
-    aboutBio: locale === "pt"
-      ? (sanityProfile.aboutBio_pt && sanityProfile.aboutBio_pt.length > 0 ? sanityProfile.aboutBio_pt : null)
-      : (sanityProfile.aboutBio && sanityProfile.aboutBio.length > 0 ? sanityProfile.aboutBio : null),
     avatar: sanityProfile.avatar
       ? {
           asset: {
@@ -280,30 +248,6 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
           alt: sanityProfile.avatar.alt || "",
         }
       : null,
-    aboutHeroImage: sanityProfile.aboutHeroImage
-      ? {
-          asset: {
-            url: sanityProfile.aboutHeroImage.asset?.url || "",
-            alt: sanityProfile.aboutHeroImage.alt || "",
-            lqip: sanityProfile.aboutHeroImage.asset?.lqip || "",
-          },
-          alt: sanityProfile.aboutHeroImage.alt || "",
-        }
-      : null,
-    socialLinks,
-    resumeUrl: sanityProfile.resumeUrl || null,
-    technologies: (sanityProfile.technologies || []).map((t) =>
-      typeof t === "string" ? { name: t } : { name: t.name, iconUrl: t.icon?.asset?.url, color: t.color }
-    ),
-    pastExperience: (sanityProfile.pastExperience || []).map((exp) => ({
-      name: exp.name,
-      url: exp.url || null,
-      logo: {
-        url: exp.logo?.asset?.url || "",
-        alt: exp.logo?.alt || exp.name,
-        lqip: exp.logo?.asset?.lqip || "",
-      },
-    })),
   });
 }
 
@@ -733,6 +677,35 @@ export class SanityDataService implements IDataService {
       const data = await client.fetch<any>(HOME_PAGE_QUERY);
       if (!data) return null;
 
+      const mapTechnologies = (techs: unknown[]): SkillTag[] =>
+        (techs || []).map((t: unknown) =>
+          typeof t === "string"
+            ? { name: t }
+            : { name: (t as { name: string }).name, iconUrl: (t as { icon?: { asset?: { url: string } } }).icon?.asset?.url, color: (t as { color?: string }).color }
+        );
+
+      const mapExperience = (exps: unknown[]): ExperienceCompany[] =>
+        (exps || []).map((exp: unknown) => {
+          const e = exp as { name: string; url?: string; logo?: { asset?: { url: string; lqip?: string }; alt?: string } };
+          return {
+            name: e.name,
+            url: e.url || null,
+            logo: {
+              url: e.logo?.asset?.url || "",
+              alt: e.logo?.alt || e.name,
+              lqip: e.logo?.asset?.lqip || "",
+            },
+          };
+        });
+
+      const mapSocialLinks = (links: unknown[]): SocialLink[] =>
+        (links || [])
+          .filter((link: unknown) => isSocialPlatform((link as { platform: string }).platform))
+          .map((link: unknown) => {
+            const l = link as { platform: SocialPlatform; url: string };
+            return { platform: l.platform, url: l.url };
+          });
+
       const hasFlat = data.greeting || data.aboutHeading || data.projectsHeading;
       if (hasFlat) {
         return {
@@ -745,9 +718,13 @@ export class SanityDataService implements IDataService {
           aboutBody: loc(data.aboutBody, data.aboutBody_pt, locale),
           showResume: data.showResume,
           showSkills: data.showSkills,
+          technologies: mapTechnologies(data.technologies),
           projectsHeading: loc(data.projectsHeading, data.projectsHeading_pt, locale),
           maxProjects: data.maxProjects,
           experienceHeading: loc(data.experienceHeading, data.experienceHeading_pt, locale),
+          pastExperience: mapExperience(data.pastExperience),
+          socialLinks: mapSocialLinks(data.socialLinks),
+          resumeUrl: data.resumeUrl,
           contactHeading: loc(data.contactHeading, data.contactHeading_pt, locale),
           contactSubtitle: loc(data.contactSubtitle, data.contactSubtitle_pt, locale),
           availabilityText: loc(data.availabilityText, data.availabilityText_pt, locale),

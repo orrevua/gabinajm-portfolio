@@ -65,7 +65,7 @@ export default async function HomePage() {
   }
 
   const hp = homePage;
-  const socialLinks = profile.getSocialLinks?.() || profile.socialLinks || [];
+  const socialLinks = hp?.socialLinks || [];
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
 
   return (
@@ -82,13 +82,14 @@ export default async function HomePage() {
 
       <ScrollReveal>
         <AboutSection
-          profile={profile}
           heading={hp?.aboutHeading || t.about.heading}
           body={hp?.aboutBody || t.about.homeAboutSummary}
           showResume={hp?.showResume}
           showSkills={hp?.showSkills}
           showMoreLabel={t.about.showMore}
           resumeLabel={t.about.resume}
+          resumeUrl={hp?.resumeUrl}
+          technologies={hp?.technologies}
         />
       </ScrollReveal>
 
@@ -129,10 +130,10 @@ export default async function HomePage() {
         </ScrollReveal>
       )}
 
-      {profile.pastExperience.length > 0 && (
+      {hp?.pastExperience && hp.pastExperience.length > 0 && (
         <ScrollReveal>
           <PastExperience
-            companies={profile.pastExperience}
+            companies={hp.pastExperience}
             heading={hp?.experienceHeading || t.pastExperience.heading}
           />
         </ScrollReveal>

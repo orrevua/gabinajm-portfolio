@@ -18,12 +18,6 @@ interface ProfileResponse {
     lqip: string;
     alt: string;
   };
-  socialLinks: Array<{
-    platform: string;
-    url: string;
-  }>;
-  resumeUrl?: string;
-  technologies: string[];
 }
 
 interface SuccessResponse {
@@ -59,7 +53,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
       );
     }
 
-    // Map to response format
     const response: ProfileResponse = {
       name: profile.name,
       title: profile.title,
@@ -74,9 +67,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
               alt: profile.avatar.alt || profile.name,
             }
           : undefined,
-      socialLinks: profile.getSocialLinks(),
-      resumeUrl: profile.getResumeUrl() || undefined,
-      technologies: (profile.technologies || []).map((t) => t.name),
     };
 
     return NextResponse.json(

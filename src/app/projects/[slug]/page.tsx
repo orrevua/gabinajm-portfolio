@@ -15,7 +15,7 @@ import { PortableTextRenderer } from "@/src/adapters/routes/components/PortableT
 import type { ContentSection, PortableTextBlock } from "@/src/domain/types";
 import { toPlainText } from "@/src/domain/types";
 import type { Project } from "@/src/domain/models/Project";
-import type { Profile } from "@/src/domain/models/Profile";
+import type { AboutPage as AboutPageData } from "@/src/domain/interfaces/DataService";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -456,16 +456,16 @@ export default async function ProjectDetailPage(props: PageProps) {
   const { locale, t } = await getServerTranslations();
 
   let project: Project | null = null;
-  let profile: Profile | null = null;
   let allProjects: Project[] = [];
+  let aboutPage: AboutPageData | null = null;
   let fetchError = false;
 
   try {
     const dataService = await getSanityDataService();
-    [project, profile, allProjects] = await Promise.all([
+    [project, allProjects, aboutPage] = await Promise.all([
       dataService.getProjectBySlug(params.slug, locale),
-      dataService.getProfile(locale),
       dataService.getProjects({ locale }),
+      dataService.getAboutPage(locale),
     ]);
   } catch {
     fetchError = true;
@@ -522,7 +522,7 @@ export default async function ProjectDetailPage(props: PageProps) {
 
   const technologies = project.technologies;
   const contentSections = project.contentSections;
-  const socialLinks = profile?.getSocialLinks?.() || profile?.socialLinks || [];
+  const socialLinks = aboutPage?.socialLinks || [];
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
 
   const year = project.publishedAt.getFullYear();

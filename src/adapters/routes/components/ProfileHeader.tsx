@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { type IProfile } from "@domain";
+import type { ProfileAvatar } from "@/src/domain/types";
 
 export interface ProfileHeaderProps {
   profile: IProfile | null;
+  heroImage?: ProfileAvatar | null;
   profileUnavailableText?: string;
   heading?: string;
 }
@@ -13,6 +15,7 @@ const StarIcon = () => (
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   profile,
+  heroImage,
   profileUnavailableText = "Profile information is currently unavailable.",
   heading = "About Me",
 }) => {
@@ -27,7 +30,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   }
 
   const hasBio = profile.bio && profile.bio.trim().length > 0;
-  const headerImage = profile.aboutHeroImage ?? profile.avatar;
+  const headerImage = heroImage ?? profile.avatar;
   const imageUrl = headerImage?.asset?.url;
 
   return (

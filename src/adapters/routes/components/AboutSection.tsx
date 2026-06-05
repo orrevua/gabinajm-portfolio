@@ -1,15 +1,16 @@
 import Image from "next/image";
-import { type IProfile } from "@domain";
+import type { SkillTag } from "@/src/domain/types";
 import { PortableTextRenderer } from "./PortableTextRenderer";
 
 export interface AboutSectionProps {
-  profile: IProfile;
   heading?: string;
   body?: string;
   showResume?: boolean;
   showSkills?: boolean;
   showMoreLabel?: string;
   resumeLabel?: string;
+  resumeUrl?: string;
+  technologies?: SkillTag[];
 }
 
 const DownloadIcon = () => (
@@ -19,16 +20,17 @@ const DownloadIcon = () => (
 );
 
 export const AboutSection: React.FC<AboutSectionProps> = ({
-  profile,
   heading = "About Me",
   body,
   showResume = true,
   showSkills = true,
   showMoreLabel = "Show more",
   resumeLabel = "My resume",
+  resumeUrl,
+  technologies = [],
 }) => {
-  const hasResume = showResume && profile.resumeUrl;
-  const hasSkills = showSkills && profile.technologies.length > 0;
+  const hasResume = showResume && resumeUrl;
+  const hasSkills = showSkills && technologies.length > 0;
   const showCtaRow = hasResume || showSkills;
 
   return (
@@ -42,12 +44,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           {body ? (
             body.split("\n\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)
           ) : (
-            <PortableTextRenderer value={profile.aboutBio || null} />
+            <PortableTextRenderer value={null} />
           )}
         </div>
         {hasSkills && (
           <div className="flex flex-wrap gap-3 mb-8">
-            {profile.technologies.map((skill) => (
+            {technologies.map((skill) => (
               <span
                 key={skill.name}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-pill text-base font-normal ${skill.color || "bg-background text-foreground"}`}
@@ -71,7 +73,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             </a>
             {hasResume && (
               <a
-                href={profile.resumeUrl!}
+                href={resumeUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-pill border-2 border-accent text-[#0A0A0A] font-bold shadow-[0_10px_20px_rgba(246,51,154,0.2)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.3)] hover:bg-accent hover:text-white transition-colors transition-shadow"

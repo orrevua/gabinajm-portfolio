@@ -28,7 +28,6 @@ describe("ProfileHeader Component", () => {
     name: "Jane Doe",
     title: "Full-Stack Engineer",
     bio: "Passionate about elegant solutions",
-    aboutBio: null,
     avatar: {
       asset: {
         url: "https://example.com/avatar.jpg",
@@ -37,26 +36,15 @@ describe("ProfileHeader Component", () => {
       },
       alt: "Jane Doe avatar",
     },
-    aboutHeroImage: {
-      asset: {
-        url: "https://example.com/about-hero.jpg",
-        alt: "Jane Doe about hero",
-        lqip: "data:image/jpeg;base64,...",
-      },
+  };
+
+  const mockHeroImage = {
+    asset: {
+      url: "https://example.com/about-hero.jpg",
       alt: "Jane Doe about hero",
+      lqip: "data:image/jpeg;base64,...",
     },
-    socialLinks: [
-      { platform: "github", url: "https://github.com/jane" },
-      { platform: "linkedin", url: "https://linkedin.com/in/jane" },
-    ],
-    resumeUrl: "https://example.com/resume.pdf",
-    technologies: [{ name: "TypeScript" }, { name: "React" }],
-    pastExperience: [],
-    getSocialLinks: () => [
-      { platform: "github", url: "https://github.com/jane" },
-      { platform: "linkedin", url: "https://linkedin.com/in/jane" },
-    ],
-    getResumeUrl: () => "https://example.com/resume.pdf",
+    alt: "Jane Doe about hero",
   };
 
   describe("rendering", () => {
@@ -68,7 +56,7 @@ describe("ProfileHeader Component", () => {
     });
 
     it("should render the dedicated about hero image when available", () => {
-      render(<ProfileHeader profile={mockProfile} />);
+      render(<ProfileHeader profile={mockProfile} heroImage={mockHeroImage} />);
       const images = screen.getAllByTestId("profile-image");
       const aboutHeroImage = images.find((img) => img.getAttribute("src") === "https://example.com/about-hero.jpg");
       expect(aboutHeroImage).toBeDefined();
@@ -80,16 +68,8 @@ describe("ProfileHeader Component", () => {
       expect(screen.getByText("Passionate about elegant solutions")).toBeInTheDocument();
     });
 
-    it("should fall back to the avatar image when about hero image is missing", () => {
-      render(
-        <ProfileHeader
-          profile={{
-            ...mockProfile,
-            aboutHeroImage: null,
-          }}
-        />
-      );
-
+    it("should fall back to the avatar image when hero image is not provided", () => {
+      render(<ProfileHeader profile={mockProfile} />);
       const images = screen.getAllByTestId("profile-image");
       const avatar = images.find((img) => img.getAttribute("src") === "https://example.com/avatar.jpg");
       expect(avatar).toBeDefined();
@@ -139,7 +119,6 @@ describe("ProfileHeader Component", () => {
       const header = screen.getByRole("banner");
       expect(header).toHaveAttribute("aria-label");
     });
-
   });
 
   describe("graceful degradation", () => {
@@ -160,15 +139,6 @@ describe("ProfileHeader Component", () => {
       render(<ProfileHeader profile={profile} />);
       expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     });
-
-    it("should handle no social links", () => {
-      const profile: IProfile = {
-        ...mockProfile,
-        socialLinks: [],
-      };
-      render(<ProfileHeader profile={profile} />);
-      expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
-    });
   });
 
   describe("styling", () => {
@@ -176,6 +146,5 @@ describe("ProfileHeader Component", () => {
       const { container } = render(<ProfileHeader profile={mockProfile} />);
       expect(container.querySelector("header")).toBeInTheDocument();
     });
-
   });
 });

@@ -36,19 +36,6 @@ describe("SanityDataService", () => {
       },
       alt: "Profile avatar",
     },
-    aboutHeroImage: {
-      asset: {
-        url: "https://cdn.sanity.io/about-hero.jpg",
-        lqip: "data:image/jpeg;base64,...",
-      },
-      alt: "About hero image",
-    },
-    socialLinks: [
-      { platform: "github", url: "https://github.com/gabi" },
-      { platform: "linkedin", url: "https://linkedin.com/in/gabi" },
-    ],
-    resumeUrl: "https://cdn.sanity.io/resume.pdf",
-    technologies: [{ name: "TypeScript" }, { name: "React" }, { name: "Node.js" }],
   };
 
   const mockSanityProject = {
@@ -110,7 +97,6 @@ describe("SanityDataService", () => {
       expect(profile).toBeInstanceOf(Profile);
       expect(profile?.name).toBe("Gabi Silva");
       expect(profile?.title).toBe("Full-Stack Engineer");
-      expect(profile?.aboutHeroImage?.asset.url).toBe("https://cdn.sanity.io/about-hero.jpg");
     });
 
     it("should return null if profile not found", async () => {
@@ -432,16 +418,6 @@ describe("SanityDataService", () => {
       expect(projects[0].technologies).toEqual([]);
     });
 
-    it("should handle missing socialLinks gracefully", async () => {
-      mockClient.fetch.mockResolvedValue({
-        ...mockSanityProfile,
-        socialLinks: null,
-      });
-
-      const profile = await service.getProfile();
-
-      expect(profile?.socialLinks).toEqual([]);
-    });
   });
 
   describe("error logging", () => {

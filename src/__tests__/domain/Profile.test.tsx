@@ -14,7 +14,6 @@ describe("Profile Model", () => {
       name: "Gabi Silva",
       title: "Full-Stack Engineer",
       bio: "Passionate about building elegant solutions",
-      aboutBio: null,
       avatar: {
         asset: {
           url: "https://example.com/avatar.jpg",
@@ -23,13 +22,6 @@ describe("Profile Model", () => {
         },
         alt: "Profile avatar",
       },
-      socialLinks: [
-        { platform: "github", url: "https://github.com/gabi" },
-        { platform: "linkedin", url: "https://linkedin.com/in/gabi" },
-      ],
-      resumeUrl: "https://example.com/resume.pdf",
-      technologies: [{ name: "TypeScript" }, { name: "React" }, { name: "Node.js" }],
-      pastExperience: [],
     };
   });
 
@@ -38,7 +30,7 @@ describe("Profile Model", () => {
       const profile = new Profile(validProfile);
       expect(profile.name).toBe("Gabi Silva");
       expect(profile.title).toBe("Full-Stack Engineer");
-      expect(profile.technologies).toHaveLength(3);
+      expect(profile.bio).toBe("Passionate about building elegant solutions");
     });
 
     it("should trim whitespace from name, title, and bio", () => {
@@ -58,14 +50,21 @@ describe("Profile Model", () => {
       expect(profile.avatar).toBeNull();
     });
 
-    it("should handle null resumeUrl", () => {
-      const profile = new Profile({ ...validProfile, resumeUrl: null });
-      expect(profile.resumeUrl).toBeNull();
-    });
-
     it("should throw FetchError when name is missing", () => {
       expect(() => {
         new Profile({ ...validProfile, name: "" });
+      }).toThrow(FetchError);
+    });
+
+    it("should throw FetchError when title is missing", () => {
+      expect(() => {
+        new Profile({ ...validProfile, title: "" });
+      }).toThrow(FetchError);
+    });
+
+    it("should throw FetchError when bio is missing", () => {
+      expect(() => {
+        new Profile({ ...validProfile, bio: "" });
       }).toThrow(FetchError);
     });
 
@@ -73,62 +72,6 @@ describe("Profile Model", () => {
       expect(() => {
         new Profile(null as any);
       }).toThrow(FetchError);
-    });
-
-    it("should throw FetchError when socialLinks is not an array", () => {
-      expect(() => {
-        new Profile({ ...validProfile, socialLinks: {} as any });
-      }).toThrow(FetchError);
-    });
-
-    it("should throw FetchError when technologies is not an array", () => {
-      expect(() => {
-        new Profile({ ...validProfile, technologies: "TypeScript" as any });
-      }).toThrow(FetchError);
-    });
-  });
-
-  describe("instance methods", () => {
-    let profile: Profile;
-
-    beforeEach(() => {
-      profile = new Profile(validProfile);
-    });
-
-    it("getResumeUrl() should return resume URL", () => {
-      expect(profile.getResumeUrl()).toBe("https://example.com/resume.pdf");
-    });
-
-    it("getResumeUrl() should return null if not set", () => {
-      const profileNoResume = new Profile({
-        ...validProfile,
-        resumeUrl: null,
-      });
-      expect(profileNoResume.getResumeUrl()).toBeNull();
-    });
-
-    it("getSocialLinks() should sort by priority", () => {
-      const profileMultipleSocial = new Profile({
-        ...validProfile,
-        socialLinks: [
-          { platform: "email", url: "test@example.com" },
-          { platform: "github", url: "https://github.com/gabi" },
-          { platform: "linkedin", url: "https://linkedin.com/in/gabi" },
-          { platform: "twitter", url: "https://twitter.com/gabi" },
-        ],
-      });
-
-      const sorted = profileMultipleSocial.getSocialLinks();
-      expect(sorted[0].platform).toBe("github");
-      expect(sorted[1].platform).toBe("linkedin");
-      expect(sorted[2].platform).toBe("twitter");
-      expect(sorted[3].platform).toBe("email");
-    });
-
-    it("getSocialLinks() should not mutate original array", () => {
-      const originalLength = profile.socialLinks.length;
-      profile.getSocialLinks();
-      expect(profile.socialLinks.length).toBe(originalLength);
     });
   });
 
@@ -151,44 +94,12 @@ describe("Profile Model", () => {
       const profile = Profile.tryCreate(null);
       expect(profile).toBeNull();
     });
-
-    it("should log warning on validation failure", () => {
-      const warnSpy = console.warn;
-      let warnCalled = false;
-      console.warn = () => {
-        warnCalled = true;
-      };
-
-      Profile.tryCreate({ ...validProfile, name: "" });
-      expect(warnCalled).toBe(true);
-      console.warn = warnSpy;
-    });
   });
 
   describe("immutability", () => {
-    let profile: Profile;
-
-    beforeEach(() => {
-      profile = new Profile(validProfile);
-    });
-
     it("should not allow name reassignment", () => {
-      // In TypeScript strict mode, readonly properties cannot be reassigned
-      // The type system enforces this at compile time
+      const profile = new Profile(validProfile);
       expect(profile.name).toBe("Gabi Silva");
-      // Runtime doesn't throw, but properties are protected by TypeScript readonly
-    });
-
-    it("should allow socialLinks mutation at runtime", () => {
-      const originalLength = profile.socialLinks.length;
-      expect(() => {
-        profile.socialLinks.push({
-          platform: "twitter",
-          url: "https://twitter.com",
-        });
-      }).not.toThrow(); // Arrays are mutable, but this tests the behavior
-      expect(profile.socialLinks.length).toBe(originalLength + 1);
-      // To ensure true immutability, Object.freeze() should be applied in constructor
     });
   });
 });

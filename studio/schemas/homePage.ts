@@ -96,6 +96,40 @@ export default defineType({
     defineField({ name: 'availabilityText', title: 'Availability Text', type: 'text', rows: 2, group: 'contact' }),
     defineField({ name: 'availabilityText_pt', title: 'Availability Text (PT)', type: 'text', rows: 2, group: 'contact' }),
     defineField({ name: 'showForm', title: 'Show Contact Form', type: 'boolean', initialValue: true, group: 'contact' }),
+    defineField({
+      name: 'socialLinks',
+      title: 'Social Links',
+      type: 'array',
+      group: 'contact',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({
+            name: 'platform',
+            title: 'Platform',
+            type: 'string',
+            options: {
+              list: [
+                { title: 'GitHub', value: 'github' },
+                { title: 'LinkedIn', value: 'linkedin' },
+                { title: 'Twitter', value: 'twitter' },
+                { title: 'Email', value: 'email' },
+                { title: 'Instagram', value: 'instagram' },
+              ],
+            },
+            validation: (rule) => rule.required(),
+          }),
+          defineField({
+            name: 'url',
+            title: 'URL',
+            type: 'url',
+            validation: (rule) => rule.required().uri({ allowRelative: false, scheme: ['http', 'https', 'mailto'] }),
+          }),
+        ],
+        preview: { select: { title: 'platform', subtitle: 'url' } },
+      }],
+    }),
+    defineField({ name: 'resumeUrl', title: 'Resume URL', type: 'url', group: 'contact' }),
   ],
   preview: {
     prepare() { return { title: 'Home Page' } },
