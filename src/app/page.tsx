@@ -98,7 +98,7 @@ export default async function HomePage() {
         <AboutSection
           profile={profile}
           heading={lf(aboutConfig, "heading", t.about.heading)}
-          body={locale === "pt" ? (aboutConfig?.body_pt || aboutConfig?.body || t.about.homeBio) : (aboutConfig?.body || t.about.homeBio)}
+          body={locale === "pt" ? (aboutConfig?.body_pt || aboutConfig?.body || t.about.homeAboutSummary) : (aboutConfig?.body || t.about.homeAboutSummary)}
           showResume={aboutConfig?.showResume}
           showSkills={aboutConfig?.showSkills}
           showMoreLabel={t.about.showMore}

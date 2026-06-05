@@ -12,8 +12,8 @@ export function NextProjectCard({ title, description, slug }: { title: string; d
         <div className="absolute -top-20 -right-20 w-[340px] h-[340px] rounded-full bg-white/10 pointer-events-none" />
         <div className="relative z-10">
           <p className="text-base font-bold text-white/80 mb-3">{t.projects.nextProject}</p>
-          <h3 className="text-[clamp(24px,3vw,30px)] font-bold text-white mb-2">{title}</h3>
-          <p className="text-lg md:text-2xl text-white/80 mb-8">{description}</p>
+          <h3 className="text-[clamp(20px,2.5vw,24px)] font-bold text-white mb-2">{title}</h3>
+          <p className="text-base md:text-lg text-white/80 mb-8">{description}</p>
           <Link
             href={`/projects/${slug}`}
             className="inline-flex items-center gap-2 bg-white text-accent-purple font-bold text-base px-8 py-3 rounded-pill hover:opacity-90 transition-opacity"

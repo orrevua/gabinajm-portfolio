@@ -547,11 +547,11 @@ export default async function ProjectDetailPage(props: PageProps) {
             </div>
           )}
 
-          <h1 className="text-[clamp(32px,4vw,48px)] font-extrabold leading-[1.15] text-[#0A0A0A] mb-1">
+          <h1 className="text-[clamp(28px,3.5vw,40px)] font-extrabold leading-[1.15] text-[#0A0A0A] mb-1">
             {project.title}
           </h1>
           {project.subtitle && (
-            <p className="text-[clamp(28px,3.5vw,42px)] font-extrabold leading-[1.15] bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent mb-6">
+            <p className="text-[clamp(24px,3vw,36px)] font-extrabold leading-[1.15] bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent mb-6">
               {project.subtitle}
             </p>
           )}
