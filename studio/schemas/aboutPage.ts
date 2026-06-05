@@ -105,6 +105,12 @@ export default defineType({
               type: 'string',
             }),
             defineField({
+              name: 'icon',
+              title: 'Icon',
+              type: 'image',
+              description: 'Small icon (SVG or PNG) shown next to the label',
+            }),
+            defineField({
               name: 'color',
               title: 'Background Color',
               type: 'string',
@@ -113,7 +119,7 @@ export default defineType({
             }),
           ],
           preview: {
-            select: { title: 'label', subtitle: 'color' },
+            select: { title: 'label', subtitle: 'color', media: 'icon' },
           },
         },
       ],

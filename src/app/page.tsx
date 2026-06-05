@@ -99,7 +99,7 @@ export default async function HomePage() {
             projects={projects.map((project) => ({
               title: project.title,
               slug: project.slug,
-              description: toPlainText(project.description),
+              description: project.excerpt || toPlainText(project.description),
               mainImage: project.mainImage?.asset
                 ? {
                     url: buildSanityImageUrl(
@@ -120,7 +120,7 @@ export default async function HomePage() {
                   }
                 : undefined,
               imageFit: project.mainImageCrop === "full" ? "contain" : "cover",
-              technologies: project.getTechnologyNames(),
+              technologies: project.technologies.map((t) => ({ name: t.name, iconUrl: t.iconUrl })),
               link: project.getPrimaryUrl() || undefined,
               featured: project.featured,
               isProtected: project.isProtected,

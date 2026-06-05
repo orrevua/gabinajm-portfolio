@@ -76,7 +76,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
           : undefined,
       socialLinks: profile.getSocialLinks(),
       resumeUrl: profile.getResumeUrl() || undefined,
-      technologies: profile.technologies || [],
+      technologies: (profile.technologies || []).map((t) => t.name),
     };
 
     return NextResponse.json(

@@ -28,7 +28,7 @@ describe("Profile Model", () => {
         { platform: "linkedin", url: "https://linkedin.com/in/gabi" },
       ],
       resumeUrl: "https://example.com/resume.pdf",
-      technologies: ["TypeScript", "React", "Node.js"],
+      technologies: [{ name: "TypeScript" }, { name: "React" }, { name: "Node.js" }],
       pastExperience: [],
     };
   });

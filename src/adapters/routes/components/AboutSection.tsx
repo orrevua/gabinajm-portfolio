@@ -12,42 +12,6 @@ export interface AboutSectionProps {
   resumeLabel?: string;
 }
 
-const SKILL_ICONS: Record<string, React.ReactNode> = {
-  accessibility: (
-    <Image src="/images/accessibility.svg" alt="" width={16} height={16} aria-hidden="true" />
-  ),
-  "ux/ui": (
-    <Image src="/images/smartphone.svg" alt="" width={16} height={16} aria-hidden="true" />
-  ),
-  illustration: (
-    <Image src="/images/illustration.svg" alt="" width={16} height={16} aria-hidden="true" />
-  ),
-  research: (
-    <Image src="/images/research.svg" alt="" width={16} height={16} aria-hidden="true" />
-  ),
-};
-
-const SKILL_BADGE_CLASSES: Record<string, string> = {
-  accessibility: "bg-accent/10 text-accent",
-  "ux/ui": "bg-accent-purple/10 text-accent-purple",
-  illustration: "bg-[#E0F2FE] text-[#2563EB]",
-  research: "bg-[#DCFCE7] text-[#16A34A]",
-};
-
-function getSkillIcon(skill: string): React.ReactNode {
-  const key = skill.toLowerCase();
-  return SKILL_ICONS[key] || (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" />
-    </svg>
-  );
-}
-
-function getSkillBadgeClasses(skill: string): string {
-  const key = skill.toLowerCase();
-  return SKILL_BADGE_CLASSES[key] || "bg-background text-foreground";
-}
-
 const DownloadIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
@@ -85,11 +49,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           <div className="flex flex-wrap gap-3 mb-8">
             {profile.technologies.map((skill) => (
               <span
-                key={skill}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-pill text-base font-normal ${getSkillBadgeClasses(skill)}`}
+                key={skill.name}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-pill text-base font-normal ${skill.color || "bg-background text-foreground"}`}
               >
-                {getSkillIcon(skill)}
-                {skill}
+                {skill.iconUrl && (
+                  <Image src={skill.iconUrl} alt="" width={16} height={16} className="object-contain" aria-hidden="true" />
+                )}
+                {skill.name}
               </span>
             ))}
           </div>

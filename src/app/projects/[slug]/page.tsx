@@ -520,7 +520,7 @@ export default async function ProjectDetailPage(props: PageProps) {
     }
   }
 
-  const technologies = project.getTechnologyNames();
+  const technologies = project.technologies;
   const contentSections = project.contentSections;
   const socialLinks = profile?.getSocialLinks?.() || profile?.socialLinks || [];
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
@@ -538,10 +538,13 @@ export default async function ProjectDetailPage(props: PageProps) {
             <div className="flex flex-wrap gap-2 mb-8">
               {technologies.map((tech) => (
                 <span
-                  key={tech}
+                  key={tech.name}
                   className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-[#0A0A0A]/80"
                 >
-                  {tech}
+                  {tech.iconUrl && (
+                    <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
+                  )}
+                  {tech.name}
                 </span>
               ))}
             </div>
@@ -609,7 +612,7 @@ export default async function ProjectDetailPage(props: PageProps) {
         const idx = allProjects.findIndex((p) => p.slug === params.slug);
         const next = idx >= 0 ? allProjects[(idx + 1) % allProjects.length] : null;
         return next && next.slug !== params.slug ? (
-          <NextProjectCard title={next.title} description={toPlainText(next.description)} slug={next.slug} />
+          <NextProjectCard title={next.title} description={next.excerpt || toPlainText(next.description)} slug={next.slug} />
         ) : null;
       })()}
 

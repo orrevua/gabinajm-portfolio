@@ -4,7 +4,7 @@
  * Validated and immutable at runtime.
  */
 
-import { SocialLink, ProfileAvatar, ExperienceCompany, PortableTextBlock, FetchError, FetchErrorCode } from "../types";
+import { SocialLink, ProfileAvatar, ExperienceCompany, PortableTextBlock, SkillTag, FetchError, FetchErrorCode } from "../types";
 
 export interface IProfile {
   name: string;
@@ -15,7 +15,7 @@ export interface IProfile {
   aboutHeroImage?: ProfileAvatar | null;
   socialLinks: SocialLink[];
   resumeUrl: string | null;
-  technologies: string[];
+  technologies: SkillTag[];
   pastExperience: ExperienceCompany[];
   getResumeUrl?: () => string | null;
   getSocialLinks?: () => SocialLink[];
@@ -33,7 +33,7 @@ export class Profile implements IProfile {
   readonly aboutHeroImage: ProfileAvatar | null;
   readonly socialLinks: SocialLink[];
   readonly resumeUrl: string | null;
-  readonly technologies: string[];
+  readonly technologies: SkillTag[];
   readonly pastExperience: ExperienceCompany[];
 
   constructor(data: IProfile) {

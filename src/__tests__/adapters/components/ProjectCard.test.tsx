@@ -32,7 +32,7 @@ describe("ProjectCard Component", () => {
       lqip: "data:image/jpeg;base64,...",
       alt: "Project screenshot",
     },
-    technologies: ["React", "TypeScript", "Tailwind"],
+    technologies: [{ name: "React" }, { name: "TypeScript" }, { name: "Tailwind" }],
     link: "https://example.com",
     featured: false,
   };

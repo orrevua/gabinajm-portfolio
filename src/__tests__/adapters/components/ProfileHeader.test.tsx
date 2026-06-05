@@ -50,7 +50,7 @@ describe("ProfileHeader Component", () => {
       { platform: "linkedin", url: "https://linkedin.com/in/jane" },
     ],
     resumeUrl: "https://example.com/resume.pdf",
-    technologies: ["TypeScript", "React"],
+    technologies: [{ name: "TypeScript" }, { name: "React" }],
     pastExperience: [],
     getSocialLinks: () => [
       { platform: "github", url: "https://github.com/jane" },

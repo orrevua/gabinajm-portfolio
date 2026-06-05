@@ -48,7 +48,7 @@ describe("SanityDataService", () => {
       { platform: "linkedin", url: "https://linkedin.com/in/gabi" },
     ],
     resumeUrl: "https://cdn.sanity.io/resume.pdf",
-    technologies: ["TypeScript", "React", "Node.js"],
+    technologies: [{ name: "TypeScript" }, { name: "React" }, { name: "Node.js" }],
   };
 
   const mockSanityProject = {

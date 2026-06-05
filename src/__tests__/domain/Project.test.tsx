@@ -15,6 +15,7 @@ describe("Project Model", () => {
       title: "E-Commerce Platform",
       subtitle: null,
       slug: "ecommerce-platform",
+      excerpt: "Full-stack e-commerce solution",
       description: "Full-stack e-commerce solution with React and Node.js",
       mainImageSize: null,
       mainImage: {

@@ -19,19 +19,19 @@ describe("ProjectGrid Component", () => {
       title: "Project 1",
       slug: "project-1",
       description: "Description 1",
-      technologies: ["React"],
+      technologies: [{ name: "React" }],
     },
     {
       title: "Project 2",
       slug: "project-2",
       description: "Description 2",
-      technologies: ["Vue"],
+      technologies: [{ name: "Vue" }],
     },
     {
       title: "Project 3",
       slug: "project-3",
       description: "Description 3",
-      technologies: ["Angular"],
+      technologies: [{ name: "Angular" }],
     },
   ];
 
@@ -192,7 +192,7 @@ describe("ProjectGrid Component", () => {
         title: "Custom",
         slug: "custom",
         description: "Custom desc",
-        technologies: ["Custom"],
+        technologies: [{ name: "Custom" }],
         link: "https://example.com",
         featured: true,
       };

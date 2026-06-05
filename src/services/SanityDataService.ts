@@ -79,7 +79,7 @@ interface SanityProfile {
     url: string;
   }>;
   resumeUrl?: string;
-  technologies?: string[];
+  technologies?: Array<string | { name: string; icon?: { asset?: { url: string } }; color?: string }>;
   pastExperience?: Array<{
     name: string;
     url?: string;
@@ -96,6 +96,8 @@ interface SanityProject {
   title_pt?: string;
   subtitle?: string;
   subtitle_pt?: string;
+  excerpt?: string;
+  excerpt_pt?: string;
   slug: {
     current: string;
   };
@@ -126,6 +128,7 @@ interface SanityProject {
   technologies?: Array<{
     name: string;
     category: string;
+    icon?: { asset?: { url: string } };
   }>;
   link?: string;
   repository?: string;
@@ -289,7 +292,9 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
       : null,
     socialLinks,
     resumeUrl: sanityProfile.resumeUrl || null,
-    technologies: sanityProfile.technologies || [],
+    technologies: (sanityProfile.technologies || []).map((t) =>
+      typeof t === "string" ? { name: t } : { name: t.name, iconUrl: t.icon?.asset?.url, color: t.color }
+    ),
     pastExperience: (sanityProfile.pastExperience || []).map((exp) => ({
       name: exp.name,
       url: exp.url || null,
@@ -310,6 +315,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
   const technologies: Technology[] = (sanityProject.technologies || []).map((tech) => ({
     name: tech.name,
     category: normalizeCategory(tech.category),
+    iconUrl: tech.icon?.asset?.url,
   }));
 
   return new Project({
@@ -317,6 +323,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
     title: loc(sanityProject.title, sanityProject.title_pt, locale),
     subtitle: loc(sanityProject.subtitle || null, sanityProject.subtitle_pt, locale),
     slug: sanityProject.slug.current,
+    excerpt: loc(sanityProject.excerpt || null, sanityProject.excerpt_pt, locale),
     mainImageSize: (sanityProject.mainImageSize as "small" | "medium" | "large" | "full") || null,
     description: loc(sanityProject.description, sanityProject.description_pt, locale) as import("@domain").RichTextBody,
     mainImage: sanityProject.mainImage
@@ -707,8 +714,9 @@ export class SanityDataService implements IDataService {
           title: loc(v.title, v.title_pt, locale),
           description: loc(v.description, v.description_pt, locale),
         })),
-        skillChips: (data.skillChips ?? []).map((c: { label: string; label_pt?: string; color: string }) => ({
+        skillChips: (data.skillChips ?? []).map((c: { label: string; label_pt?: string; icon?: { asset?: { url: string } }; color: string }) => ({
           label: loc(c.label, c.label_pt, locale),
+          iconUrl: c.icon?.asset?.url,
           color: c.color,
         })),
       };

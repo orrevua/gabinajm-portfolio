@@ -64,14 +64,28 @@ export default defineType({
       description: 'Portuguese version. Falls back to English if empty.',
     }),
     defineField({
+      name: 'excerpt',
+      title: 'Card Excerpt',
+      type: 'string',
+      description: 'Short summary shown on the project card (1–2 sentences)',
+      validation: (rule) => rule.max(200),
+    }),
+    defineField({
+      name: 'excerpt_pt',
+      title: 'Card Excerpt (PT)',
+      type: 'string',
+      description: 'Portuguese version. Falls back to English if empty.',
+    }),
+    defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Full Description',
       ...richText,
+      description: 'Detailed description shown on the project detail page',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description_pt',
-      title: 'Description (PT)',
+      title: 'Full Description (PT)',
       ...richText,
       description: 'Portuguese version. Falls back to English if empty.',
     }),
@@ -134,6 +148,12 @@ export default defineType({
               validation: (rule) => rule.required(),
             }),
             defineField({
+              name: 'icon',
+              title: 'Icon',
+              type: 'image',
+              description: 'Small icon (SVG or PNG) shown next to the label',
+            }),
+            defineField({
               name: 'category',
               title: 'Category',
               type: 'string',
@@ -151,7 +171,7 @@ export default defineType({
             }),
           ],
           preview: {
-            select: { title: 'name', subtitle: 'category' },
+            select: { title: 'name', subtitle: 'category', media: 'icon' },
           },
         },
       ],

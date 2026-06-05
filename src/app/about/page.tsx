@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import { ProfileHeader } from "@/src/adapters/routes/components/ProfileHeader";
 import { SectionBlock } from "@/src/adapters/routes/components/SectionBlock";
 import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   },
 };
 
-const SKILL_CHIPS = [
+const SKILL_CHIPS: Array<{ label: string; iconUrl?: string; color: string }> = [
   { label: "Design thinking", color: "#fee8db" },
   { label: "Accessibility", color: "#fce7f3" },
   { label: "UX/UI", color: "#f3e8ff" },
@@ -105,7 +106,7 @@ export default async function AboutPage() {
   return (
     <>
       <ProfileHeader
-        profile={{ ...profile, aboutHeroImage: aboutHeroImage ?? profile.aboutHeroImage }}
+        profile={{ ...profile, aboutHeroImage: aboutHeroImage ?? profile.aboutHeroImage } as typeof profile}
         profileUnavailableText={t.error.profileUnavailable}
         heading={t.about.heading}
       />
@@ -135,6 +136,9 @@ export default async function AboutPage() {
                   className="inline-flex items-center gap-2 text-base font-normal px-5 py-2.5 rounded-full"
                   style={{ backgroundColor: chip.color }}
                 >
+                  {chip.iconUrl && (
+                    <Image src={chip.iconUrl} alt="" width={16} height={16} className="object-contain" aria-hidden="true" />
+                  )}
                   {chip.label}
                 </span>
               ))}

@@ -40,10 +40,17 @@ export default defineType({
       name: 'technologies',
       title: 'Skills Tags',
       type: 'array',
-      of: [{ type: 'string' }],
-      options: { layout: 'tags' },
       description: 'Skill badges shown on the home about card',
       group: 'about',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({ name: 'name', title: 'Label', type: 'string', validation: (rule) => rule.required() }),
+          defineField({ name: 'icon', title: 'Icon', type: 'image', description: 'Small icon (SVG or PNG)' }),
+          defineField({ name: 'color', title: 'Badge Color', type: 'string', description: 'CSS class or hex for badge styling (e.g. bg-accent/10 text-accent)' }),
+        ],
+        preview: { select: { title: 'name', media: 'icon' } },
+      }],
     }),
 
     // --- Projects ---

@@ -47,6 +47,7 @@ export interface AboutPageValue {
 
 export interface AboutPageSkillChip {
   label: string;
+  iconUrl?: string;
   color: string;
 }
 

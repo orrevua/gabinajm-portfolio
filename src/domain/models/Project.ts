@@ -18,6 +18,7 @@ export interface IProject {
   title: string;
   subtitle: string | null;
   slug: string;
+  excerpt: string | null;
   description: RichTextBody;
   mainImage: ProjectImage | null;
   mainImageSize: "small" | "medium" | "large" | "full" | null;
@@ -39,6 +40,7 @@ export class Project implements IProject {
   readonly title: string;
   readonly subtitle: string | null;
   readonly slug: string;
+  readonly excerpt: string | null;
   readonly description: RichTextBody;
   readonly mainImage: ProjectImage | null;
   readonly mainImageSize: "small" | "medium" | "large" | "full" | null;
@@ -60,6 +62,7 @@ export class Project implements IProject {
     this.title = data.title.trim();
     this.subtitle = data.subtitle ? data.subtitle.trim() : null;
     this.slug = data.slug.trim().toLowerCase();
+    this.excerpt = data.excerpt ? data.excerpt.trim() : null;
     this.description = typeof data.description === "string" ? data.description.trim() : data.description;
     this.mainImage = data.mainImage;
     this.mainImageSize = data.mainImageSize || "large";

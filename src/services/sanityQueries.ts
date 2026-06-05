@@ -61,6 +61,8 @@ export const PROJECTS_QUERY = `
     title,
     title_pt,
     slug,
+    excerpt,
+    excerpt_pt,
     description,
     description_pt,
     mainImage {
@@ -76,7 +78,8 @@ export const PROJECTS_QUERY = `
     },
     technologies[] {
       name,
-      category
+      category,
+      icon { asset-> { _id, url } }
     },
     link,
     repository,
@@ -100,6 +103,8 @@ export const FEATURED_PROJECTS_QUERY = `
     title,
     title_pt,
     slug,
+    excerpt,
+    excerpt_pt,
     description,
     description_pt,
     mainImage {
@@ -115,7 +120,8 @@ export const FEATURED_PROJECTS_QUERY = `
     },
     technologies[] {
       name,
-      category
+      category,
+      icon { asset-> { _id, url } }
     },
     link,
     repository,
@@ -141,6 +147,8 @@ export const PROJECT_BY_SLUG_QUERY = `
     subtitle,
     subtitle_pt,
     slug,
+    excerpt,
+    excerpt_pt,
     description,
     description_pt,
     heroColor,
@@ -158,7 +166,8 @@ export const PROJECT_BY_SLUG_QUERY = `
     },
     technologies[] {
       name,
-      category
+      category,
+      icon { asset-> { _id, url } }
     },
     contentSections[] {
       _type,
@@ -387,6 +396,7 @@ export const ABOUT_PAGE_QUERY = `
     skillChips[] {
       label,
       label_pt,
+      icon { asset-> { _id, url } },
       color
     }
   }
@@ -409,7 +419,11 @@ export const HOME_PAGE_QUERY = `
     aboutBody_pt,
     showResume,
     showSkills,
-    technologies,
+    technologies[] {
+      name,
+      icon { asset-> { _id, url } },
+      color
+    },
     projectsHeading,
     projectsHeading_pt,
     maxProjects,

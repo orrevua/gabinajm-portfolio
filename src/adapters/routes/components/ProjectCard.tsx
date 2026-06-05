@@ -7,6 +7,11 @@ export interface CardTheme {
   border: string;
 }
 
+export interface TechItem {
+  name: string;
+  iconUrl?: string;
+}
+
 export interface ProjectCardProps {
   title: string;
   slug: string;
@@ -17,36 +22,13 @@ export interface ProjectCardProps {
     alt: string;
   } | null;
   imageFit?: "cover" | "contain";
-  technologies: string[];
+  technologies: TechItem[];
   link?: string | null;
   featured?: boolean;
   cardTheme?: CardTheme | null;
   cardStyle?: "large" | "small";
   companyLogo?: { url: string; alt: string } | null;
   isProtected?: boolean;
-}
-
-const TECH_ICONS: Record<string, React.ReactNode> = {
-  accessibility: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M12 2L13.09 8.26L18 6L14.74 10.91L21 12L14.74 13.09L18 18L13.09 15.74L12 22L10.91 15.74L6 18L9.26 13.09L3 12L9.26 10.91L6 6L10.91 8.26L12 2Z" />
-    </svg>
-  ),
-  "ux/ui": (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="5" y="2" width="14" height="20" rx="2" ry="2" /><line x1="12" y1="18" x2="12.01" y2="18" />
-    </svg>
-  ),
-  research: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  ),
-};
-
-function getTechIcon(tech: string): React.ReactNode {
-  const key = tech.toLowerCase();
-  return TECH_ICONS[key] || null;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -123,11 +105,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="flex flex-wrap gap-2">
             {technologies.map((tech) => (
               <span
-                key={tech}
+                key={tech.name}
                 className="inline-flex items-center gap-1.5 text-sm font-normal text-[#0A0A0A]/70 bg-[#F3F4F6] rounded-pill px-3 py-1.5"
               >
-                {getTechIcon(tech)}
-                {tech}
+                {tech.iconUrl && (
+                  <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
+                )}
+                {tech.name}
               </span>
             ))}
           </div>

@@ -35,6 +35,12 @@ export interface ProfileAvatar {
   alt: string;
 }
 
+export interface SkillTag {
+  name: string;
+  iconUrl?: string;
+  color?: string;
+}
+
 export interface ExperienceCompany {
   name: string;
   logo: SanityImageAsset;
@@ -74,6 +80,7 @@ export interface ProjectImage {
 export interface Technology {
   name: string;
   category: "Frontend" | "Backend" | "DevOps" | "Other";
+  iconUrl?: string;
 }
 
 export interface ContentSectionImage {
