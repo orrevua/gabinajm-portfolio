@@ -11,16 +11,22 @@ const deskStructure = (S: StructureBuilder) =>
       S.listItem()
         .title('Profile')
         .icon(() => '👤')
-        .child(S.document().schemaType('profile').documentId('profile')),
+        .child(
+          S.documentTypeList('profile').title('Profile')
+        ),
       S.divider(),
       S.listItem()
         .title('Home Page')
         .icon(() => '🏠')
-        .child(S.document().schemaType('homePage').documentId('homePage')),
+        .child(
+          S.documentTypeList('homePage').title('Home Page')
+        ),
       S.listItem()
         .title('About Page')
         .icon(() => '📄')
-        .child(S.document().schemaType('aboutPage').documentId('aboutPage')),
+        .child(
+          S.documentTypeList('aboutPage').title('About Page')
+        ),
       S.divider(),
       S.listItem()
         .title('Projects')
