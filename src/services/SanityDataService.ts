@@ -4,7 +4,7 @@
  * Handles GROQ queries, data mapping to domain models, and error handling
  */
 
-import { IDataService, type HomePage, type HomePageSection, type AboutPage } from "@domain/interfaces/DataService";
+import { IDataService, type HomePage, type AboutPage } from "@domain/interfaces/DataService";
 import {
   Profile,
   Project,
@@ -672,35 +672,42 @@ export class SanityDataService implements IDataService {
   async getAboutPage(locale: string = "en"): Promise<AboutPage | null> {
     try {
       const client = getSanityClient();
-      const data = await client.fetch<{
-        _id: string;
-        bioHeading?: string;
-        bioHeading_pt?: string;
-        valuesHeading?: string;
-        valuesHeading_pt?: string;
-        values?: Array<{
-          title: string;
-          title_pt?: string;
-          description: string;
-          description_pt?: string;
-        }>;
-        skillChips?: Array<{
-          label: string;
-          label_pt?: string;
-          color: string;
-        }>;
-      } | null>(ABOUT_PAGE_QUERY);
-
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data = await client.fetch<any>(ABOUT_PAGE_QUERY);
       if (!data) return null;
+
+      const bio = locale === "pt"
+        ? (data.bio_pt?.length > 0 ? data.bio_pt : data.bio?.length > 0 ? data.bio : null)
+        : (data.bio?.length > 0 ? data.bio : null);
+
+      const socialLinks: SocialLink[] = (data.socialLinks || [])
+        .filter((link: { platform: string }) => isSocialPlatform(link.platform))
+        .map((link: { platform: SocialPlatform; url: string }) => ({
+          platform: link.platform,
+          url: link.url,
+        }));
 
       return {
         bioHeading: loc(data.bioHeading ?? null, data.bioHeading_pt, locale),
+        bio,
+        heroImage: data.heroImage?.asset?.url
+          ? {
+              asset: {
+                url: data.heroImage.asset.url,
+                alt: data.heroImage.alt || "",
+                lqip: data.heroImage.asset.lqip || "",
+              },
+              alt: data.heroImage.alt || "",
+            }
+          : null,
+        socialLinks,
+        resumeUrl: data.resumeUrl || null,
         valuesHeading: loc(data.valuesHeading ?? null, data.valuesHeading_pt, locale),
-        values: (data.values ?? []).map((v) => ({
+        values: (data.values ?? []).map((v: { title: string; title_pt?: string; description: string; description_pt?: string }) => ({
           title: loc(v.title, v.title_pt, locale),
           description: loc(v.description, v.description_pt, locale),
         })),
-        skillChips: (data.skillChips ?? []).map((c) => ({
+        skillChips: (data.skillChips ?? []).map((c: { label: string; label_pt?: string; color: string }) => ({
           label: loc(c.label, c.label_pt, locale),
           color: c.color,
         })),
@@ -711,12 +718,85 @@ export class SanityDataService implements IDataService {
     }
   }
 
-  async getHomePage(): Promise<HomePage | null> {
+  async getHomePage(locale: string = "en"): Promise<HomePage | null> {
     try {
       const client = getSanityClient();
-      const data = await client.fetch<{ _id: string; sections?: HomePageSection[] } | null>(HOME_PAGE_QUERY);
-      if (!data || !data.sections) return null;
-      return { sections: data.sections };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data = await client.fetch<any>(HOME_PAGE_QUERY);
+      if (!data) return null;
+
+      const hasFlat = data.greeting || data.aboutHeading || data.projectsHeading;
+      if (hasFlat) {
+        return {
+          greeting: loc(data.greeting, data.greeting_pt, locale),
+          ctaPrimaryLabel: loc(data.ctaPrimaryLabel, data.ctaPrimaryLabel_pt, locale),
+          ctaPrimaryHref: data.ctaPrimaryHref,
+          ctaSecondaryLabel: loc(data.ctaSecondaryLabel, data.ctaSecondaryLabel_pt, locale),
+          ctaSecondaryHref: data.ctaSecondaryHref,
+          aboutHeading: loc(data.aboutHeading, data.aboutHeading_pt, locale),
+          aboutBody: loc(data.aboutBody, data.aboutBody_pt, locale),
+          showResume: data.showResume,
+          showSkills: data.showSkills,
+          projectsHeading: loc(data.projectsHeading, data.projectsHeading_pt, locale),
+          maxProjects: data.maxProjects,
+          experienceHeading: loc(data.experienceHeading, data.experienceHeading_pt, locale),
+          contactHeading: loc(data.contactHeading, data.contactHeading_pt, locale),
+          contactSubtitle: loc(data.contactSubtitle, data.contactSubtitle_pt, locale),
+          availabilityText: loc(data.availabilityText, data.availabilityText_pt, locale),
+          showForm: data.showForm,
+          videoHeading: loc(data.videoHeading, data.videoHeading_pt, locale),
+          videoSubtitle: loc(data.videoSubtitle, data.videoSubtitle_pt, locale),
+          videoUrl: data.videoUrl || (data.videoAssetId ? buildFileUrl(data.videoAssetId) : undefined),
+          videoExternalUrl: data.videoExternalUrl,
+          videoPoster: data.videoPoster,
+          videoAutoplay: data.videoAutoplay,
+          videoLoop: data.videoLoop,
+          videoMuted: data.videoMuted,
+        };
+      }
+
+      // backward compat: old sections[] array → flat
+      const sections = data.sections || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const find = (type: string) => sections.find((s: any) => s._type === type);
+      const hero = find("heroSection");
+      const about = find("aboutSection");
+      const projects = find("projectsSection");
+      const experience = find("experienceSection");
+      const contact = find("contactSection");
+      const video = find("videoSection");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const lfs = (s: any, field: string) => {
+        if (!s) return undefined;
+        return loc(s[field], s[`${field}_pt`], locale);
+      };
+
+      return {
+        greeting: lfs(hero, "greeting"),
+        ctaPrimaryLabel: lfs(hero, "ctaPrimaryLabel"),
+        ctaPrimaryHref: hero?.ctaPrimaryHref,
+        ctaSecondaryLabel: lfs(hero, "ctaSecondaryLabel"),
+        ctaSecondaryHref: hero?.ctaSecondaryHref,
+        aboutHeading: lfs(about, "heading"),
+        aboutBody: lfs(about, "body"),
+        showResume: about?.showResume,
+        showSkills: about?.showSkills,
+        projectsHeading: lfs(projects, "heading"),
+        maxProjects: projects?.maxProjects,
+        experienceHeading: lfs(experience, "heading"),
+        contactHeading: lfs(contact, "heading"),
+        contactSubtitle: lfs(contact, "subtitle"),
+        availabilityText: lfs(contact, "availabilityText"),
+        showForm: contact?.showForm,
+        videoHeading: lfs(video, "heading"),
+        videoSubtitle: lfs(video, "subtitle"),
+        videoUrl: video?.videoUrl,
+        videoExternalUrl: video?.externalUrl,
+        videoPoster: video?.poster,
+        videoAutoplay: video?.autoplay,
+        videoLoop: video?.loop,
+        videoMuted: video?.muted,
+      };
     } catch (error) {
       console.error("SanityDataService: Failed to fetch home page", error);
       return null;

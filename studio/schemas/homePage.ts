@@ -4,132 +4,91 @@ export default defineType({
   name: 'homePage',
   title: 'Home Page',
   type: 'document',
+  groups: [
+    { name: 'hero', title: 'Hero' },
+    { name: 'about', title: 'About Preview' },
+    { name: 'projects', title: 'Projects' },
+    { name: 'experience', title: 'Experience' },
+    { name: 'video', title: 'Video' },
+    { name: 'contact', title: 'Contact' },
+  ],
   fields: [
+    // --- Hero ---
     defineField({
-      name: 'sections',
-      title: 'Page Sections',
-      description: 'Add and reorder sections to build the homepage',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          name: 'heroSection',
-          title: 'Hero Section',
-          fields: [
-            defineField({ name: 'greeting', title: 'Greeting', type: 'string', initialValue: 'Hi there! 👋' }),
-            defineField({ name: 'greeting_pt', title: 'Greeting (PT)', type: 'string' }),
-            defineField({ name: 'ctaPrimaryLabel', title: 'Primary CTA Label', type: 'string', initialValue: 'Get in touch' }),
-            defineField({ name: 'ctaPrimaryLabel_pt', title: 'Primary CTA Label (PT)', type: 'string' }),
-            defineField({ name: 'ctaPrimaryHref', title: 'Primary CTA Link', type: 'string', initialValue: '#contact' }),
-            defineField({ name: 'ctaSecondaryLabel', title: 'Secondary CTA Label', type: 'string', initialValue: 'Learn more' }),
-            defineField({ name: 'ctaSecondaryLabel_pt', title: 'Secondary CTA Label (PT)', type: 'string' }),
-            defineField({ name: 'ctaSecondaryHref', title: 'Secondary CTA Link', type: 'string', initialValue: '#about' }),
-          ],
-          preview: {
-            prepare() { return { title: 'Hero Section' } },
-          },
-        },
-        {
-          type: 'object',
-          name: 'aboutSection',
-          title: 'About Section',
-          fields: [
-            defineField({ name: 'heading', title: 'Heading', type: 'string', initialValue: 'About Me' }),
-            defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
-            defineField({ name: 'body', title: 'Body Text', type: 'text', rows: 6 }),
-            defineField({ name: 'body_pt', title: 'Body Text (PT)', type: 'text', rows: 6 }),
-            defineField({ name: 'showResume', title: 'Show Resume Link', type: 'boolean', initialValue: true }),
-            defineField({ name: 'showSkills', title: 'Show Skills Tags', type: 'boolean', initialValue: true }),
-          ],
-          preview: {
-            select: { title: 'heading' },
-            prepare({ title }) { return { title: title || 'About Section' } },
-          },
-        },
-        {
-          type: 'object',
-          name: 'projectsSection',
-          title: 'Projects Section',
-          fields: [
-            defineField({ name: 'heading', title: 'Heading', type: 'string', initialValue: 'My projects' }),
-            defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
-            defineField({ name: 'maxProjects', title: 'Max Projects', type: 'number', initialValue: 4 }),
-          ],
-          preview: {
-            select: { title: 'heading' },
-            prepare({ title }) { return { title: title || 'Projects Section' } },
-          },
-        },
-        {
-          type: 'object',
-          name: 'experienceSection',
-          title: 'Past Experience Section',
-          fields: [
-            defineField({ name: 'heading', title: 'Heading', type: 'string', initialValue: 'Past Experience' }),
-            defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
-          ],
-          preview: {
-            select: { title: 'heading' },
-            prepare({ title }) { return { title: title || 'Past Experience' } },
-          },
-        },
-        {
-          type: 'object',
-          name: 'videoSection',
-          title: 'Video Section',
-          fields: [
-            defineField({ name: 'heading', title: 'Heading', type: 'string' }),
-            defineField({ name: 'subtitle', title: 'Subtitle', type: 'string' }),
-            defineField({
-              name: 'video',
-              title: 'Upload Video',
-              type: 'file',
-              options: { accept: 'video/*' },
-            }),
-            defineField({
-              name: 'externalUrl',
-              title: 'External Video URL',
-              description: 'YouTube or Vimeo URL (used if no video is uploaded)',
-              type: 'url',
-            }),
-            defineField({
-              name: 'poster',
-              title: 'Poster / Thumbnail',
-              type: 'image',
-              options: { hotspot: true },
-              fields: [
-                defineField({ name: 'alt', title: 'Alt Text', type: 'string' }),
-              ],
-            }),
-            defineField({ name: 'autoplay', title: 'Autoplay', type: 'boolean', initialValue: false }),
-            defineField({ name: 'loop', title: 'Loop', type: 'boolean', initialValue: false }),
-            defineField({ name: 'muted', title: 'Muted', type: 'boolean', initialValue: true }),
-          ],
-          preview: {
-            select: { title: 'heading' },
-            prepare({ title }) { return { title: title || 'Video Section' } },
-          },
-        },
-        {
-          type: 'object',
-          name: 'contactSection',
-          title: 'Contact Section',
-          fields: [
-            defineField({ name: 'heading', title: 'Heading', type: 'string', initialValue: "Let's talk" }),
-            defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
-            defineField({ name: 'subtitle', title: 'Subtitle', type: 'string', initialValue: 'I will reply to you as soon as possible.' }),
-            defineField({ name: 'subtitle_pt', title: 'Subtitle (PT)', type: 'string' }),
-            defineField({ name: 'availabilityText', title: 'Availability Text', type: 'text', rows: 3 }),
-            defineField({ name: 'availabilityText_pt', title: 'Availability Text (PT)', type: 'text', rows: 3 }),
-            defineField({ name: 'showForm', title: 'Show Contact Form', type: 'boolean', initialValue: true }),
-          ],
-          preview: {
-            select: { title: 'heading' },
-            prepare({ title }) { return { title: title || 'Contact Section' } },
-          },
-        },
-      ],
+      name: 'greeting',
+      title: 'Greeting',
+      type: 'string',
+      initialValue: 'Hi there! 👋',
+      group: 'hero',
     }),
+    defineField({ name: 'greeting_pt', title: 'Greeting (PT)', type: 'string', group: 'hero' }),
+    defineField({ name: 'ctaPrimaryLabel', title: 'Primary CTA Label', type: 'string', initialValue: 'Get in touch', group: 'hero' }),
+    defineField({ name: 'ctaPrimaryLabel_pt', title: 'Primary CTA Label (PT)', type: 'string', group: 'hero' }),
+    defineField({ name: 'ctaPrimaryHref', title: 'Primary CTA Link', type: 'string', initialValue: '#contact', group: 'hero' }),
+    defineField({ name: 'ctaSecondaryLabel', title: 'Secondary CTA Label', type: 'string', initialValue: 'Learn more', group: 'hero' }),
+    defineField({ name: 'ctaSecondaryLabel_pt', title: 'Secondary CTA Label (PT)', type: 'string', group: 'hero' }),
+    defineField({ name: 'ctaSecondaryHref', title: 'Secondary CTA Link', type: 'string', initialValue: '#about', group: 'hero' }),
+
+    // --- About Preview ---
+    defineField({ name: 'aboutHeading', title: 'Heading', type: 'string', initialValue: 'About Me', group: 'about' }),
+    defineField({ name: 'aboutHeading_pt', title: 'Heading (PT)', type: 'string', group: 'about' }),
+    defineField({ name: 'aboutBody', title: 'Summary Text', type: 'text', rows: 4, description: 'Short preview of the about section for the home page', group: 'about' }),
+    defineField({ name: 'aboutBody_pt', title: 'Summary Text (PT)', type: 'text', rows: 4, group: 'about' }),
+    defineField({ name: 'showResume', title: 'Show Resume Link', type: 'boolean', initialValue: true, group: 'about' }),
+    defineField({ name: 'showSkills', title: 'Show Skills Tags', type: 'boolean', initialValue: true, group: 'about' }),
+    defineField({
+      name: 'technologies',
+      title: 'Skills Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+      description: 'Skill badges shown on the home about card',
+      group: 'about',
+    }),
+
+    // --- Projects ---
+    defineField({ name: 'projectsHeading', title: 'Heading', type: 'string', initialValue: 'My projects', group: 'projects' }),
+    defineField({ name: 'projectsHeading_pt', title: 'Heading (PT)', type: 'string', group: 'projects' }),
+    defineField({ name: 'maxProjects', title: 'Max Projects to Show', type: 'number', initialValue: 4, group: 'projects' }),
+
+    // --- Experience ---
+    defineField({ name: 'experienceHeading', title: 'Heading', type: 'string', initialValue: 'Past Experience', group: 'experience' }),
+    defineField({ name: 'experienceHeading_pt', title: 'Heading (PT)', type: 'string', group: 'experience' }),
+    defineField({
+      name: 'pastExperience',
+      title: 'Company Logos',
+      type: 'array',
+      description: 'Company logos shown in the Past Experience section',
+      group: 'experience',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({ name: 'name', title: 'Company Name', type: 'string', validation: (rule) => rule.required() }),
+          defineField({ name: 'url', title: 'URL', type: 'url' }),
+          defineField({ name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true }, validation: (rule) => rule.required() }),
+        ],
+        preview: { select: { title: 'name', media: 'logo' } },
+      }],
+    }),
+
+    // --- Video ---
+    defineField({ name: 'videoHeading', title: 'Heading', type: 'string', group: 'video' }),
+    defineField({ name: 'videoSubtitle', title: 'Subtitle', type: 'string', group: 'video' }),
+    defineField({ name: 'video', title: 'Upload Video', type: 'file', options: { accept: 'video/*' }, group: 'video' }),
+    defineField({ name: 'videoExternalUrl', title: 'External Video URL', type: 'url', description: 'YouTube or Vimeo URL (used if no video uploaded)', group: 'video' }),
+    defineField({ name: 'videoPoster', title: 'Poster / Thumbnail', type: 'image', options: { hotspot: true }, group: 'video' }),
+    defineField({ name: 'videoAutoplay', title: 'Autoplay', type: 'boolean', initialValue: false, group: 'video' }),
+    defineField({ name: 'videoLoop', title: 'Loop', type: 'boolean', initialValue: false, group: 'video' }),
+    defineField({ name: 'videoMuted', title: 'Muted', type: 'boolean', initialValue: true, group: 'video' }),
+
+    // --- Contact ---
+    defineField({ name: 'contactHeading', title: 'Heading', type: 'string', initialValue: "Let's talk", group: 'contact' }),
+    defineField({ name: 'contactHeading_pt', title: 'Heading (PT)', type: 'string', group: 'contact' }),
+    defineField({ name: 'contactSubtitle', title: 'Subtitle', type: 'string', initialValue: 'I will reply to you as soon as possible.', group: 'contact' }),
+    defineField({ name: 'contactSubtitle_pt', title: 'Subtitle (PT)', type: 'string', group: 'contact' }),
+    defineField({ name: 'availabilityText', title: 'Availability Text', type: 'text', rows: 2, group: 'contact' }),
+    defineField({ name: 'availabilityText_pt', title: 'Availability Text (PT)', type: 'text', rows: 2, group: 'contact' }),
+    defineField({ name: 'showForm', title: 'Show Contact Form', type: 'boolean', initialValue: true, group: 'contact' }),
   ],
   preview: {
     prepare() { return { title: 'Home Page' } },

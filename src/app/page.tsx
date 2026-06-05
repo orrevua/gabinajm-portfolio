@@ -42,7 +42,7 @@ export default async function HomePage() {
     [profile, projects, homePage] = await Promise.all([
       dataService.getProfile(locale),
       dataService.getFeaturedProjects(4, locale),
-      dataService.getHomePage(),
+      dataService.getHomePage(locale),
     ]);
   } catch {
     fetchError = true;
@@ -64,21 +64,7 @@ export default async function HomePage() {
     );
   }
 
-  const sections = homePage?.sections || [];
-  const heroConfig = sections.find((s) => s._type === "heroSection");
-  const aboutConfig = sections.find((s) => s._type === "aboutSection");
-  const projectsConfig = sections.find((s) => s._type === "projectsSection");
-  const experienceConfig = sections.find((s) => s._type === "experienceSection");
-  const contactConfig = sections.find((s) => s._type === "contactSection");
-  const videoSections = sections.filter((s) => s._type === "videoSection");
-
-  type S = typeof sections[number];
-  const lf = (s: S | undefined, field: keyof S, fallback: string) => {
-    const ptKey = `${String(field)}_pt` as keyof S;
-    if (locale === "pt") return (s?.[ptKey] as string) || (s?.[field] as string) || fallback;
-    return (s?.[field] as string) || fallback;
-  };
-
+  const hp = homePage;
   const socialLinks = profile.getSocialLinks?.() || profile.socialLinks || [];
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
 
@@ -86,21 +72,21 @@ export default async function HomePage() {
     <>
       <HeroSection
         profile={profile}
-        greeting={lf(heroConfig, "greeting", t.hero.greeting)}
+        greeting={hp?.greeting || t.hero.greeting}
         intro={t.hero.intro.trim()}
-        ctaPrimaryLabel={lf(heroConfig, "ctaPrimaryLabel", t.hero.ctaPrimary)}
-        ctaPrimaryHref={heroConfig?.ctaPrimaryHref}
-        ctaSecondaryLabel={lf(heroConfig, "ctaSecondaryLabel", t.hero.ctaSecondary)}
-        ctaSecondaryHref={heroConfig?.ctaSecondaryHref}
+        ctaPrimaryLabel={hp?.ctaPrimaryLabel || t.hero.ctaPrimary}
+        ctaPrimaryHref={hp?.ctaPrimaryHref}
+        ctaSecondaryLabel={hp?.ctaSecondaryLabel || t.hero.ctaSecondary}
+        ctaSecondaryHref={hp?.ctaSecondaryHref}
       />
 
       <ScrollReveal>
         <AboutSection
           profile={profile}
-          heading={lf(aboutConfig, "heading", t.about.heading)}
-          body={locale === "pt" ? (aboutConfig?.body_pt || aboutConfig?.body || t.about.homeAboutSummary) : (aboutConfig?.body || t.about.homeAboutSummary)}
-          showResume={aboutConfig?.showResume}
-          showSkills={aboutConfig?.showSkills}
+          heading={hp?.aboutHeading || t.about.heading}
+          body={hp?.aboutBody || t.about.homeAboutSummary}
+          showResume={hp?.showResume}
+          showSkills={hp?.showSkills}
           showMoreLabel={t.about.showMore}
           resumeLabel={t.about.resume}
         />
@@ -109,7 +95,7 @@ export default async function HomePage() {
       {projects && projects.length > 0 && (
         <ScrollReveal>
           <ProjectGrid
-            title={lf(projectsConfig, "heading", t.projects.heading)}
+            title={hp?.projectsHeading || t.projects.heading}
             projects={projects.map((project) => ({
               title: project.title,
               slug: project.slug,
@@ -147,31 +133,33 @@ export default async function HomePage() {
         <ScrollReveal>
           <PastExperience
             companies={profile.pastExperience}
-            heading={lf(experienceConfig, "heading", t.pastExperience.heading)}
+            heading={hp?.experienceHeading || t.pastExperience.heading}
           />
         </ScrollReveal>
       )}
 
-      {videoSections.map((vc) => (
-        <ScrollReveal key={vc._key}>
+      {hp?.videoUrl || hp?.videoExternalUrl ? (
+        <ScrollReveal>
           <VideoSection
-            heading={vc.heading}
-            subtitle={vc.subtitle}
-            videoUrl={vc.videoUrl}
-            externalUrl={vc.externalUrl}
-            poster={vc.poster}
-            autoplay={vc.autoplay}
-            loop={vc.loop}
-            muted={vc.muted}
+            heading={hp.videoHeading}
+            subtitle={hp.videoSubtitle}
+            videoUrl={hp.videoUrl}
+            externalUrl={hp.videoExternalUrl}
+            poster={hp.videoPoster}
+            autoplay={hp.videoAutoplay}
+            loop={hp.videoLoop}
+            muted={hp.videoMuted}
           />
         </ScrollReveal>
-      ))}
+      ) : null}
 
       <ScrollReveal>
         <ContactSection
+          heading={hp?.contactHeading}
+          subtitle={hp?.contactSubtitle}
           email={email}
           socialLinks={socialLinks.filter((l) => l.platform !== "email")}
-          availabilityText={locale === "pt" ? (contactConfig?.availabilityText_pt || contactConfig?.availabilityText) : contactConfig?.availabilityText}
+          availabilityText={hp?.availabilityText}
         />
       </ScrollReveal>
     </>

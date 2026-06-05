@@ -8,43 +8,36 @@
 import { Profile } from "../models/Profile";
 import { Project } from "../models/Project";
 import { Section } from "../models/Section";
+import type { PortableTextBlock, SocialLink, ProfileAvatar } from "../types";
 
-export interface HomePageSection {
-  _type: string;
-  _key: string;
+export interface HomePage {
   greeting?: string;
-  greeting_pt?: string;
   ctaPrimaryLabel?: string;
-  ctaPrimaryLabel_pt?: string;
   ctaPrimaryHref?: string;
   ctaSecondaryLabel?: string;
-  ctaSecondaryLabel_pt?: string;
   ctaSecondaryHref?: string;
-  heading?: string;
-  heading_pt?: string;
-  body?: string;
-  body_pt?: string;
+  aboutHeading?: string;
+  aboutBody?: string;
   showResume?: boolean;
   showSkills?: boolean;
+  projectsHeading?: string;
   maxProjects?: number;
+  experienceHeading?: string;
+  contactHeading?: string;
+  contactSubtitle?: string;
   availabilityText?: string;
-  availabilityText_pt?: string;
   showForm?: boolean;
-  subtitle?: string;
-  subtitle_pt?: string;
+  videoHeading?: string;
+  videoSubtitle?: string;
   videoUrl?: string;
-  externalUrl?: string;
-  poster?: {
+  videoExternalUrl?: string;
+  videoPoster?: {
     asset: { url: string; lqip?: string };
     alt?: string;
   };
-  autoplay?: boolean;
-  loop?: boolean;
-  muted?: boolean;
-}
-
-export interface HomePage {
-  sections: HomePageSection[];
+  videoAutoplay?: boolean;
+  videoLoop?: boolean;
+  videoMuted?: boolean;
 }
 
 export interface AboutPageValue {
@@ -59,6 +52,10 @@ export interface AboutPageSkillChip {
 
 export interface AboutPage {
   bioHeading: string | null;
+  bio: PortableTextBlock[] | null;
+  heroImage: ProfileAvatar | null;
+  socialLinks: SocialLink[];
+  resumeUrl: string | null;
   valuesHeading: string | null;
   values: AboutPageValue[];
   skillChips: AboutPageSkillChip[];
@@ -146,7 +143,7 @@ export class NullDataService implements IDataService {
     return null;
   }
 
-  async getAboutPage(): Promise<AboutPage | null> {
+  async getAboutPage(_locale?: string): Promise<AboutPage | null> {
     return null;
   }
 

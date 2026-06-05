@@ -15,185 +15,34 @@ export default defineType({
       name: 'title',
       title: 'Professional Title',
       type: 'string',
-      description: 'e.g. "Full-Stack Engineer" or "UX Designer"',
+      description: 'e.g. "Product Designer"',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'title_pt',
       title: 'Professional Title (PT)',
       type: 'string',
-      description: 'Portuguese version. Falls back to English if empty.',
     }),
     defineField({
       name: 'bio',
-      title: 'Bio (Hero)',
+      title: 'Short Bio',
       type: 'text',
-      rows: 4,
-      description: 'Short introduction displayed in the hero section',
+      rows: 3,
+      description: 'Short introduction shown in the hero section',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'bio_pt',
-      title: 'Bio (Hero) (PT)',
+      title: 'Short Bio (PT)',
       type: 'text',
-      rows: 4,
-      description: 'Portuguese version. Falls back to English if empty.',
-    }),
-    defineField({
-      name: 'aboutBio',
-      title: 'About Me (Long Bio)',
-      type: 'array',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H2', value: 'h2' },
-            { title: 'H3', value: 'h3' },
-            { title: 'Quote', value: 'blockquote' },
-          ],
-          marks: {
-            decorators: [
-              { title: 'Bold', value: 'strong' },
-              { title: 'Italic', value: 'em' },
-            ],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
-                fields: [
-                  defineField({
-                    name: 'href',
-                    type: 'url',
-                    title: 'URL',
-                    validation: (rule) =>
-                      rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto'] }),
-                  }),
-                ],
-              },
-            ],
-          },
-        },
-      ],
-      description: 'Longer bio displayed in the About Me section. If empty, falls back to the hero bio.',
-    }),
-    defineField({
-      name: 'aboutBio_pt',
-      title: 'About Me (Long Bio) (PT)',
-      type: 'array',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H2', value: 'h2' },
-            { title: 'H3', value: 'h3' },
-            { title: 'Quote', value: 'blockquote' },
-          ],
-          marks: {
-            decorators: [
-              { title: 'Bold', value: 'strong' },
-              { title: 'Italic', value: 'em' },
-            ],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
-                fields: [
-                  defineField({
-                    name: 'href',
-                    type: 'url',
-                    title: 'URL',
-                    validation: (rule) =>
-                      rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto'] }),
-                  }),
-                ],
-              },
-            ],
-          },
-        },
-      ],
-      description: 'Portuguese version. Falls back to English if empty.',
+      rows: 3,
     }),
     defineField({
       name: 'avatar',
-      title: 'Avatar',
+      title: 'Main Photo',
       type: 'image',
       options: { hotspot: true },
-    }),
-    defineField({
-      name: 'aboutHeroImage',
-      title: 'About Hero Image',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'Dedicated image for the About page hero/header. Falls back to Avatar if empty.',
-    }),
-    defineField({
-      name: 'socialLinks',
-      title: 'Social Links',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'platform',
-              title: 'Platform',
-              type: 'string',
-              options: {
-                list: [
-                  { title: 'GitHub', value: 'github' },
-                  { title: 'LinkedIn', value: 'linkedin' },
-                  { title: 'Twitter', value: 'twitter' },
-                  { title: 'Email', value: 'email' },
-                  { title: 'Instagram', value: 'instagram' },
-                ],
-              },
-              validation: (rule) => rule.required(),
-            }),
-            defineField({
-              name: 'url',
-              title: 'URL',
-              type: 'url',
-              validation: (rule) =>
-                rule.required().uri({ allowRelative: false, scheme: ['http', 'https', 'mailto'] }),
-            }),
-          ],
-          preview: {
-            select: { title: 'platform', subtitle: 'url' },
-          },
-        },
-      ],
-    }),
-    defineField({
-      name: 'resumeUrl',
-      title: 'Resume URL',
-      type: 'url',
-      description: 'Link to downloadable resume/CV',
-    }),
-    defineField({
-      name: 'technologies',
-      title: 'Technologies & Skills',
-      type: 'array',
-      of: [{ type: 'string' }],
-      options: { layout: 'tags' },
-    }),
-    defineField({
-      name: 'pastExperience',
-      title: 'Past Experience',
-      type: 'array',
-      description: 'Company logos shown in the Past Experience section',
-      of: [{
-        type: 'object',
-        fields: [
-          defineField({ name: 'name', title: 'Company Name', type: 'string', validation: (rule) => rule.required() }),
-          defineField({ name: 'url', title: 'URL', type: 'url', description: 'Link to company website or relevant page' }),
-          defineField({ name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true }, validation: (rule) => rule.required() }),
-        ],
-        preview: { select: { title: 'name', media: 'logo' } },
-      }],
+      description: 'Your main photo displayed on the home page hero',
     }),
   ],
   preview: {

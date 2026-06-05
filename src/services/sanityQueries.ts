@@ -361,6 +361,21 @@ export const ABOUT_PAGE_QUERY = `
     _id,
     bioHeading,
     bioHeading_pt,
+    bio,
+    bio_pt,
+    heroImage {
+      asset-> {
+        _id,
+        url,
+        "lqip": metadata.lqip
+      },
+      alt
+    },
+    socialLinks[] {
+      platform,
+      url
+    },
+    resumeUrl,
     valuesHeading,
     valuesHeading_pt,
     values[] {
@@ -380,6 +395,56 @@ export const ABOUT_PAGE_QUERY = `
 export const HOME_PAGE_QUERY = `
   *[_type == "homePage"][0] {
     _id,
+    greeting,
+    greeting_pt,
+    ctaPrimaryLabel,
+    ctaPrimaryLabel_pt,
+    ctaPrimaryHref,
+    ctaSecondaryLabel,
+    ctaSecondaryLabel_pt,
+    ctaSecondaryHref,
+    aboutHeading,
+    aboutHeading_pt,
+    aboutBody,
+    aboutBody_pt,
+    showResume,
+    showSkills,
+    technologies,
+    projectsHeading,
+    projectsHeading_pt,
+    maxProjects,
+    experienceHeading,
+    experienceHeading_pt,
+    pastExperience[] {
+      name,
+      url,
+      logo {
+        asset-> { _id, url, "lqip": metadata.lqip },
+        alt
+      }
+    },
+    videoHeading,
+    videoHeading_pt,
+    videoSubtitle,
+    videoSubtitle_pt,
+    "videoUrl": video.asset->url,
+    "videoAssetId": video.asset->_id,
+    videoExternalUrl,
+    videoPoster {
+      asset-> { _id, url, "lqip": metadata.lqip },
+      alt
+    },
+    videoAutoplay,
+    videoLoop,
+    videoMuted,
+    contactHeading,
+    contactHeading_pt,
+    contactSubtitle,
+    contactSubtitle_pt,
+    availabilityText,
+    availabilityText_pt,
+    showForm,
+    // backward compat: old sections array
     sections[] {
       _type,
       _key,

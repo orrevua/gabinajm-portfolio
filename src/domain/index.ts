@@ -12,5 +12,5 @@ export { Project, type IProject } from "./models/Project";
 export { Section, type ISection } from "./models/Section";
 
 // Interfaces
-export type { IDataService, HomePage, HomePageSection } from "./interfaces/DataService";
+export type { IDataService, HomePage } from "./interfaces/DataService";
 export { NullDataService } from "./interfaces/DataService";

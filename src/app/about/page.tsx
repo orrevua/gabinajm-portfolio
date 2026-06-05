@@ -94,14 +94,18 @@ export default async function AboutPage() {
     );
   }
 
-  const socialLinks = profile.getSocialLinks?.() || profile.socialLinks || [];
+  const socialLinks = (aboutPage?.socialLinks && aboutPage.socialLinks.length > 0)
+    ? aboutPage.socialLinks
+    : (profile.getSocialLinks?.() || profile.socialLinks || []);
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
-  const resumeUrl = profile.getResumeUrl?.() ?? profile.resumeUrl;
+  const resumeUrl = aboutPage?.resumeUrl || profile.getResumeUrl?.() || profile.resumeUrl;
+  const aboutBio = aboutPage?.bio || profile.aboutBio;
+  const aboutHeroImage = aboutPage?.heroImage || profile.aboutHeroImage;
 
   return (
     <>
       <ProfileHeader
-        profile={profile}
+        profile={{ ...profile, aboutHeroImage: aboutHeroImage ?? profile.aboutHeroImage }}
         profileUnavailableText={t.error.profileUnavailable}
         heading={t.about.heading}
       />
@@ -114,8 +118,8 @@ export default async function AboutPage() {
               {aboutPage?.bioHeading || t.about.bioHeading}
             </h2>
             <div className="space-y-6 text-lg text-[#0A0A0A]/70 leading-relaxed mb-10">
-              {profile.aboutBio ? (
-                <PortableTextRenderer value={profile.aboutBio} />
+              {aboutBio ? (
+                <PortableTextRenderer value={aboutBio} />
               ) : (
                 t.about.bio.map((paragraph, i) => <p key={i}>{paragraph}</p>)
               )}
