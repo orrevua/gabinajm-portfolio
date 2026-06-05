@@ -195,14 +195,9 @@ describe("Project Model", () => {
       expect(projectNotLive.getPrimaryUrl()).toBeNull();
     });
 
-    it("getFormattedDate() should format date in en-US locale", () => {
-      const formatted = project.getFormattedDate("en-US");
-      expect(formatted).toBe("January 2024");
-    });
-
-    it("getFormattedDate() should use default locale if not specified", () => {
+    it("getFormattedDate() should return year only", () => {
       const formatted = project.getFormattedDate();
-      expect(formatted).toContain("2024");
+      expect(formatted).toBe("2024");
     });
 
     it("getTechnologyNames() should return array of unique tech names", () => {

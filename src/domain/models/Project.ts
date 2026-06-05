@@ -170,11 +170,8 @@ export class Project implements IProject {
   /**
    * Get formatted publication date
    */
-  getFormattedDate(locale: string = "en-US"): string {
-    return this.publishedAt.toLocaleDateString(locale, {
-      year: "numeric",
-      month: "long",
-    });
+  getFormattedDate(): string {
+    return String(this.publishedAt.getFullYear());
   }
 
   /**

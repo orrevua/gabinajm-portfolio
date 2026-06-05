@@ -23,6 +23,7 @@ export const translations = {
       heading: "About Me",
       subtitle: "A product designer passionate about crafting accessible and human-centered experiences.",
       bioHeading: "Hi, I'm Gabi,",
+      homeBio: "A Product Designer with 10+ years of experience creating accessible, user-centered digital experiences. Specialized in UX/UI and accessibility, I transform complex challenges into simple and intuitive solutions.",
       bio: [
         "Hi, I'm Gabi — a Product Designer with 10+ years of experience creating accessible, user-centered digital experiences. Specialized in UX/UI and accessibility, I transform complex challenges into simple and intuitive solutions.",
         "I've had the privilege of working at companies like Itaú, C6 Bank, and QuintoAndar, as well as international projects during my time in Portugal. My approach is deeply collaborative — I believe the best products emerge when designers, developers, and users work closely together.",
@@ -131,12 +132,13 @@ export const translations = {
       heading: "Sobre Mim",
       subtitle: "Uma product designer apaixonada por criar experiências acessíveis e centradas no ser humano.",
       bioHeading: "Oi, eu sou a Gabi,",
+      homeBio: "Product Designer com mais de 10 anos de experiência criando experiências digitais acessíveis e centradas no usuário. Especializada em UX/UI e acessibilidade, transformo desafios complexos em soluções simples e intuitivas.",
       bio: [
         "Olá, eu sou a Gabi — Product Designer com mais de 10 anos de experiência criando experiências digitais acessíveis e centradas no usuário. Especializada em UX/UI e acessibilidade, transformo desafios complexos em soluções simples e intuitivas.",
         "Tive o privilégio de trabalhar em empresas como Itaú, C6 Bank e QuintoAndar, além de projetos internacionais durante meu tempo em Portugal. Minha abordagem é profundamente colaborativa — acredito que os melhores produtos surgem quando designers, desenvolvedores e usuários trabalham juntos.",
         "Sou apaixonada por pesquisa e estou sempre buscando formas de entender as reais necessidades por trás de cada projeto. Quando não estou projetando, você provavelmente vai me encontrar com meus cachorros, lendo um bom livro, assistindo Bridgerton ou aumentando minha coleção de Sylvanian Families.",
       ],
-      showMore: "Ver mais",
+      showMore: "Mostrar mais",
       resume: "Meu currículo",
       valuesHeading: "Meus valores",
       values: [

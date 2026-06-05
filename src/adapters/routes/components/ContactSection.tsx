@@ -12,7 +12,7 @@ function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: 
   const isSent = type === "sent";
   return (
     <div
-      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-pill shadow-lg text-white text-base font-medium animate-fade-in max-w-[90vw] ${isSent ? "bg-[#16A34A]" : "bg-[#DC2626]"}`}
+      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-pill shadow-lg text-base font-medium animate-fade-in max-w-[90vw] ${isSent ? "bg-[#D2FCD8] text-[#0A0A0A]" : "bg-[#FCE7F3] text-[#0A0A0A]"}`}
       role="alert"
     >
       {isSent ? (

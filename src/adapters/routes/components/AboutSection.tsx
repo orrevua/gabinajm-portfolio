@@ -70,7 +70,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   return (
     <section className="container-max py-12 md:py-20" aria-label={heading} id="about">
       <div className="bg-white rounded-3xl p-8 md:p-12 drop-shadow-2xl">
-        <h2 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent mb-6 p-1">
+        <h2 className="text-3xl md:text-[36px] font-extrabold bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent mb-6 p-1">
           {heading}
         </h2>
 

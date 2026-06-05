@@ -154,7 +154,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 className={`text-2xl font-bold transition-colors ${
                   isActive(link.href)
                     ? "bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent"
-                    : "text-[#0A0A0A] hover:text-accent-pink"
+                    : "text-[#0A0A0A] hover:bg-gradient-to-r hover:from-accent hover:to-accent-purple hover:bg-clip-text hover:text-transparent"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
@@ -166,7 +166,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               className={`text-2xl font-bold transition-colors ${
                 pathname.includes("#contact")
                   ? "bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent"
-                  : "text-[#0A0A0A] hover:text-accent-pink"
+                  : "text-[#0A0A0A] hover:bg-gradient-to-r hover:from-accent hover:to-accent-purple hover:bg-clip-text hover:text-transparent"
               }`}
               onClick={() => setIsOpen(false)}
             >

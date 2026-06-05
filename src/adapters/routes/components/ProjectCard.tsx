@@ -113,7 +113,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       )}
 
       <div className="p-6">
-        <h3 className="text-lg font-bold text-[#0A0A0A] group-hover:text-accent leading-tight mb-1">
+        <h3 className="text-xl md:text-2xl font-bold text-[#0A0A0A] group-hover:text-accent leading-tight mb-1">
           {title}
         </h3>
         <p className="text-sm text-muted leading-snug mb-4">
