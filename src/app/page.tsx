@@ -75,13 +75,13 @@ export default async function HomePage() {
     <>
       <HeroSection
         profile={profile}
-        greeting={hp?.greeting || t.hero.greeting}
+        greeting={profile.greeting || t.hero.greeting}
         intro={t.hero.intro.trim()}
-        heroName={hp?.heroName || t.hero.name}
-        ctaPrimaryLabel={hp?.ctaPrimaryLabel || t.hero.ctaPrimary}
-        ctaPrimaryHref={hp?.ctaPrimaryHref}
-        ctaSecondaryLabel={hp?.ctaSecondaryLabel || t.hero.ctaSecondary}
-        ctaSecondaryHref={hp?.ctaSecondaryHref}
+        heroName={profile.heroName || t.hero.name}
+        ctaPrimaryLabel={profile.ctaPrimaryLabel || t.hero.ctaPrimary}
+        ctaPrimaryHref={profile.ctaPrimaryHref || undefined}
+        ctaSecondaryLabel={profile.ctaSecondaryLabel || t.hero.ctaSecondary}
+        ctaSecondaryHref={profile.ctaSecondaryHref || undefined}
       />
 
       <ScrollReveal>

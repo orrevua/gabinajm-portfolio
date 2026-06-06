@@ -36,6 +36,12 @@ describe("ProfileHeader Component", () => {
       },
       alt: "Jane Doe avatar",
     },
+    greeting: null,
+    heroName: null,
+    ctaPrimaryLabel: null,
+    ctaPrimaryHref: null,
+    ctaSecondaryLabel: null,
+    ctaSecondaryHref: null,
     resumeUrl: null,
     technologies: [],
   };

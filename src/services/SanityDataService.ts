@@ -63,6 +63,16 @@ interface SanityProfile {
     };
     alt?: string;
   };
+  greeting?: string;
+  greeting_pt?: string;
+  heroName?: string;
+  heroName_pt?: string;
+  ctaPrimaryLabel?: string;
+  ctaPrimaryLabel_pt?: string;
+  ctaPrimaryHref?: string;
+  ctaSecondaryLabel?: string;
+  ctaSecondaryLabel_pt?: string;
+  ctaSecondaryHref?: string;
   resumeUrl?: string;
   technologies?: Array<{
     name: string;
@@ -254,6 +264,12 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
           alt: sanityProfile.avatar.alt || "",
         }
       : null,
+    greeting: loc(sanityProfile.greeting, sanityProfile.greeting_pt, locale) || null,
+    heroName: loc(sanityProfile.heroName, sanityProfile.heroName_pt, locale) || null,
+    ctaPrimaryLabel: loc(sanityProfile.ctaPrimaryLabel, sanityProfile.ctaPrimaryLabel_pt, locale) || null,
+    ctaPrimaryHref: sanityProfile.ctaPrimaryHref || null,
+    ctaSecondaryLabel: loc(sanityProfile.ctaSecondaryLabel, sanityProfile.ctaSecondaryLabel_pt, locale) || null,
+    ctaSecondaryHref: sanityProfile.ctaSecondaryHref || null,
     resumeUrl: sanityProfile.resumeUrl || null,
     technologies,
   });
@@ -692,15 +708,9 @@ export class SanityDataService implements IDataService {
       const data = await client.fetch<any>(HOME_PAGE_QUERY);
       if (!data) return null;
 
-      const hasFlat = data.greeting || data.aboutHeading || data.projectsHeading;
+      const hasFlat = data.aboutHeading || data.projectsHeading || data.showResume != null;
       if (hasFlat) {
         return {
-          greeting: loc(data.greeting, data.greeting_pt, locale),
-          heroName: loc(data.heroName, data.heroName_pt, locale),
-          ctaPrimaryLabel: loc(data.ctaPrimaryLabel, data.ctaPrimaryLabel_pt, locale),
-          ctaPrimaryHref: data.ctaPrimaryHref,
-          ctaSecondaryLabel: loc(data.ctaSecondaryLabel, data.ctaSecondaryLabel_pt, locale),
-          ctaSecondaryHref: data.ctaSecondaryHref,
           aboutHeading: loc(data.aboutHeading, data.aboutHeading_pt, locale),
           aboutBody: loc(data.aboutBody, data.aboutBody_pt, locale),
           showResume: data.showResume,
@@ -727,7 +737,6 @@ export class SanityDataService implements IDataService {
       const sections = data.sections || [];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const find = (type: string) => sections.find((s: any) => s._type === type);
-      const hero = find("heroSection");
       const about = find("aboutSection");
       const projects = find("projectsSection");
       const experience = find("experienceSection");
@@ -740,11 +749,6 @@ export class SanityDataService implements IDataService {
       };
 
       return {
-        greeting: lfs(hero, "greeting"),
-        ctaPrimaryLabel: lfs(hero, "ctaPrimaryLabel"),
-        ctaPrimaryHref: hero?.ctaPrimaryHref,
-        ctaSecondaryLabel: lfs(hero, "ctaSecondaryLabel"),
-        ctaSecondaryHref: hero?.ctaSecondaryHref,
         aboutHeading: lfs(about, "heading"),
         aboutBody: lfs(about, "body"),
         showResume: about?.showResume,

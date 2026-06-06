@@ -22,6 +22,12 @@ describe("Profile Model", () => {
         },
         alt: "Profile avatar",
       },
+      greeting: null,
+      heroName: null,
+      ctaPrimaryLabel: null,
+      ctaPrimaryHref: null,
+      ctaSecondaryLabel: null,
+      ctaSecondaryHref: null,
       resumeUrl: null,
       technologies: [{ name: "React" }],
     };

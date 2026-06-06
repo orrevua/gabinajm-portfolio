@@ -5,7 +5,6 @@ export default defineType({
   title: 'Home Page',
   type: 'document',
   groups: [
-    { name: 'hero', title: 'Hero' },
     { name: 'about', title: 'About Preview' },
     { name: 'projects', title: 'Projects' },
     { name: 'experience', title: 'Experience' },
@@ -13,18 +12,6 @@ export default defineType({
     { name: 'contact', title: 'Contact' },
   ],
   fields: [
-    // --- Hero ---
-    defineField({ name: 'greeting', title: 'Greeting', type: 'string', initialValue: 'Hi there!', description: 'Just the greeting, e.g. "Olá!" — the wave emoji is added automatically', group: 'hero' }),
-    defineField({ name: 'greeting_pt', title: 'Greeting (PT)', type: 'string', group: 'hero' }),
-    defineField({ name: 'heroName', title: 'Display Name', type: 'string', initialValue: 'Gabi', description: 'Name shown with gradient in the hero, e.g. "Gabi" or "Gabiiiii"', group: 'hero' }),
-    defineField({ name: 'heroName_pt', title: 'Display Name (PT)', type: 'string', group: 'hero' }),
-    defineField({ name: 'ctaPrimaryLabel', title: 'Primary CTA Label', type: 'string', initialValue: 'Get in touch', group: 'hero' }),
-    defineField({ name: 'ctaPrimaryLabel_pt', title: 'Primary CTA Label (PT)', type: 'string', group: 'hero' }),
-    defineField({ name: 'ctaPrimaryHref', title: 'Primary CTA Link', type: 'string', initialValue: '#contact', group: 'hero' }),
-    defineField({ name: 'ctaSecondaryLabel', title: 'Secondary CTA Label', type: 'string', initialValue: 'Learn more', group: 'hero' }),
-    defineField({ name: 'ctaSecondaryLabel_pt', title: 'Secondary CTA Label (PT)', type: 'string', group: 'hero' }),
-    defineField({ name: 'ctaSecondaryHref', title: 'Secondary CTA Link', type: 'string', initialValue: '#about', group: 'hero' }),
-
     // --- About Preview ---
     defineField({ name: 'aboutHeading', title: 'Heading', type: 'string', initialValue: 'About Me', group: 'about' }),
     defineField({ name: 'aboutHeading_pt', title: 'Heading (PT)', type: 'string', group: 'about' }),

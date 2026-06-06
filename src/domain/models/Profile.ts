@@ -5,6 +5,12 @@ export interface IProfile {
   title: string;
   bio: string;
   avatar: ProfileAvatar | null;
+  greeting: string | null;
+  heroName: string | null;
+  ctaPrimaryLabel: string | null;
+  ctaPrimaryHref: string | null;
+  ctaSecondaryLabel: string | null;
+  ctaSecondaryHref: string | null;
   resumeUrl: string | null;
   technologies: SkillTag[];
 }
@@ -14,6 +20,12 @@ export class Profile implements IProfile {
   readonly title: string;
   readonly bio: string;
   readonly avatar: ProfileAvatar | null;
+  readonly greeting: string | null;
+  readonly heroName: string | null;
+  readonly ctaPrimaryLabel: string | null;
+  readonly ctaPrimaryHref: string | null;
+  readonly ctaSecondaryLabel: string | null;
+  readonly ctaSecondaryHref: string | null;
   readonly resumeUrl: string | null;
   readonly technologies: SkillTag[];
 
@@ -23,6 +35,12 @@ export class Profile implements IProfile {
     this.title = data.title.trim();
     this.bio = data.bio.trim();
     this.avatar = data.avatar;
+    this.greeting = data.greeting;
+    this.heroName = data.heroName;
+    this.ctaPrimaryLabel = data.ctaPrimaryLabel;
+    this.ctaPrimaryHref = data.ctaPrimaryHref;
+    this.ctaSecondaryLabel = data.ctaSecondaryLabel;
+    this.ctaSecondaryHref = data.ctaSecondaryHref;
     this.resumeUrl = data.resumeUrl;
     this.technologies = data.technologies;
   }

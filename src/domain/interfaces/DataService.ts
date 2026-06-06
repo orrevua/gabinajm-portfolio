@@ -11,12 +11,6 @@ import { Section } from "../models/Section";
 import type { PortableTextBlock, ProfileAvatar } from "../types";
 
 export interface HomePage {
-  greeting?: string;
-  heroName?: string;
-  ctaPrimaryLabel?: string;
-  ctaPrimaryHref?: string;
-  ctaSecondaryLabel?: string;
-  ctaSecondaryHref?: string;
   aboutHeading?: string;
   aboutBody?: string;
   showResume?: boolean;
