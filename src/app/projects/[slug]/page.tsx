@@ -540,7 +540,25 @@ export default async function ProjectDetailPage(props: PageProps) {
                   className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-[#0A0A0A]/80"
                 >
                   {tech.iconUrl && (
-                    <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
+                    tech.color ? (
+                      <span
+                        className="inline-block w-[14px] h-[14px] shrink-0"
+                        style={{
+                          backgroundColor: tech.color,
+                          WebkitMaskImage: `url(${tech.iconUrl})`,
+                          WebkitMaskSize: "contain",
+                          WebkitMaskRepeat: "no-repeat",
+                          WebkitMaskPosition: "center",
+                          maskImage: `url(${tech.iconUrl})`,
+                          maskSize: "contain",
+                          maskRepeat: "no-repeat",
+                          maskPosition: "center",
+                        }}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
+                    )
                   )}
                   {tech.name}
                 </span>

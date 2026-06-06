@@ -113,6 +113,7 @@ interface SanityProject {
     name: string;
     category: string;
     icon?: { asset?: { url: string } };
+    color?: string;
   }>;
   link?: string;
   repository?: string;
@@ -273,6 +274,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
     name: tech.name,
     category: normalizeCategory(tech.category),
     iconUrl: tech.icon?.asset?.url,
+    color: tech.color,
   }));
 
   return new Project({

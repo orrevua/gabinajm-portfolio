@@ -65,7 +65,8 @@ export const PROJECTS_QUERY = `
     technologies[] {
       name,
       category,
-      icon { asset-> { _id, url } }
+      icon { asset-> { _id, url } },
+      color
     },
     link,
     repository,
@@ -107,7 +108,8 @@ export const FEATURED_PROJECTS_QUERY = `
     technologies[] {
       name,
       category,
-      icon { asset-> { _id, url } }
+      icon { asset-> { _id, url } },
+      color
     },
     link,
     repository,
@@ -153,7 +155,8 @@ export const PROJECT_BY_SLUG_QUERY = `
     technologies[] {
       name,
       category,
-      icon { asset-> { _id, url } }
+      icon { asset-> { _id, url } },
+      color
     },
     contentSections[] {
       _type,

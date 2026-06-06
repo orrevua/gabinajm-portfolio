@@ -116,7 +116,7 @@ export default async function HomePage() {
                   }
                 : undefined,
               imageFit: project.mainImageCrop === "full" ? "contain" : "cover",
-              technologies: project.technologies.map((t) => ({ name: t.name, iconUrl: t.iconUrl })),
+              technologies: project.technologies.map((t) => ({ name: t.name, iconUrl: t.iconUrl, color: t.color })),
               link: project.getPrimaryUrl() || undefined,
               featured: project.featured,
               isProtected: project.isProtected,

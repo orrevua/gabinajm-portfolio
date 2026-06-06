@@ -154,6 +154,12 @@ export default defineType({
               description: 'Small icon (SVG or PNG) shown next to the label',
             }),
             defineField({
+              name: 'color',
+              title: 'Icon Color Override',
+              type: 'string',
+              description: 'Hex color to tint the icon (e.g. #000000 for black). Leave empty to show original colors.',
+            }),
+            defineField({
               name: 'category',
               title: 'Category',
               type: 'string',

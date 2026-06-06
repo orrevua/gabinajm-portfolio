@@ -81,6 +81,7 @@ export interface Technology {
   name: string;
   category: "Frontend" | "Backend" | "DevOps" | "Other";
   iconUrl?: string;
+  color?: string;
 }
 
 export interface ContentSectionImage {

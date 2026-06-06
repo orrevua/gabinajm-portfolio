@@ -10,6 +10,7 @@ export interface CardTheme {
 export interface TechItem {
   name: string;
   iconUrl?: string;
+  color?: string;
 }
 
 export interface ProjectCardProps {
@@ -109,7 +110,25 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 className="inline-flex items-center gap-1.5 text-sm font-normal text-[#0A0A0A]/70 bg-[#F3F4F6] rounded-pill px-3 py-1.5"
               >
                 {tech.iconUrl && (
-                  <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
+                  tech.color ? (
+                    <span
+                      className="inline-block w-[14px] h-[14px] shrink-0"
+                      style={{
+                        backgroundColor: tech.color,
+                        WebkitMaskImage: `url(${tech.iconUrl})`,
+                        WebkitMaskSize: "contain",
+                        WebkitMaskRepeat: "no-repeat",
+                        WebkitMaskPosition: "center",
+                        maskImage: `url(${tech.iconUrl})`,
+                        maskSize: "contain",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center",
+                      }}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
+                  )
                 )}
                 {tech.name}
               </span>
