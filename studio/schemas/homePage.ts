@@ -14,8 +14,10 @@ export default defineType({
   ],
   fields: [
     // --- Hero ---
-    defineField({ name: 'greeting', title: 'Greeting', type: 'string', initialValue: 'Hi there! 👋', group: 'hero' }),
+    defineField({ name: 'greeting', title: 'Greeting', type: 'string', initialValue: 'Hi there!', description: 'Just the greeting, e.g. "Olá!" — the wave emoji is added automatically', group: 'hero' }),
     defineField({ name: 'greeting_pt', title: 'Greeting (PT)', type: 'string', group: 'hero' }),
+    defineField({ name: 'heroName', title: 'Display Name', type: 'string', initialValue: 'Gabi', description: 'Name shown with gradient in the hero, e.g. "Gabi" or "Gabiiiii"', group: 'hero' }),
+    defineField({ name: 'heroName_pt', title: 'Display Name (PT)', type: 'string', group: 'hero' }),
     defineField({ name: 'ctaPrimaryLabel', title: 'Primary CTA Label', type: 'string', initialValue: 'Get in touch', group: 'hero' }),
     defineField({ name: 'ctaPrimaryLabel_pt', title: 'Primary CTA Label (PT)', type: 'string', group: 'hero' }),
     defineField({ name: 'ctaPrimaryHref', title: 'Primary CTA Link', type: 'string', initialValue: '#contact', group: 'hero' }),

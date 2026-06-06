@@ -12,6 +12,7 @@ import type { PortableTextBlock, ProfileAvatar } from "../types";
 
 export interface HomePage {
   greeting?: string;
+  heroName?: string;
   ctaPrimaryLabel?: string;
   ctaPrimaryHref?: string;
   ctaSecondaryLabel?: string;

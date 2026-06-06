@@ -5,6 +5,7 @@ export interface HeroSectionProps {
   profile: IProfile;
   greeting?: string;
   intro?: string;
+  heroName?: string;
   ctaPrimaryLabel?: string;
   ctaPrimaryHref?: string;
   ctaSecondaryLabel?: string;
@@ -19,6 +20,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   profile,
   greeting,
   intro = "I'm",
+  heroName = "Gabi",
   ctaPrimaryLabel,
   ctaPrimaryHref = "#contact",
   ctaSecondaryLabel,
@@ -47,7 +49,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {intro}{" "}
             <span className="inline-flex items-baseline whitespace-nowrap">
               <span className="relative bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent">
-                Gabi
+                {heroName}
               </span>
               <span className="text-[#0A0A0A]">,</span>
             </span>

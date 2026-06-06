@@ -398,6 +398,8 @@ export const HOME_PAGE_QUERY = `
     _id,
     greeting,
     greeting_pt,
+    heroName,
+    heroName_pt,
     ctaPrimaryLabel,
     ctaPrimaryLabel_pt,
     ctaPrimaryHref,

@@ -696,6 +696,7 @@ export class SanityDataService implements IDataService {
       if (hasFlat) {
         return {
           greeting: loc(data.greeting, data.greeting_pt, locale),
+          heroName: loc(data.heroName, data.heroName_pt, locale),
           ctaPrimaryLabel: loc(data.ctaPrimaryLabel, data.ctaPrimaryLabel_pt, locale),
           ctaPrimaryHref: data.ctaPrimaryHref,
           ctaSecondaryLabel: loc(data.ctaSecondaryLabel, data.ctaSecondaryLabel_pt, locale),

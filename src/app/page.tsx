@@ -77,6 +77,7 @@ export default async function HomePage() {
         profile={profile}
         greeting={hp?.greeting || t.hero.greeting}
         intro={t.hero.intro.trim()}
+        heroName={hp?.heroName || t.hero.name}
         ctaPrimaryLabel={hp?.ctaPrimaryLabel || t.hero.ctaPrimary}
         ctaPrimaryHref={hp?.ctaPrimaryHref}
         ctaSecondaryLabel={hp?.ctaSecondaryLabel || t.hero.ctaSecondary}
