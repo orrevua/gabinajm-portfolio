@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { IconCheck, IconAlertTriangle } from "@tabler/icons-react";
+import { IconCheck, IconAlertCircle } from "@tabler/icons-react";
 import { useTranslation } from "@/src/i18n";
 
 function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: string; onDismiss: () => void }) {
@@ -19,7 +19,7 @@ function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: 
       {isSent ? (
         <IconCheck size={20} className="shrink-0 text-[#1a7a2e]" aria-hidden="true" />
       ) : (
-        <IconAlertTriangle size={20} className="shrink-0 text-[#c4365a]" aria-hidden="true" />
+        <IconAlertCircle size={20} className="shrink-0 text-[#c4365a]" aria-hidden="true" />
       )}
       {message}
     </div>
