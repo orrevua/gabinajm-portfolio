@@ -32,13 +32,7 @@ export const PROFILE_QUERY = `
     ctaPrimaryHref,
     ctaSecondaryLabel,
     ctaSecondaryLabel_pt,
-    ctaSecondaryHref,
-    resumeUrl,
-    technologies[] {
-      name,
-      icon { asset-> { _id, url } },
-      color
-    }
+    ctaSecondaryHref
   }
 `;
 
@@ -274,7 +268,15 @@ const CONTENT_BLOCKS_PROJECTION = `
     },
     links[] { platform, url },
     availabilityText,
-    availabilityText_pt
+    availabilityText_pt,
+    skills[] {
+      name,
+      icon { asset-> { _id, url } },
+      color
+    },
+    resumeUrl,
+    showResume,
+    showSkills
   }
 `;
 
@@ -406,12 +408,6 @@ export const ABOUT_PAGE_QUERY = `
 export const HOME_PAGE_QUERY = `
   *[_type == "homePage"][0] {
     _id,
-    aboutHeading,
-    aboutHeading_pt,
-    aboutBody,
-    aboutBody_pt,
-    showResume,
-    showSkills,
     projectsHeading,
     projectsHeading_pt,
     maxProjects,

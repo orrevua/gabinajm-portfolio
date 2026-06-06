@@ -93,12 +93,14 @@ export default async function AboutPage() {
     );
   }
 
-  const resumeUrl = profile.getResumeUrl();
+  const aboutPreviewSection = sections.find((s) => s.sectionType === "about-preview");
+  const aboutBlock = aboutPreviewSection?.contentBlocks.find((b) => b._type === "aboutPreviewBlock");
+  const resumeUrl = aboutBlock?.resumeUrl || null;
   const aboutBio = aboutPage?.bio;
   const aboutHeroImage = aboutPage?.heroImage;
 
   const contactSection = sections.find((s) => s.sectionType === "contact");
-  const otherSections = sections.filter((s) => s.sectionType !== "contact");
+  const otherSections = sections.filter((s) => s.sectionType !== "contact" && s.sectionType !== "about-preview");
 
   return (
     <>

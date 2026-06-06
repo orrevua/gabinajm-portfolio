@@ -175,6 +175,10 @@ export interface SectionContentBlock {
   companies?: SectionCompany[];
   links?: SectionSocialLink[];
   availabilityText?: string;
+  skills?: SkillTag[];
+  resumeUrl?: string;
+  showResume?: boolean;
+  showSkills?: boolean;
 }
 
 export type SectionPadding = "none" | "small" | "medium" | "large";

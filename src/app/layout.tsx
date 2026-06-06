@@ -6,7 +6,6 @@ import { SkipToContent } from "@/src/adapters/routes/components/SkipToContent";
 import { LocaleProvider } from "@/src/i18n";
 import type { Locale } from "@/src/i18n";
 import { translations } from "@/src/i18n/translations";
-import { getSanityDataService } from "@/src/services";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import "@/src/styles/globals.css";
@@ -70,18 +69,6 @@ export default async function RootLayout({
   const localeCookie = cookieStore.get("locale")?.value;
   const locale: Locale = localeCookie === "pt" ? "pt" : "en";
 
-  let resumeUrl: string | null = null;
-
-  try {
-    const dataService = await getSanityDataService();
-    const profile = await dataService.getProfile(locale);
-    if (profile) {
-      resumeUrl = profile.getResumeUrl();
-    }
-  } catch {
-    // Profile data is optional for navigation
-  }
-
   return (
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
@@ -108,7 +95,7 @@ export default async function RootLayout({
         />
         <LocaleProvider initialLocale={locale}>
           <SkipToContent />
-          <Navigation brandName="Gabinajm" resumeUrl={resumeUrl} />
+          <Navigation brandName="Gabinajm" />
           <main id="main-content" className="flex-1">{children}</main>
           <footer className="w-full bg-[#FFFFFF80] border-t-[1px] border-[#FCE7F3]">
           <div className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted min-h-[88px]">

@@ -18,8 +18,6 @@ interface ProfileResponse {
     lqip: string;
     alt: string;
   };
-  resumeUrl: string | null;
-  technologies: Array<{ name: string; iconUrl?: string; color?: string }>;
 }
 
 interface SuccessResponse {
@@ -69,8 +67,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
               alt: profile.avatar.alt || profile.name,
             }
           : undefined,
-      resumeUrl: profile.getResumeUrl(),
-      technologies: profile.technologies,
     };
 
     return NextResponse.json(

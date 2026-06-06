@@ -1,4 +1,5 @@
 import type { Section } from "@/src/domain/models/Section";
+import { AboutSection } from "./AboutSection";
 import { PastExperience } from "./PastExperience";
 import { ContactSection } from "./ContactSection";
 import { ValuesSection } from "./ValuesSection";
@@ -8,10 +9,29 @@ import type { ExperienceCompany } from "@/src/domain/types";
 
 interface SectionRouterProps {
   section: Section;
+  showMoreLabel?: string;
+  resumeLabel?: string;
 }
 
-export function SectionRouter({ section }: SectionRouterProps) {
+export function SectionRouter({ section, showMoreLabel, resumeLabel }: SectionRouterProps) {
   switch (section.sectionType) {
+    case "about-preview": {
+      const block = section.contentBlocks.find((b) => b._type === "aboutPreviewBlock");
+      return (
+        <ScrollReveal>
+          <AboutSection
+            heading={section.title}
+            body={block?.body}
+            showResume={block?.showResume}
+            showSkills={block?.showSkills}
+            showMoreLabel={showMoreLabel}
+            resumeLabel={resumeLabel}
+            resumeUrl={block?.resumeUrl}
+            technologies={block?.skills}
+          />
+        </ScrollReveal>
+      );
+    }
     case "past-experience": {
       const block = section.contentBlocks.find((b) => b._type === "companyLogos");
       const companies: ExperienceCompany[] = (block?.companies || []).map((c) => ({

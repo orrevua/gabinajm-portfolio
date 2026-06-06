@@ -1,4 +1,4 @@
-import { ProfileAvatar, SkillTag, FetchError, FetchErrorCode } from "../types";
+import { ProfileAvatar, FetchError, FetchErrorCode } from "../types";
 
 export interface IProfile {
   name: string;
@@ -11,8 +11,6 @@ export interface IProfile {
   ctaPrimaryHref: string | null;
   ctaSecondaryLabel: string | null;
   ctaSecondaryHref: string | null;
-  resumeUrl: string | null;
-  technologies: SkillTag[];
 }
 
 export class Profile implements IProfile {
@@ -26,8 +24,6 @@ export class Profile implements IProfile {
   readonly ctaPrimaryHref: string | null;
   readonly ctaSecondaryLabel: string | null;
   readonly ctaSecondaryHref: string | null;
-  readonly resumeUrl: string | null;
-  readonly technologies: SkillTag[];
 
   constructor(data: IProfile) {
     Profile.validate(data);
@@ -41,8 +37,6 @@ export class Profile implements IProfile {
     this.ctaPrimaryHref = data.ctaPrimaryHref;
     this.ctaSecondaryLabel = data.ctaSecondaryLabel;
     this.ctaSecondaryHref = data.ctaSecondaryHref;
-    this.resumeUrl = data.resumeUrl;
-    this.technologies = data.technologies;
   }
 
   private static validate(data: unknown): asserts data is IProfile {
@@ -56,8 +50,6 @@ export class Profile implements IProfile {
       throw new FetchError(FetchErrorCode.INVALID_DATA, "Profile title is required", 400);
     if (!p.bio || typeof p.bio !== "string")
       throw new FetchError(FetchErrorCode.INVALID_DATA, "Profile bio is required", 400);
-    if (!Array.isArray(p.technologies))
-      throw new FetchError(FetchErrorCode.INVALID_DATA, "technologies must be an array", 400);
   }
 
   static tryCreate(data: unknown): Profile | null {
@@ -67,9 +59,5 @@ export class Profile implements IProfile {
       console.warn("Profile validation failed:", error);
       return null;
     }
-  }
-
-  getResumeUrl(): string | null {
-    return this.resumeUrl;
   }
 }

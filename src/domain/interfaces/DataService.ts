@@ -11,10 +11,6 @@ import { Section } from "../models/Section";
 import type { PortableTextBlock, ProfileAvatar } from "../types";
 
 export interface HomePage {
-  aboutHeading?: string;
-  aboutBody?: string;
-  showResume?: boolean;
-  showSkills?: boolean;
   projectsHeading?: string;
   maxProjects?: number;
   experienceHeading?: string;

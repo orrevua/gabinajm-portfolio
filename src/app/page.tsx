@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { HeroSection } from "@/src/adapters/routes/components/HeroSection";
-import { AboutSection } from "@/src/adapters/routes/components/AboutSection";
 import { ProjectGrid } from "@/src/adapters/routes/components/ProjectGrid";
 import { VideoSection } from "@/src/adapters/routes/components/VideoSection";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
@@ -68,6 +67,7 @@ export default async function HomePage() {
 
   const hp = homePage;
 
+  const aboutSection = sections.find((s) => s.sectionType === "about-preview");
   const contactSection = sections.find((s) => s.sectionType === "contact");
   const genericSections = sections.filter((s) => s.sectionType === "generic");
 
@@ -84,18 +84,9 @@ export default async function HomePage() {
         ctaSecondaryHref={profile.ctaSecondaryHref || undefined}
       />
 
-      <ScrollReveal>
-        <AboutSection
-          heading={hp?.aboutHeading || t.about.heading}
-          body={hp?.aboutBody || t.about.homeAboutSummary}
-          showResume={hp?.showResume}
-          showSkills={hp?.showSkills}
-          showMoreLabel={t.about.showMore}
-          resumeLabel={t.about.resume}
-          resumeUrl={profile.getResumeUrl() ?? undefined}
-          technologies={profile.technologies}
-        />
-      </ScrollReveal>
+      {aboutSection && (
+        <SectionRouter section={aboutSection} showMoreLabel={t.about.showMore} resumeLabel={t.about.resume} />
+      )}
 
       {projects && projects.length > 0 && (
         <ScrollReveal>

@@ -42,8 +42,6 @@ describe("ProfileHeader Component", () => {
     ctaPrimaryHref: null,
     ctaSecondaryLabel: null,
     ctaSecondaryHref: null,
-    resumeUrl: null,
-    technologies: [],
   };
 
   const mockHeroImage = {

@@ -9,7 +9,6 @@ import {
   Profile,
   Project,
   Section,
-  type SkillTag,
   type Technology,
   type SectionBackground,
   type SectionPadding,
@@ -73,12 +72,6 @@ interface SanityProfile {
   ctaSecondaryLabel?: string;
   ctaSecondaryLabel_pt?: string;
   ctaSecondaryHref?: string;
-  resumeUrl?: string;
-  technologies?: Array<{
-    name: string;
-    icon?: { asset?: { url: string } };
-    color?: string;
-  }>;
 }
 
 interface SanityProject {
@@ -202,6 +195,10 @@ interface SanityContentBlock {
   links?: Array<{ platform: string; url: string }>;
   availabilityText?: string;
   availabilityText_pt?: string;
+  skills?: Array<{ name: string; icon?: { asset?: { url: string } }; color?: string }>;
+  resumeUrl?: string;
+  showResume?: boolean;
+  showSkills?: boolean;
 }
 
 interface SanitySection {
@@ -244,12 +241,6 @@ const normalizeCategory = (category: string): Technology["category"] => {
  * Handles null/missing fields gracefully
  */
 function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = "en"): Profile {
-  const technologies: SkillTag[] = (sanityProfile.technologies || []).map((t) => ({
-    name: t.name,
-    iconUrl: t.icon?.asset?.url,
-    color: t.color,
-  }));
-
   return new Profile({
     name: sanityProfile.name,
     title: loc(sanityProfile.title, sanityProfile.title_pt, locale),
@@ -270,8 +261,6 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
     ctaPrimaryHref: sanityProfile.ctaPrimaryHref || null,
     ctaSecondaryLabel: loc(sanityProfile.ctaSecondaryLabel, sanityProfile.ctaSecondaryLabel_pt, locale) || null,
     ctaSecondaryHref: sanityProfile.ctaSecondaryHref || null,
-    resumeUrl: sanityProfile.resumeUrl || null,
-    technologies,
   });
 }
 
@@ -434,10 +423,19 @@ function mapSanitySectionToModel(doc: SanitySection, locale: string = "en"): Sec
     })),
     links: block.links,
     availabilityText: loc(block.availabilityText, block.availabilityText_pt, locale),
+    skills: block.skills?.map((s: { name: string; icon?: { asset?: { url: string } }; color?: string }) => ({
+      name: s.name,
+      iconUrl: s.icon?.asset?.url,
+      color: s.color,
+    })),
+    resumeUrl: block.resumeUrl,
+    showResume: block.showResume,
+    showSkills: block.showSkills,
   }));
 
-  const sectionType = (doc.sectionType === "past-experience" || doc.sectionType === "contact" || doc.sectionType === "values")
-    ? doc.sectionType
+  const validTypes = ["about-preview", "past-experience", "contact", "values"] as const;
+  const sectionType = validTypes.includes(doc.sectionType as typeof validTypes[number])
+    ? (doc.sectionType as typeof validTypes[number])
     : "generic" as const;
 
   return new Section({
@@ -708,13 +706,9 @@ export class SanityDataService implements IDataService {
       const data = await client.fetch<any>(HOME_PAGE_QUERY);
       if (!data) return null;
 
-      const hasFlat = data.aboutHeading || data.projectsHeading || data.showResume != null;
+      const hasFlat = data.projectsHeading;
       if (hasFlat) {
         return {
-          aboutHeading: loc(data.aboutHeading, data.aboutHeading_pt, locale),
-          aboutBody: loc(data.aboutBody, data.aboutBody_pt, locale),
-          showResume: data.showResume,
-          showSkills: data.showSkills,
           projectsHeading: loc(data.projectsHeading, data.projectsHeading_pt, locale),
           maxProjects: data.maxProjects,
           experienceHeading: loc(data.experienceHeading, data.experienceHeading_pt, locale),
@@ -737,7 +731,6 @@ export class SanityDataService implements IDataService {
       const sections = data.sections || [];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const find = (type: string) => sections.find((s: any) => s._type === type);
-      const about = find("aboutSection");
       const projects = find("projectsSection");
       const experience = find("experienceSection");
       const contact = find("contactSection");
@@ -749,10 +742,6 @@ export class SanityDataService implements IDataService {
       };
 
       return {
-        aboutHeading: lfs(about, "heading"),
-        aboutBody: lfs(about, "body"),
-        showResume: about?.showResume,
-        showSkills: about?.showSkills,
         projectsHeading: lfs(projects, "heading"),
         maxProjects: projects?.maxProjects,
         experienceHeading: lfs(experience, "heading"),

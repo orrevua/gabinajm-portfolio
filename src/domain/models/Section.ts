@@ -7,7 +7,7 @@ import {
   FetchErrorCode,
 } from "../types";
 
-export type SectionType = "generic" | "past-experience" | "contact" | "values";
+export type SectionType = "generic" | "about-preview" | "past-experience" | "contact" | "values";
 
 export interface ISection {
   readonly id: string;

@@ -5,21 +5,12 @@ export default defineType({
   title: 'Home Page',
   type: 'document',
   groups: [
-    { name: 'about', title: 'About Preview' },
     { name: 'projects', title: 'Projects' },
     { name: 'experience', title: 'Experience' },
     { name: 'video', title: 'Video' },
     { name: 'contact', title: 'Contact' },
   ],
   fields: [
-    // --- About Preview ---
-    defineField({ name: 'aboutHeading', title: 'Heading', type: 'string', initialValue: 'About Me', group: 'about' }),
-    defineField({ name: 'aboutHeading_pt', title: 'Heading (PT)', type: 'string', group: 'about' }),
-    defineField({ name: 'aboutBody', title: 'Summary Text', type: 'text', rows: 4, description: 'Short preview of the about section for the home page', group: 'about' }),
-    defineField({ name: 'aboutBody_pt', title: 'Summary Text (PT)', type: 'text', rows: 4, group: 'about' }),
-    defineField({ name: 'showResume', title: 'Show Resume Link', type: 'boolean', initialValue: true, group: 'about', description: 'Resume URL and skill tags are managed in Profile → Skills & Experience / Contact & Links' }),
-    defineField({ name: 'showSkills', title: 'Show Skills Tags', type: 'boolean', initialValue: true, group: 'about' }),
-
     // --- Projects ---
     defineField({ name: 'projectsHeading', title: 'Heading', type: 'string', initialValue: 'My projects', group: 'projects' }),
     defineField({ name: 'projectsHeading_pt', title: 'Heading (PT)', type: 'string', group: 'projects' }),

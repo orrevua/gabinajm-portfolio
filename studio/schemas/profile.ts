@@ -7,7 +7,6 @@ export default defineType({
   groups: [
     { name: 'identity', title: 'Identity' },
     { name: 'hero', title: 'Hero' },
-    { name: 'skills', title: 'Skills' },
   ],
   fields: [
     // --- Identity ---
@@ -68,31 +67,6 @@ export default defineType({
     defineField({ name: 'ctaSecondaryLabel', title: 'Secondary CTA Label', type: 'string', initialValue: 'Learn more', group: 'hero' }),
     defineField({ name: 'ctaSecondaryLabel_pt', title: 'Secondary CTA Label (PT)', type: 'string', group: 'hero' }),
     defineField({ name: 'ctaSecondaryHref', title: 'Secondary CTA Link', type: 'string', initialValue: '#about', group: 'hero' }),
-
-    // --- Skills ---
-    defineField({
-      name: 'technologies',
-      title: 'Skills / Technologies',
-      type: 'array',
-      description: 'Skill badges shared across pages',
-      group: 'skills',
-      of: [{
-        type: 'object',
-        fields: [
-          defineField({ name: 'name', title: 'Label', type: 'string', validation: (rule) => rule.required() }),
-          defineField({ name: 'icon', title: 'Icon', type: 'image', description: 'Small icon (SVG or PNG)' }),
-          defineField({ name: 'color', title: 'Badge Color', type: 'string', description: 'CSS class or hex' }),
-        ],
-        preview: { select: { title: 'name', media: 'icon' } },
-      }],
-    }),
-    defineField({
-      name: 'resumeUrl',
-      title: 'Resume URL',
-      type: 'url',
-      description: 'Link to downloadable resume/CV',
-      group: 'skills',
-    }),
   ],
   preview: {
     select: { title: 'name', subtitle: 'title', media: 'avatar' },

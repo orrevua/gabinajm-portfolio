@@ -12,6 +12,7 @@ export default defineType({
       options: {
         list: [
           { title: 'Generic', value: 'generic' },
+          { title: 'About Preview', value: 'about-preview' },
           { title: 'Past Experience', value: 'past-experience' },
           { title: 'Contact / Social Links', value: 'contact' },
           { title: 'Values', value: 'values' },
@@ -236,6 +237,35 @@ export default defineType({
             prepare({ links }) {
               return { title: `Social Links (${links?.length || 0})` }
             },
+          },
+        },
+        {
+          type: 'object',
+          name: 'aboutPreviewBlock',
+          title: 'About Preview',
+          fields: [
+            defineField({ name: 'body', title: 'Summary Text', type: 'text', rows: 4 }),
+            defineField({ name: 'body_pt', title: 'Summary Text (PT)', type: 'text', rows: 4 }),
+            defineField({
+              name: 'skills',
+              title: 'Skill Tags',
+              type: 'array',
+              of: [{
+                type: 'object',
+                fields: [
+                  defineField({ name: 'name', title: 'Label', type: 'string', validation: (rule) => rule.required() }),
+                  defineField({ name: 'icon', title: 'Icon', type: 'image', description: 'Small icon (SVG or PNG)' }),
+                  defineField({ name: 'color', title: 'Badge Color', type: 'string', description: 'CSS class or hex' }),
+                ],
+                preview: { select: { title: 'name', media: 'icon' } },
+              }],
+            }),
+            defineField({ name: 'resumeUrl', title: 'Resume URL', type: 'url', description: 'Link to downloadable resume/CV' }),
+            defineField({ name: 'showResume', title: 'Show Resume Link', type: 'boolean', initialValue: true }),
+            defineField({ name: 'showSkills', title: 'Show Skill Tags', type: 'boolean', initialValue: true }),
+          ],
+          preview: {
+            prepare() { return { title: 'About Preview' } },
           },
         },
       ],
