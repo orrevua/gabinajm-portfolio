@@ -75,7 +75,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {avatarUrl && (
           <div className="flex-1 flex justify-center md:justify-end">
-            <div className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px]">
+            <div className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] animate-float">
               <Image
                 src={avatarUrl}
                 alt={profile.avatar?.alt || profile.name}
