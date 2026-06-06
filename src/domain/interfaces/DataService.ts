@@ -8,7 +8,7 @@
 import { Profile } from "../models/Profile";
 import { Project } from "../models/Project";
 import { Section } from "../models/Section";
-import type { PortableTextBlock, SocialLink, ProfileAvatar, SkillTag, ExperienceCompany } from "../types";
+import type { PortableTextBlock, ProfileAvatar } from "../types";
 
 export interface HomePage {
   greeting?: string;
@@ -20,13 +20,9 @@ export interface HomePage {
   aboutBody?: string;
   showResume?: boolean;
   showSkills?: boolean;
-  technologies?: SkillTag[];
   projectsHeading?: string;
   maxProjects?: number;
   experienceHeading?: string;
-  pastExperience?: ExperienceCompany[];
-  socialLinks?: SocialLink[];
-  resumeUrl?: string;
   contactHeading?: string;
   contactSubtitle?: string;
   availabilityText?: string;
@@ -59,8 +55,6 @@ export interface AboutPage {
   bioHeading: string | null;
   bio: PortableTextBlock[] | null;
   heroImage: ProfileAvatar | null;
-  socialLinks: SocialLink[];
-  resumeUrl: string | null;
   valuesHeading: string | null;
   values: AboutPageValue[];
   skillChips: AboutPageSkillChip[];

@@ -22,6 +22,24 @@ export const PROFILE_QUERY = `
         "lqip": metadata.lqip
       },
       alt
+    },
+    socialLinks[] {
+      platform,
+      url
+    },
+    resumeUrl,
+    technologies[] {
+      name,
+      icon { asset-> { _id, url } },
+      color
+    },
+    pastExperience[] {
+      name,
+      url,
+      logo {
+        asset-> { _id, url, "lqip": metadata.lqip },
+        alt
+      }
     }
   }
 `;
@@ -356,11 +374,6 @@ export const ABOUT_PAGE_QUERY = `
       },
       alt
     },
-    socialLinks[] {
-      platform,
-      url
-    },
-    resumeUrl,
     valuesHeading,
     valuesHeading_pt,
     values[] {
@@ -395,24 +408,11 @@ export const HOME_PAGE_QUERY = `
     aboutBody_pt,
     showResume,
     showSkills,
-    technologies[] {
-      name,
-      icon { asset-> { _id, url } },
-      color
-    },
     projectsHeading,
     projectsHeading_pt,
     maxProjects,
     experienceHeading,
     experienceHeading_pt,
-    pastExperience[] {
-      name,
-      url,
-      logo {
-        asset-> { _id, url, "lqip": metadata.lqip },
-        alt
-      }
-    },
     videoHeading,
     videoHeading_pt,
     videoSubtitle,
@@ -434,11 +434,6 @@ export const HOME_PAGE_QUERY = `
     availabilityText,
     availabilityText_pt,
     showForm,
-    socialLinks[] {
-      platform,
-      url
-    },
-    resumeUrl,
     // backward compat: old sections array
     sections[] {
       _type,

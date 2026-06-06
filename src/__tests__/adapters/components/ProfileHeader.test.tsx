@@ -36,6 +36,10 @@ describe("ProfileHeader Component", () => {
       },
       alt: "Jane Doe avatar",
     },
+    socialLinks: [{ platform: "github", url: "https://github.com/janedoe" }],
+    resumeUrl: null,
+    technologies: [],
+    pastExperience: [],
   };
 
   const mockHeroImage = {

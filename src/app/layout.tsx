@@ -75,17 +75,17 @@ export default async function RootLayout({
 
   try {
     const dataService = await getSanityDataService();
-    const homePage = await dataService.getHomePage(locale);
-    if (homePage) {
-      resumeUrl = homePage.resumeUrl ?? null;
-      pastExperience = (homePage.pastExperience || []).map((c) => ({
+    const profile = await dataService.getProfile(locale);
+    if (profile) {
+      resumeUrl = profile.getResumeUrl();
+      pastExperience = profile.pastExperience.map((c) => ({
         name: c.name,
         url: c.url,
         logo: { url: c.logo.url, alt: c.logo.alt },
       }));
     }
   } catch {
-    // HomePage data is optional for navigation
+    // Profile data is optional for navigation
   }
 
   return (

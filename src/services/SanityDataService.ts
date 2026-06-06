@@ -66,6 +66,18 @@ interface SanityProfile {
     };
     alt?: string;
   };
+  socialLinks?: Array<{ platform: string; url: string }>;
+  resumeUrl?: string;
+  technologies?: Array<{
+    name: string;
+    icon?: { asset?: { url: string } };
+    color?: string;
+  }>;
+  pastExperience?: Array<{
+    name: string;
+    url?: string;
+    logo?: { asset?: { url: string; lqip?: string }; alt?: string };
+  }>;
 }
 
 interface SanityProject {
@@ -234,6 +246,26 @@ const normalizeCategory = (category: string): Technology["category"] => {
  * Handles null/missing fields gracefully
  */
 function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = "en"): Profile {
+  const socialLinks: SocialLink[] = (sanityProfile.socialLinks || [])
+    .filter((link) => isSocialPlatform(link.platform))
+    .map((link) => ({ platform: link.platform as SocialPlatform, url: link.url }));
+
+  const technologies: SkillTag[] = (sanityProfile.technologies || []).map((t) => ({
+    name: t.name,
+    iconUrl: t.icon?.asset?.url,
+    color: t.color,
+  }));
+
+  const pastExperience: ExperienceCompany[] = (sanityProfile.pastExperience || []).map((e) => ({
+    name: e.name,
+    url: e.url || null,
+    logo: {
+      url: e.logo?.asset?.url || "",
+      alt: e.logo?.alt || e.name,
+      lqip: e.logo?.asset?.lqip || "",
+    },
+  }));
+
   return new Profile({
     name: sanityProfile.name,
     title: loc(sanityProfile.title, sanityProfile.title_pt, locale),
@@ -248,6 +280,10 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
           alt: sanityProfile.avatar.alt || "",
         }
       : null,
+    socialLinks,
+    resumeUrl: sanityProfile.resumeUrl || null,
+    technologies,
+    pastExperience,
   });
 }
 
@@ -631,13 +667,6 @@ export class SanityDataService implements IDataService {
         ? (data.bio_pt?.length > 0 ? data.bio_pt : data.bio?.length > 0 ? data.bio : null)
         : (data.bio?.length > 0 ? data.bio : null);
 
-      const socialLinks: SocialLink[] = (data.socialLinks || [])
-        .filter((link: { platform: string }) => isSocialPlatform(link.platform))
-        .map((link: { platform: SocialPlatform; url: string }) => ({
-          platform: link.platform,
-          url: link.url,
-        }));
-
       return {
         bioHeading: loc(data.bioHeading ?? null, data.bioHeading_pt, locale),
         bio,
@@ -651,8 +680,6 @@ export class SanityDataService implements IDataService {
               alt: data.heroImage.alt || "",
             }
           : null,
-        socialLinks,
-        resumeUrl: data.resumeUrl || null,
         valuesHeading: loc(data.valuesHeading ?? null, data.valuesHeading_pt, locale),
         values: (data.values ?? []).map((v: { title: string; title_pt?: string; description: string; description_pt?: string }) => ({
           title: loc(v.title, v.title_pt, locale),
@@ -677,35 +704,6 @@ export class SanityDataService implements IDataService {
       const data = await client.fetch<any>(HOME_PAGE_QUERY);
       if (!data) return null;
 
-      const mapTechnologies = (techs: unknown[]): SkillTag[] =>
-        (techs || []).map((t: unknown) =>
-          typeof t === "string"
-            ? { name: t }
-            : { name: (t as { name: string }).name, iconUrl: (t as { icon?: { asset?: { url: string } } }).icon?.asset?.url, color: (t as { color?: string }).color }
-        );
-
-      const mapExperience = (exps: unknown[]): ExperienceCompany[] =>
-        (exps || []).map((exp: unknown) => {
-          const e = exp as { name: string; url?: string; logo?: { asset?: { url: string; lqip?: string }; alt?: string } };
-          return {
-            name: e.name,
-            url: e.url || null,
-            logo: {
-              url: e.logo?.asset?.url || "",
-              alt: e.logo?.alt || e.name,
-              lqip: e.logo?.asset?.lqip || "",
-            },
-          };
-        });
-
-      const mapSocialLinks = (links: unknown[]): SocialLink[] =>
-        (links || [])
-          .filter((link: unknown) => isSocialPlatform((link as { platform: string }).platform))
-          .map((link: unknown) => {
-            const l = link as { platform: SocialPlatform; url: string };
-            return { platform: l.platform, url: l.url };
-          });
-
       const hasFlat = data.greeting || data.aboutHeading || data.projectsHeading;
       if (hasFlat) {
         return {
@@ -718,13 +716,9 @@ export class SanityDataService implements IDataService {
           aboutBody: loc(data.aboutBody, data.aboutBody_pt, locale),
           showResume: data.showResume,
           showSkills: data.showSkills,
-          technologies: mapTechnologies(data.technologies),
           projectsHeading: loc(data.projectsHeading, data.projectsHeading_pt, locale),
           maxProjects: data.maxProjects,
           experienceHeading: loc(data.experienceHeading, data.experienceHeading_pt, locale),
-          pastExperience: mapExperience(data.pastExperience),
-          socialLinks: mapSocialLinks(data.socialLinks),
-          resumeUrl: data.resumeUrl,
           contactHeading: loc(data.contactHeading, data.contactHeading_pt, locale),
           contactSubtitle: loc(data.contactSubtitle, data.contactSubtitle_pt, locale),
           availabilityText: loc(data.availabilityText, data.availabilityText_pt, locale),

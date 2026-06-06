@@ -95,9 +95,9 @@ export default async function AboutPage() {
     );
   }
 
-  const socialLinks = aboutPage?.socialLinks || [];
+  const socialLinks = profile.getSocialLinks();
   const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
-  const resumeUrl = aboutPage?.resumeUrl;
+  const resumeUrl = profile.getResumeUrl();
   const aboutBio = aboutPage?.bio;
   const aboutHeroImage = aboutPage?.heroImage;
 

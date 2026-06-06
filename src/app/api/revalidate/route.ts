@@ -13,12 +13,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const type = body?._type as string | undefined;
 
-    if (type === "profile") {
+    if (type === "profile" || type === "homePage" || type === "aboutPage") {
+      revalidatePath("/", "layout");
       revalidatePath("/");
       revalidatePath("/about");
     } else if (type === "project") {
       revalidatePath("/");
-      revalidatePath("/projects");
       if (body?.slug?.current) {
         revalidatePath(`/projects/${body.slug.current}`);
       }
@@ -26,7 +26,9 @@ export async function POST(request: NextRequest) {
       revalidatePath("/");
       revalidatePath("/about");
     } else {
+      revalidatePath("/", "layout");
       revalidatePath("/");
+      revalidatePath("/about");
     }
 
     return NextResponse.json({ revalidated: true, type });
