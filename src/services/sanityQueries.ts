@@ -180,6 +180,7 @@ export const PROJECT_BY_SLUG_QUERY = `
       useCard,
       noPadding,
       textColumns[] {
+        icon { asset-> { _id, url } },
         heading,
         heading_pt,
         body,

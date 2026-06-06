@@ -107,6 +107,7 @@ export function toPlainText(body: RichTextBody | undefined): string {
 }
 
 export interface TextColumnItem {
+  iconUrl?: string;
   heading?: string;
   body?: RichTextBody;
   useCard?: boolean;

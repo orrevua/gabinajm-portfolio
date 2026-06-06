@@ -135,6 +135,7 @@ function TextBlock({ section }: { section: ContentSection }) {
             if (col.useCard) {
               return (
                 <div key={i} className="rounded-3xl p-8 md:p-10" style={{ ...colBgStyle, backgroundColor: colBgStyle.backgroundColor || "white" }}>
+                  {col.iconUrl && <Image src={col.iconUrl} alt="" width={40} height={40} className="mb-3" aria-hidden="true" />}
                   <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} />
                 </div>
               );
@@ -142,6 +143,7 @@ function TextBlock({ section }: { section: ContentSection }) {
 
             return (
               <div key={i} style={colBgStyle}>
+                {col.iconUrl && <Image src={col.iconUrl} alt="" width={40} height={40} className="mb-3" aria-hidden="true" />}
                 <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} />
               </div>
             );
