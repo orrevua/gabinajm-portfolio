@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { IconCircleCheck, IconAlertTriangle } from "@tabler/icons-react";
 import { useTranslation } from "@/src/i18n";
 
 function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: string; onDismiss: () => void }) {
@@ -16,13 +17,9 @@ function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: 
       role="alert"
     >
       {isSent ? (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
-          <circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" />
-        </svg>
+        <IconCircleCheck size={20} className="shrink-0 text-[#1a7a2e]" aria-hidden="true" />
       ) : (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
-          <circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" />
-        </svg>
+        <IconAlertTriangle size={20} className="shrink-0 text-[#c4365a]" aria-hidden="true" />
       )}
       {message}
     </div>
