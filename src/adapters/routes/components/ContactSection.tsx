@@ -187,7 +187,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <button
             type="submit"
             disabled={status === "sending" || status === "sent"}
-            className="w-full flex items-center justify-center gap-2 px-7 py-4 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-7 py-4 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold hover:opacity-90 active:scale-95 transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {status === "sending" ? t.contact.sending : status === "sent" ? t.contact.sent : t.contact.send}
             {status === "idle" && <SendIcon />}

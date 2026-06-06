@@ -67,7 +67,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           <div className="flex flex-wrap gap-4">
             <a
               href="/about"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold shadow-[0_10px_20px_rgba(246,51,154,0.3)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.45)] hover:opacity-90 transition-shadow transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold shadow-[0_10px_20px_rgba(246,51,154,0.3)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.45)] hover:opacity-90 active:scale-95 transition-all duration-150"
             >
               {showMoreLabel}
             </a>
@@ -76,7 +76,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                 href={resumeUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-pill border-2 border-accent text-[#0A0A0A] font-bold shadow-[0_10px_20px_rgba(246,51,154,0.2)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.3)] hover:bg-accent hover:text-white transition-colors transition-shadow"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-pill border-2 border-accent text-[#0A0A0A] font-bold shadow-[0_10px_20px_rgba(246,51,154,0.2)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.3)] hover:bg-accent hover:text-white active:scale-95 transition-all duration-150"
               >
                 <DownloadIcon />
                 {resumeLabel}

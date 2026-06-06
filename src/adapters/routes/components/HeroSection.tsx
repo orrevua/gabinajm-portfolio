@@ -62,13 +62,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="flex flex-wrap gap-4">
             <a
               href={ctaPrimaryHref}
-              className="px-7 py-3.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold shadow-[0_10px_20px_rgba(246,51,154,0.3)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.45)] hover:opacity-90 transition-shadow transition-opacity"
+              className="px-7 py-3.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold shadow-[0_10px_20px_rgba(246,51,154,0.3)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.45)] hover:opacity-90 active:scale-95 transition-all duration-150"
             >
               {ctaPrimaryLabel}
             </a>
             <a
               href={ctaSecondaryHref}
-              className="px-7 py-3.5 rounded-pill border-2 border-accent text-[#0A0A0A] font-bold shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.45)] hover:bg-accent hover:text-background transition-colors transition-shadow"
+              className="px-7 py-3.5 rounded-pill border-2 border-accent text-[#0A0A0A] font-bold shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.45)] hover:bg-accent hover:text-background active:scale-95 transition-all duration-150"
             >
               {ctaSecondaryLabel}
             </a>

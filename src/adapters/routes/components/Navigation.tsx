@@ -101,7 +101,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             ))}
             <Link
               href={ctaLink.href}
-              className="px-5 py-2.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white text-base font-bold hover:shadow-[0_0_20px_rgba(246,51,154,0.2)] transition-shadow duration-300"
+              className="px-5 py-2.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white text-base font-bold hover:shadow-[0_0_20px_rgba(246,51,154,0.2)] active:scale-95 transition-all duration-150"
             >
               {ctaLink.label}
             </Link>

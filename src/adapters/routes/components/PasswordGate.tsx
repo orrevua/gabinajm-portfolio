@@ -137,7 +137,7 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
             <button
               type="submit"
               disabled={loading || !password}
-              className="w-full mt-4 px-7 py-3.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-4 px-7 py-3.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-semibold hover:opacity-90 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? t.password.verifying : t.password.unlock}
             </button>
