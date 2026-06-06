@@ -85,7 +85,7 @@ function RichBody({ body, style }: { body: PortableTextBlock[] | string | undefi
   );
 }
 
-function TextBlockContent({ heading, body, bullets, textColor }: { heading?: string; body?: PortableTextBlock[] | string; bullets?: string[]; textColor?: string }) {
+function TextBlockContent({ heading, body, bullets, textColor, iconUrl }: { heading?: string; body?: PortableTextBlock[] | string; bullets?: string[]; textColor?: string; iconUrl?: string }) {
   const color = textColor || "#0A0A0A";
   const muted = textColor ? `${color}CC` : undefined;
 
@@ -93,6 +93,7 @@ function TextBlockContent({ heading, body, bullets, textColor }: { heading?: str
     <>
       {heading && (
         <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2" style={{ color }}>
+          {iconUrl && <Image src={iconUrl} alt="" width={28} height={28} className="shrink-0" aria-hidden="true" />}
           {heading}
         </h2>
       )}
@@ -134,17 +135,15 @@ function TextBlock({ section }: { section: ContentSection }) {
 
             if (col.useCard) {
               return (
-                <div key={i} className="rounded-3xl p-8 md:p-10" style={{ ...colBgStyle, backgroundColor: colBgStyle.backgroundColor || "white" }}>
-                  {col.iconUrl && <Image src={col.iconUrl} alt="" width={40} height={40} className="mb-3" aria-hidden="true" />}
-                  <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} />
+                <div key={i} className="rounded-3xl p-6 md:p-8" style={{ ...colBgStyle, backgroundColor: colBgStyle.backgroundColor || "white" }}>
+                  <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} iconUrl={col.iconUrl} />
                 </div>
               );
             }
 
             return (
               <div key={i} style={colBgStyle}>
-                {col.iconUrl && <Image src={col.iconUrl} alt="" width={40} height={40} className="mb-3" aria-hidden="true" />}
-                <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} />
+                <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} iconUrl={col.iconUrl} />
               </div>
             );
           })}
@@ -160,7 +159,7 @@ function TextBlock({ section }: { section: ContentSection }) {
   if (section.useCard) {
     return (
       <div className="max-w-[1158px] mx-auto px-5 py-6 md:py-8">
-        <div className="rounded-3xl p-8 md:p-12" style={{ ...bgStyle, backgroundColor: bgStyle.backgroundColor || "white" }}>
+        <div className="rounded-3xl p-6 md:p-8" style={{ ...bgStyle, backgroundColor: bgStyle.backgroundColor || "white" }}>
           {content}
         </div>
       </div>
