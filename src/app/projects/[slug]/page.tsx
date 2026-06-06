@@ -6,6 +6,7 @@ import { getSanityDataService } from "@/src/services";
 import { verifyCookie } from "@/src/services/projectAccess";
 import { getServerTranslations } from "@/src/i18n/serverLocale";
 import { SectionRouter } from "@/src/adapters/routes/components/SectionRouter";
+import { hexToIconFilter } from "@/src/adapters/routes/components/ProjectCard";
 import { PasswordGate } from "@/src/adapters/routes/components/PasswordGate";
 import { NextProjectCard } from "@/src/adapters/routes/components/NextProjectCard";
 import { BackToProjectsLink } from "@/src/adapters/routes/components/BackToProjectsLink";
@@ -540,25 +541,15 @@ export default async function ProjectDetailPage(props: PageProps) {
                   className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-[#0A0A0A]/80"
                 >
                   {tech.iconUrl && (
-                    tech.color ? (
-                      <span
-                        className="inline-block w-[14px] h-[14px] shrink-0"
-                        style={{
-                          backgroundColor: tech.color,
-                          WebkitMaskImage: `url(${tech.iconUrl})`,
-                          WebkitMaskSize: "contain",
-                          WebkitMaskRepeat: "no-repeat",
-                          WebkitMaskPosition: "center",
-                          maskImage: `url(${tech.iconUrl})`,
-                          maskSize: "contain",
-                          maskRepeat: "no-repeat",
-                          maskPosition: "center",
-                        }}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
-                    )
+                    <Image
+                      src={tech.iconUrl}
+                      alt=""
+                      width={14}
+                      height={14}
+                      className="object-contain"
+                      style={tech.color ? { filter: hexToIconFilter(tech.color) } : undefined}
+                      aria-hidden="true"
+                    />
                   )}
                   {tech.name}
                 </span>

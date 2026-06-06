@@ -1,6 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
 
+export function hexToIconFilter(hex: string): string {
+  const c = hex.replace("#", "");
+  const r = parseInt(c.substring(0, 2), 16);
+  const g = parseInt(c.substring(2, 4), 16);
+  const b = parseInt(c.substring(4, 6), 16);
+
+  if (r + g + b < 50) return "brightness(0) saturate(100%)";
+  if (r + g + b > 700) return "brightness(0) saturate(100%) invert(1)";
+
+  const rn = r / 255, gn = g / 255, bn = b / 255;
+  const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
+  const l = (max + min) / 2;
+  let h = 0, s = 0;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === rn) h = ((gn - bn) / d + (gn < bn ? 6 : 0)) * 60;
+    else if (max === gn) h = ((bn - rn) / d + 2) * 60;
+    else h = ((rn - gn) / d + 4) * 60;
+  }
+
+  return `brightness(0) saturate(100%) invert(${Math.round(l * 100)}%) sepia(100%) saturate(${Math.max(Math.round(s * 10000), 100)}%) hue-rotate(${Math.round(h)}deg)`;
+}
+
 export interface CardTheme {
   bg: string;
   fg: string;
@@ -110,25 +134,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 className="inline-flex items-center gap-1.5 text-sm font-normal text-[#0A0A0A]/70 bg-[#F3F4F6] rounded-pill px-3 py-1.5"
               >
                 {tech.iconUrl && (
-                  tech.color ? (
-                    <span
-                      className="inline-block w-[14px] h-[14px] shrink-0"
-                      style={{
-                        backgroundColor: tech.color,
-                        WebkitMaskImage: `url(${tech.iconUrl})`,
-                        WebkitMaskSize: "contain",
-                        WebkitMaskRepeat: "no-repeat",
-                        WebkitMaskPosition: "center",
-                        maskImage: `url(${tech.iconUrl})`,
-                        maskSize: "contain",
-                        maskRepeat: "no-repeat",
-                        maskPosition: "center",
-                      }}
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <Image src={tech.iconUrl} alt="" width={14} height={14} className="object-contain" aria-hidden="true" />
-                  )
+                  <Image
+                    src={tech.iconUrl}
+                    alt=""
+                    width={14}
+                    height={14}
+                    className="object-contain"
+                    style={tech.color ? { filter: hexToIconFilter(tech.color) } : undefined}
+                    aria-hidden="true"
+                  />
                 )}
                 {tech.name}
               </span>
