@@ -152,6 +152,17 @@ export interface SectionValueItem {
   description: string;
 }
 
+export interface SectionCompany {
+  name: string;
+  url?: string;
+  logo: SanityImageAsset;
+}
+
+export interface SectionSocialLink {
+  platform: string;
+  url: string;
+}
+
 export interface SectionContentBlock {
   _type: string;
   _key: string;
@@ -161,6 +172,9 @@ export interface SectionContentBlock {
   ctaLabel?: string;
   ctaHref?: string;
   items?: SectionValueItem[];
+  companies?: SectionCompany[];
+  links?: SectionSocialLink[];
+  availabilityText?: string;
 }
 
 export type SectionPadding = "none" | "small" | "medium" | "large";

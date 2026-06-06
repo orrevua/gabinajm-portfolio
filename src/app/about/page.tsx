@@ -1,11 +1,9 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import { ProfileHeader } from "@/src/adapters/routes/components/ProfileHeader";
-import { SectionBlock } from "@/src/adapters/routes/components/SectionBlock";
-import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
+import { SectionRouter } from "@/src/adapters/routes/components/SectionRouter";
 import { PortableTextRenderer } from "@/src/adapters/routes/components/PortableTextRenderer";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
-import { ValuesSection } from "@/src/adapters/routes/components/ValuesSection";
 import { getSanityDataService } from "@/src/services";
 import { getServerTranslations } from "@/src/i18n/serverLocale";
 import type { Profile } from "@/src/domain/models/Profile";
@@ -95,11 +93,12 @@ export default async function AboutPage() {
     );
   }
 
-  const socialLinks = profile.getSocialLinks();
-  const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
   const resumeUrl = profile.getResumeUrl();
   const aboutBio = aboutPage?.bio;
   const aboutHeroImage = aboutPage?.heroImage;
+
+  const contactSection = sections.find((s) => s.sectionType === "contact");
+  const otherSections = sections.filter((s) => s.sectionType !== "contact");
 
   return (
     <>
@@ -159,26 +158,13 @@ export default async function AboutPage() {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal>
-          <ValuesSection
-            heading={aboutPage?.valuesHeading}
-            values={aboutPage?.values}
-          />
-        </ScrollReveal>
       </section>
 
-      {sections.map((section) => (
-        <ScrollReveal key={section.id}>
-          <SectionBlock section={section} />
-        </ScrollReveal>
+      {otherSections.map((section) => (
+        <SectionRouter key={section.id} section={section} />
       ))}
 
-      <ScrollReveal>
-        <ContactSection
-          email={email}
-          socialLinks={socialLinks.filter((l) => l.platform !== "email")}
-        />
-      </ScrollReveal>
+      {contactSection && <SectionRouter section={contactSection} />}
     </>
   );
 }

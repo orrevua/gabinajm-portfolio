@@ -7,9 +7,12 @@ import {
   FetchErrorCode,
 } from "../types";
 
+export type SectionType = "generic" | "past-experience" | "contact" | "values";
+
 export interface ISection {
   readonly id: string;
   readonly uid: string;
+  readonly sectionType: SectionType;
   readonly title: string;
   readonly subtitle: string | null;
   readonly content: unknown[];
@@ -24,6 +27,7 @@ export interface ISection {
 export class Section implements ISection {
   readonly id: string;
   readonly uid: string;
+  readonly sectionType: SectionType;
   readonly title: string;
   readonly subtitle: string | null;
   readonly content: unknown[];
@@ -38,6 +42,7 @@ export class Section implements ISection {
     Section.validate(data);
     this.id = data.id;
     this.uid = data.uid.trim().toLowerCase();
+    this.sectionType = data.sectionType || "generic";
     this.title = data.title.trim();
     this.subtitle = data.subtitle?.trim() || null;
     this.content = data.content;

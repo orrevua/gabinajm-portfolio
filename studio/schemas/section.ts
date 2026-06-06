@@ -6,6 +6,20 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'sectionType',
+      title: 'Section Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Generic', value: 'generic' },
+          { title: 'Past Experience', value: 'past-experience' },
+          { title: 'Contact / Social Links', value: 'contact' },
+          { title: 'Values', value: 'values' },
+        ],
+      },
+      initialValue: 'generic',
+    }),
+    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
@@ -150,6 +164,80 @@ export default defineType({
             },
           },
         },
+        {
+          type: 'object',
+          name: 'companyLogos',
+          title: 'Company Logos',
+          fields: [
+            defineField({
+              name: 'companies',
+              title: 'Companies',
+              type: 'array',
+              of: [{
+                type: 'object',
+                fields: [
+                  defineField({ name: 'name', title: 'Company Name', type: 'string', validation: (rule) => rule.required() }),
+                  defineField({ name: 'url', title: 'URL', type: 'url' }),
+                  defineField({ name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true }, validation: (rule) => rule.required() }),
+                ],
+                preview: { select: { title: 'name', media: 'logo' } },
+              }],
+            }),
+          ],
+          preview: {
+            select: { companies: 'companies' },
+            prepare({ companies }) {
+              return { title: `Company Logos (${companies?.length || 0})` }
+            },
+          },
+        },
+        {
+          type: 'object',
+          name: 'socialLinksBlock',
+          title: 'Social Links',
+          fields: [
+            defineField({
+              name: 'links',
+              title: 'Links',
+              type: 'array',
+              of: [{
+                type: 'object',
+                fields: [
+                  defineField({
+                    name: 'platform',
+                    title: 'Platform',
+                    type: 'string',
+                    options: {
+                      list: [
+                        { title: 'GitHub', value: 'github' },
+                        { title: 'LinkedIn', value: 'linkedin' },
+                        { title: 'Twitter', value: 'twitter' },
+                        { title: 'Email', value: 'email' },
+                        { title: 'Instagram', value: 'instagram' },
+                      ],
+                    },
+                    validation: (rule) => rule.required(),
+                  }),
+                  defineField({
+                    name: 'url',
+                    title: 'URL',
+                    type: 'url',
+                    validation: (rule) => rule.required().uri({ allowRelative: false, scheme: ['http', 'https', 'mailto'] }),
+                  }),
+                ],
+                preview: { select: { title: 'platform', subtitle: 'url' } },
+              }],
+            }),
+            defineField({ name: 'availabilityText', title: 'Availability Text', type: 'string' }),
+            defineField({ name: 'availabilityText_pt', title: 'Availability Text (PT)', type: 'string' }),
+          ],
+          preview: {
+            select: { links: 'links' },
+            prepare({ links }) {
+              return { title: `Social Links (${links?.length || 0})` }
+            },
+          },
+        },
       ],
     }),
     defineField({
@@ -221,18 +309,18 @@ export default defineType({
       initialValue: 'py-16',
     }),
     defineField({
-      name: 'page',
-      title: 'Page',
-      type: 'string',
-      description: 'Which page this section belongs to',
+      name: 'pages',
+      title: 'Pages',
+      type: 'array',
+      description: 'Which pages this section appears on',
+      of: [{ type: 'string' }],
       options: {
         list: [
-          { title: 'About', value: 'about' },
           { title: 'Home', value: 'home' },
+          { title: 'About', value: 'about' },
         ],
-        layout: 'radio',
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().min(1),
     }),
     defineField({
       name: 'order',

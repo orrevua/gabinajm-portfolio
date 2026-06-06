@@ -265,7 +265,18 @@ const CONTENT_BLOCKS_PROJECTION = `
     ctaLabel,
     ctaLabel_pt,
     ctaHref,
-    items[] { title, title_pt, description, description_pt }
+    items[] { title, title_pt, description, description_pt },
+    companies[] {
+      name,
+      url,
+      logo {
+        asset-> { _id, url, "lqip": metadata.lqip },
+        alt
+      }
+    },
+    links[] { platform, url },
+    availabilityText,
+    availabilityText_pt
   }
 `;
 
@@ -273,6 +284,7 @@ export const SECTIONS_QUERY = `
   *[_type == "section"] | order(order asc) {
     _id,
     uid,
+    sectionType,
     title,
     title_pt,
     subtitle,
@@ -294,15 +306,16 @@ export const SECTIONS_QUERY = `
     overlay,
     hasDropShadow,
     padding,
-    page,
+    pages,
     order
   }
 `;
 
 export const SECTIONS_BY_PAGE_QUERY = `
-  *[_type == "section" && page == $page] | order(order asc) {
+  *[_type == "section" && $page in pages] | order(order asc) {
     _id,
     uid,
+    sectionType,
     title,
     title_pt,
     subtitle,
@@ -324,7 +337,7 @@ export const SECTIONS_BY_PAGE_QUERY = `
     overlay,
     hasDropShadow,
     padding,
-    page,
+    pages,
     order
   }
 `;
@@ -333,6 +346,7 @@ export const SECTION_BY_UID_QUERY = `
   *[_type == "section" && uid.current == $uid][0] {
     _id,
     uid,
+    sectionType,
     title,
     title_pt,
     subtitle,
@@ -354,7 +368,7 @@ export const SECTION_BY_UID_QUERY = `
     overlay,
     hasDropShadow,
     padding,
-    page,
+    pages,
     order
   }
 `;

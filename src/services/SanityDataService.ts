@@ -197,11 +197,16 @@ interface SanityContentBlock {
   ctaLabel_pt?: string;
   ctaHref?: string;
   items?: Array<{ title: string; title_pt?: string; description: string; description_pt?: string }>;
+  companies?: Array<{ name: string; url?: string; logo?: { asset?: { url: string; lqip?: string }; alt?: string } }>;
+  links?: Array<{ platform: string; url: string }>;
+  availabilityText?: string;
+  availabilityText_pt?: string;
 }
 
 interface SanitySection {
   _id: string;
   uid: { current: string };
+  sectionType?: string;
   title: string;
   title_pt?: string;
   subtitle?: string;
@@ -435,11 +440,27 @@ function mapSanitySectionToModel(doc: SanitySection, locale: string = "en"): Sec
       title: loc(item.title, item.title_pt, locale),
       description: loc(item.description, item.description_pt, locale),
     })),
+    companies: block.companies?.map((c) => ({
+      name: c.name,
+      url: c.url,
+      logo: {
+        url: c.logo?.asset?.url || "",
+        alt: c.logo?.alt || c.name,
+        lqip: c.logo?.asset?.lqip || "",
+      },
+    })),
+    links: block.links,
+    availabilityText: loc(block.availabilityText, block.availabilityText_pt, locale),
   }));
+
+  const sectionType = (doc.sectionType === "past-experience" || doc.sectionType === "contact" || doc.sectionType === "values")
+    ? doc.sectionType
+    : "generic" as const;
 
   return new Section({
     id: doc._id,
     uid: doc.uid.current,
+    sectionType,
     title: loc(doc.title, doc.title_pt, locale),
     subtitle: loc(doc.subtitle || null, doc.subtitle_pt, locale),
     content: doc.content || [],

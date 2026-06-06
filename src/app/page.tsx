@@ -2,14 +2,14 @@ import { Metadata } from "next";
 import { HeroSection } from "@/src/adapters/routes/components/HeroSection";
 import { AboutSection } from "@/src/adapters/routes/components/AboutSection";
 import { ProjectGrid } from "@/src/adapters/routes/components/ProjectGrid";
-import { PastExperience } from "@/src/adapters/routes/components/PastExperience";
-import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
 import { VideoSection } from "@/src/adapters/routes/components/VideoSection";
 import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
+import { SectionRouter } from "@/src/adapters/routes/components/SectionRouter";
 import { buildSanityImageUrl, getSanityDataService } from "@/src/services";
 import { getServerTranslations } from "@/src/i18n/serverLocale";
 import type { Profile } from "@/src/domain/models/Profile";
 import type { Project } from "@/src/domain/models/Project";
+import type { Section } from "@/src/domain/models/Section";
 import type { HomePage as HomePageData } from "@/src/domain/interfaces/DataService";
 import { toPlainText } from "@/src/domain/types";
 
@@ -35,14 +35,16 @@ export default async function HomePage() {
   let profile: Profile | null = null;
   let projects: Project[] = [];
   let homePage: HomePageData | null = null;
+  let sections: Section[] = [];
   let fetchError = false;
 
   try {
     const dataService = getSanityDataService();
-    [profile, projects, homePage] = await Promise.all([
+    [profile, projects, homePage, sections] = await Promise.all([
       dataService.getProfile(locale),
       dataService.getFeaturedProjects(4, locale),
       dataService.getHomePage(locale),
+      dataService.getSectionsByPage("home", locale),
     ]);
   } catch {
     fetchError = true;
@@ -65,8 +67,9 @@ export default async function HomePage() {
   }
 
   const hp = homePage;
-  const socialLinks = profile.getSocialLinks();
-  const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
+
+  const contactSection = sections.find((s) => s.sectionType === "contact");
+  const genericSections = sections.filter((s) => s.sectionType === "generic");
 
   return (
     <>
@@ -130,14 +133,9 @@ export default async function HomePage() {
         </ScrollReveal>
       )}
 
-      {profile.pastExperience.length > 0 && (
-        <ScrollReveal>
-          <PastExperience
-            companies={profile.pastExperience}
-            heading={hp?.experienceHeading || t.pastExperience.heading}
-          />
-        </ScrollReveal>
-      )}
+      {sections.filter((s) => s.sectionType === "past-experience").map((section) => (
+        <SectionRouter key={section.id} section={section} />
+      ))}
 
       {hp?.videoUrl || hp?.videoExternalUrl ? (
         <ScrollReveal>
@@ -154,15 +152,11 @@ export default async function HomePage() {
         </ScrollReveal>
       ) : null}
 
-      <ScrollReveal>
-        <ContactSection
-          heading={hp?.contactHeading}
-          subtitle={hp?.contactSubtitle}
-          email={email}
-          socialLinks={socialLinks.filter((l) => l.platform !== "email")}
-          availabilityText={hp?.availabilityText}
-        />
-      </ScrollReveal>
+      {genericSections.map((section) => (
+        <SectionRouter key={section.id} section={section} />
+      ))}
+
+      {contactSection && <SectionRouter section={contactSection} />}
     </>
   );
 }

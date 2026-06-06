@@ -9,6 +9,7 @@ describe("Section Model", () => {
     validSection = {
       id: "sec-001",
       uid: "about",
+      sectionType: "generic",
       title: "About Me",
       subtitle: "Get to know me",
       content: [{ _type: "block", children: [] }],
