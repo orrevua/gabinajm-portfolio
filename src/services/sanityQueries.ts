@@ -23,23 +23,11 @@ export const PROFILE_QUERY = `
       },
       alt
     },
-    socialLinks[] {
-      platform,
-      url
-    },
     resumeUrl,
     technologies[] {
       name,
       icon { asset-> { _id, url } },
       color
-    },
-    pastExperience[] {
-      name,
-      url,
-      logo {
-        asset-> { _id, url, "lqip": metadata.lqip },
-        alt
-      }
     }
   }
 `;

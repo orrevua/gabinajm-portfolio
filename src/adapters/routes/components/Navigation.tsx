@@ -10,7 +10,6 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 export interface NavigationProps {
   brandName?: string;
   resumeUrl?: string | null;
-  pastExperience?: Array<{ name: string; url: string | null; logo: { url: string; alt: string } }>;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({

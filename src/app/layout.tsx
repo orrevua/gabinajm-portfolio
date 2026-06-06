@@ -71,18 +71,12 @@ export default async function RootLayout({
   const locale: Locale = localeCookie === "pt" ? "pt" : "en";
 
   let resumeUrl: string | null = null;
-  let pastExperience: Array<{ name: string; url: string | null; logo: { url: string; alt: string } }> = [];
 
   try {
     const dataService = await getSanityDataService();
     const profile = await dataService.getProfile(locale);
     if (profile) {
       resumeUrl = profile.getResumeUrl();
-      pastExperience = profile.pastExperience.map((c) => ({
-        name: c.name,
-        url: c.url,
-        logo: { url: c.logo.url, alt: c.logo.alt },
-      }));
     }
   } catch {
     // Profile data is optional for navigation
@@ -114,7 +108,7 @@ export default async function RootLayout({
         />
         <LocaleProvider initialLocale={locale}>
           <SkipToContent />
-          <Navigation brandName="Gabinajm" resumeUrl={resumeUrl} pastExperience={pastExperience} />
+          <Navigation brandName="Gabinajm" resumeUrl={resumeUrl} />
           <main id="main-content" className="flex-1">{children}</main>
           <footer className="w-full bg-[#FFFFFF80] border-t-[1px] border-[#FCE7F3]">
           <div className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted min-h-[88px]">

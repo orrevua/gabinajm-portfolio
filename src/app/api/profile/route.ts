@@ -18,7 +18,6 @@ interface ProfileResponse {
     lqip: string;
     alt: string;
   };
-  socialLinks: Array<{ platform: string; url: string }>;
   resumeUrl: string | null;
   technologies: Array<{ name: string; iconUrl?: string; color?: string }>;
 }
@@ -70,7 +69,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
               alt: profile.avatar.alt || profile.name,
             }
           : undefined,
-      socialLinks: profile.getSocialLinks(),
       resumeUrl: profile.getResumeUrl(),
       technologies: profile.technologies,
     };

@@ -6,8 +6,7 @@ export default defineType({
   type: 'document',
   groups: [
     { name: 'identity', title: 'Identity' },
-    { name: 'skills', title: 'Skills & Experience' },
-    { name: 'contact', title: 'Contact & Links' },
+    { name: 'skills', title: 'Skills' },
   ],
   fields: [
     defineField({
@@ -74,62 +73,11 @@ export default defineType({
       }],
     }),
     defineField({
-      name: 'pastExperience',
-      title: 'Past Experience',
-      type: 'array',
-      description: 'Company logos shown in the experience section',
-      group: 'skills',
-      of: [{
-        type: 'object',
-        fields: [
-          defineField({ name: 'name', title: 'Company Name', type: 'string', validation: (rule) => rule.required() }),
-          defineField({ name: 'url', title: 'URL', type: 'url' }),
-          defineField({ name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true }, validation: (rule) => rule.required() }),
-        ],
-        preview: { select: { title: 'name', media: 'logo' } },
-      }],
-    }),
-
-    // --- Contact & Links ---
-    defineField({
-      name: 'socialLinks',
-      title: 'Social Links',
-      type: 'array',
-      group: 'contact',
-      of: [{
-        type: 'object',
-        fields: [
-          defineField({
-            name: 'platform',
-            title: 'Platform',
-            type: 'string',
-            options: {
-              list: [
-                { title: 'GitHub', value: 'github' },
-                { title: 'LinkedIn', value: 'linkedin' },
-                { title: 'Twitter', value: 'twitter' },
-                { title: 'Email', value: 'email' },
-                { title: 'Instagram', value: 'instagram' },
-              ],
-            },
-            validation: (rule) => rule.required(),
-          }),
-          defineField({
-            name: 'url',
-            title: 'URL',
-            type: 'url',
-            validation: (rule) => rule.required().uri({ allowRelative: false, scheme: ['http', 'https', 'mailto'] }),
-          }),
-        ],
-        preview: { select: { title: 'platform', subtitle: 'url' } },
-      }],
-    }),
-    defineField({
       name: 'resumeUrl',
       title: 'Resume URL',
       type: 'url',
       description: 'Link to downloadable resume/CV',
-      group: 'contact',
+      group: 'skills',
     }),
   ],
   preview: {

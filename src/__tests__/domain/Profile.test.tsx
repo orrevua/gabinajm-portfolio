@@ -22,10 +22,8 @@ describe("Profile Model", () => {
         },
         alt: "Profile avatar",
       },
-      socialLinks: [{ platform: "github", url: "https://github.com/gabi" }],
       resumeUrl: null,
       technologies: [{ name: "React" }],
-      pastExperience: [],
     };
   });
 

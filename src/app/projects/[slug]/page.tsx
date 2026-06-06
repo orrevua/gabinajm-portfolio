@@ -5,9 +5,8 @@ import { cookies } from "next/headers";
 import { getSanityDataService } from "@/src/services";
 import { verifyCookie } from "@/src/services/projectAccess";
 import { getServerTranslations } from "@/src/i18n/serverLocale";
-import { ContactSection } from "@/src/adapters/routes/components/ContactSection";
+import { SectionRouter } from "@/src/adapters/routes/components/SectionRouter";
 import { PasswordGate } from "@/src/adapters/routes/components/PasswordGate";
-import { ScrollReveal } from "@/src/adapters/routes/components/ScrollReveal";
 import { NextProjectCard } from "@/src/adapters/routes/components/NextProjectCard";
 import { BackToProjectsLink } from "@/src/adapters/routes/components/BackToProjectsLink";
 import { VideoPlayer } from "@/src/adapters/routes/components/VideoPlayer";
@@ -15,7 +14,7 @@ import { PortableTextRenderer } from "@/src/adapters/routes/components/PortableT
 import type { ContentSection, PortableTextBlock } from "@/src/domain/types";
 import { toPlainText } from "@/src/domain/types";
 import type { Project } from "@/src/domain/models/Project";
-import type { Profile } from "@/src/domain/models/Profile";
+import type { Section } from "@/src/domain/models/Section";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -457,15 +456,15 @@ export default async function ProjectDetailPage(props: PageProps) {
 
   let project: Project | null = null;
   let allProjects: Project[] = [];
-  let profile: Profile | null = null;
+  let sections: Section[] = [];
   let fetchError = false;
 
   try {
     const dataService = await getSanityDataService();
-    [project, allProjects, profile] = await Promise.all([
+    [project, allProjects, sections] = await Promise.all([
       dataService.getProjectBySlug(params.slug, locale),
       dataService.getProjects({ locale }),
-      dataService.getProfile(locale),
+      dataService.getSectionsByPage("home", locale),
     ]);
   } catch {
     fetchError = true;
@@ -522,8 +521,7 @@ export default async function ProjectDetailPage(props: PageProps) {
 
   const technologies = project.technologies;
   const contentSections = project.contentSections;
-  const socialLinks = profile?.getSocialLinks() || [];
-  const email = socialLinks.find((l) => l.platform === "email")?.url?.replace("mailto:", "");
+  const contactSection = sections.find((s) => s.sectionType === "contact");
 
   const year = project.publishedAt.getFullYear();
 
@@ -617,12 +615,7 @@ export default async function ProjectDetailPage(props: PageProps) {
       })()}
 
       {/* Contact */}
-      <ScrollReveal>
-        <ContactSection
-          email={email}
-          socialLinks={socialLinks.filter((l) => l.platform !== "email")}
-        />
-      </ScrollReveal>
+      {contactSection && <SectionRouter section={contactSection} />}
     </article>
   );
 }

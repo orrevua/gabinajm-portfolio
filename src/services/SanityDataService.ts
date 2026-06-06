@@ -9,10 +9,7 @@ import {
   Profile,
   Project,
   Section,
-  type SocialLink,
-  type SocialPlatform,
   type SkillTag,
-  type ExperienceCompany,
   type Technology,
   type SectionBackground,
   type SectionPadding,
@@ -66,17 +63,11 @@ interface SanityProfile {
     };
     alt?: string;
   };
-  socialLinks?: Array<{ platform: string; url: string }>;
   resumeUrl?: string;
   technologies?: Array<{
     name: string;
     icon?: { asset?: { url: string } };
     color?: string;
-  }>;
-  pastExperience?: Array<{
-    name: string;
-    url?: string;
-    logo?: { asset?: { url: string; lqip?: string }; alt?: string };
   }>;
 }
 
@@ -230,14 +221,6 @@ interface SanitySection {
   order?: number;
 }
 
-const isSocialPlatform = (platform: string): platform is SocialPlatform => {
-  return platform === "github" ||
-    platform === "linkedin" ||
-    platform === "twitter" ||
-    platform === "email" ||
-    platform === "instagram";
-};
-
 const normalizeCategory = (category: string): Technology["category"] => {
   if (category === "Frontend" || category === "Backend" || category === "DevOps") {
     return category;
@@ -251,24 +234,10 @@ const normalizeCategory = (category: string): Technology["category"] => {
  * Handles null/missing fields gracefully
  */
 function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = "en"): Profile {
-  const socialLinks: SocialLink[] = (sanityProfile.socialLinks || [])
-    .filter((link) => isSocialPlatform(link.platform))
-    .map((link) => ({ platform: link.platform as SocialPlatform, url: link.url }));
-
   const technologies: SkillTag[] = (sanityProfile.technologies || []).map((t) => ({
     name: t.name,
     iconUrl: t.icon?.asset?.url,
     color: t.color,
-  }));
-
-  const pastExperience: ExperienceCompany[] = (sanityProfile.pastExperience || []).map((e) => ({
-    name: e.name,
-    url: e.url || null,
-    logo: {
-      url: e.logo?.asset?.url || "",
-      alt: e.logo?.alt || e.name,
-      lqip: e.logo?.asset?.lqip || "",
-    },
   }));
 
   return new Profile({
@@ -285,10 +254,8 @@ function mapSanityProfileToModel(sanityProfile: SanityProfile, locale: string = 
           alt: sanityProfile.avatar.alt || "",
         }
       : null,
-    socialLinks,
     resumeUrl: sanityProfile.resumeUrl || null,
     technologies,
-    pastExperience,
   });
 }
 
