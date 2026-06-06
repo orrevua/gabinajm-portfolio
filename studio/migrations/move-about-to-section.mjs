@@ -33,7 +33,7 @@ async function migrate() {
   const token = await getCliToken()
 
   const client = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'yrx7q093',
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'v0mc5w1c',
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
     apiVersion: '2024-01-15',
     token,
