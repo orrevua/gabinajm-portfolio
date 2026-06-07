@@ -9,7 +9,7 @@ export function NextProjectCard({ title, description, slug }: { title: string; d
   return (
     <div className="max-w-[1158px] mx-auto px-5 py-8">
       <div className="relative overflow-hidden rounded-3xl bg-[#9810FA] px-10 py-12 md:px-14 md:py-14">
-        <div className="absolute -top-20 -right-20 w-[340px] h-[340px] rounded-full bg-white/10 pointer-events-none" />
+        <div className="absolute -top-40 -right-40 w-[340px] h-[340px] rounded-full bg-white/10 pointer-events-none" />
         <div className="relative z-10">
           <p className="text-base font-bold text-white/80 mb-3">{t.projects.nextProject}</p>
           <h3 className="text-[clamp(20px,2.5vw,24px)] font-bold text-white mb-2">{title}</h3>
