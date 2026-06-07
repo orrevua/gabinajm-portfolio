@@ -92,10 +92,12 @@ function TextBlockContent({ heading, body, bullets, textColor, iconUrl }: { head
   return (
     <>
       {heading && (
+        <>
+        {iconUrl && <Image src={iconUrl} alt="" width={28} height={28} className="shrink-0 w-[40px] h-[40px] m-3" aria-hidden="true" />}
         <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2" style={{ color }}>
-          {iconUrl && <Image src={iconUrl} alt="" width={28} height={28} className="shrink-0" aria-hidden="true" />}
           {heading}
         </h2>
+        </>
       )}
       <RichBody body={body} style={{ color: muted, opacity: textColor ? undefined : 0.7 }} />
       {bullets && bullets.length > 0 && (
