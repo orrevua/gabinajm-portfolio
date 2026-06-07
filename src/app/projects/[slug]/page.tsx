@@ -194,6 +194,37 @@ function FullWidthImage({ section }: { section: ContentSection }) {
   const ratio = section.imageAspectRatio || "214/100";
   const isAuto = ratio === "auto";
   const fitClass = section.imageFit === "contain" ? "object-contain" : "object-cover";
+  const showCard = section.useCard !== false;
+
+  const imageContent = isAuto ? (
+    <div className="rounded-xl overflow-hidden">
+      <Image
+        src={section.image.asset.url}
+        alt={section.alt || section.image.alt || ""}
+        width={section.image.asset.dimensions?.width || 1200}
+        height={section.image.asset.dimensions?.height || 630}
+        className={`w-full h-auto ${fitClass}`}
+      />
+    </div>
+  ) : (
+    <div
+      className="relative w-full rounded-xl overflow-hidden"
+      style={{ aspectRatio: ratio }}
+    >
+      <Image
+        src={section.image.asset.url}
+        alt={section.alt || section.image.alt || ""}
+        fill
+        className={fitClass}
+      />
+    </div>
+  );
+
+  const caption = section.caption && (
+    <p className="text-center text-sm mt-4 font-semibold" style={{ color: "#4f4f4f" }}>
+      {section.caption}
+    </p>
+  );
 
   return (
     <div
@@ -201,36 +232,17 @@ function FullWidthImage({ section }: { section: ContentSection }) {
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">
-        <div className={`bg-white rounded-3xl drop-shadow-2xl ${section.noPadding ? "" : "p-8 md:p-12"}`}>
-          {isAuto ? (
-            <div className="rounded-xl overflow-hidden">
-              <Image
-                src={section.image.asset.url}
-                alt={section.alt || section.image.alt || ""}
-                width={section.image.asset.dimensions?.width || 1200}
-                height={section.image.asset.dimensions?.height || 630}
-                className={`w-full h-auto ${fitClass}`}
-              />
-            </div>
-          ) : (
-            <div
-              className="relative w-full rounded-xl overflow-hidden"
-              style={{ aspectRatio: ratio }}
-            >
-              <Image
-                src={section.image.asset.url}
-                alt={section.alt || section.image.alt || ""}
-                fill
-                className={fitClass}
-              />
-            </div>
-          )}
-          {section.caption && (
-            <p className="text-center text-sm mt-4 font-semibold" style={{ color: "#4f4f4f" }}>
-              {section.caption}
-            </p>
-          )}
-        </div>
+        {showCard ? (
+          <div className={`bg-white rounded-3xl drop-shadow-2xl ${section.noPadding ? "" : "p-8 md:p-12"}`}>
+            {imageContent}
+            {caption}
+          </div>
+        ) : (
+          <>
+            {imageContent}
+            {caption}
+          </>
+        )}
       </div>
     </div>
   );
