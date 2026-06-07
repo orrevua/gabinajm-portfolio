@@ -244,7 +244,7 @@ function FullWidthImage({ section }: { section: ContentSection }) {
           </div>
         </div>
       ) : (
-        <div className="max-w-[1400px] mx-auto px-5">
+        <div className="max-w-[1158px] mx-auto px-5">
           {imageContent}
           {caption}
         </div>
