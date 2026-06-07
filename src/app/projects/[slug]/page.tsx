@@ -231,24 +231,24 @@ function FullWidthImage({ section }: { section: ContentSection }) {
       className="w-full py-6 md:py-8"
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
-      <div className="max-w-[1158px] mx-auto px-5">
-        {section.heading && (
-          <h2 className="text-xl md:text-2xl font-bold text-center mb-6">
-            {section.heading}
-          </h2>
-        )}
-        {showCard ? (
+      {section.heading && (
+        <h2 className="text-xl md:text-2xl font-bold text-center mb-6 max-w-[1158px] mx-auto px-5">
+          {section.heading}
+        </h2>
+      )}
+      {showCard ? (
+        <div className="max-w-[1158px] mx-auto px-5">
           <div className={`bg-white rounded-3xl drop-shadow-2xl ${section.noPadding ? "" : "p-8 md:p-12"}`}>
             {imageContent}
             {caption}
           </div>
-        ) : (
-          <>
-            {imageContent}
-            {caption}
-          </>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="max-w-[1400px] mx-auto px-5">
+          {imageContent}
+          {caption}
+        </div>
+      )}
     </div>
   );
 }
