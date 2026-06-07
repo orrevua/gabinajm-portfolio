@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import { getSanityDataService } from "@/src/services";
 import { verifyCookie } from "@/src/services/projectAccess";
 import { getServerTranslations } from "@/src/i18n/serverLocale";
-import { SectionRouter } from "@/src/adapters/routes/components/SectionRouter";
 import { hexToIconFilter } from "@/src/adapters/routes/components/ProjectCard";
 import { PasswordGate } from "@/src/adapters/routes/components/PasswordGate";
 import { NextProjectCard } from "@/src/adapters/routes/components/NextProjectCard";
@@ -15,7 +14,6 @@ import { PortableTextRenderer } from "@/src/adapters/routes/components/PortableT
 import type { ContentSection, PortableTextBlock } from "@/src/domain/types";
 import { toPlainText } from "@/src/domain/types";
 import type { Project } from "@/src/domain/models/Project";
-import type { Section } from "@/src/domain/models/Section";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -486,15 +484,13 @@ export default async function ProjectDetailPage(props: PageProps) {
 
   let project: Project | null = null;
   let allProjects: Project[] = [];
-  let sections: Section[] = [];
   let fetchError = false;
 
   try {
     const dataService = await getSanityDataService();
-    [project, allProjects, sections] = await Promise.all([
+    [project, allProjects] = await Promise.all([
       dataService.getProjectBySlug(params.slug, locale),
       dataService.getProjects({ locale }),
-      dataService.getSectionsByPage("home", locale),
     ]);
   } catch {
     fetchError = true;
@@ -551,8 +547,6 @@ export default async function ProjectDetailPage(props: PageProps) {
 
   const technologies = project.technologies;
   const contentSections = project.contentSections;
-  const contactSection = sections.find((s) => s.sectionType === "contact");
-
   const year = project.publishedAt.getFullYear();
 
   return (
@@ -652,8 +646,6 @@ export default async function ProjectDetailPage(props: PageProps) {
         ) : null;
       })()}
 
-      {/* Contact */}
-      {contactSection && <SectionRouter section={contactSection} />}
     </article>
   );
 }
