@@ -126,7 +126,7 @@ function TextBlock({ section }: { section: ContentSection }) {
             {section.sectionLabel}
           </h2>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="-mx-1 md:-mx-3 grid grid-cols-1 md:grid-cols-2 gap-6">
           {section.textColumns.map((col, i) => {
             const colGradient = col.bgColor?.includes("gradient");
             const colBgStyle: React.CSSProperties = col.bgColor
