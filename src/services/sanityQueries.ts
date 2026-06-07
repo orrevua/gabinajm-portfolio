@@ -164,6 +164,7 @@ export const PROJECT_BY_SLUG_QUERY = `
       sectionLabel,
       sectionLabel_pt,
       heading,
+      heading_pt,
       body,
       body_pt,
       bullets,

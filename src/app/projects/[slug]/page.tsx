@@ -232,6 +232,11 @@ function FullWidthImage({ section }: { section: ContentSection }) {
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">
+        {section.heading && (
+          <h2 className="text-xl md:text-2xl font-bold text-center mb-6">
+            {section.heading}
+          </h2>
+        )}
         {showCard ? (
           <div className={`bg-white rounded-3xl drop-shadow-2xl ${section.noPadding ? "" : "p-8 md:p-12"}`}>
             {imageContent}
@@ -256,6 +261,47 @@ function ImageGallery({ section }: { section: ContentSection }) {
 
   const hasSpans = images.some((img) => img.span && img.span > 1);
   const hasDimensions = images.some((img) => img.asset?.dimensions);
+  const showCard = section.useCard === true;
+
+  const galleryContent = hasSpans || hasDimensions ? (
+    <div className="flex gap-2 w-full">
+      {images.map((img, i) => {
+        const d = img.asset?.dimensions;
+        const ratio = d ? d.width / d.height : 1;
+        const flex = (img.span || 1) * ratio;
+        return (
+          <div
+            key={i}
+            className="relative overflow-hidden rounded-lg"
+            style={{ flex, aspectRatio: `${ratio}` }}
+          >
+            <Image
+              src={img.asset!.url}
+              alt={img.alt || ""}
+              fill
+              className={imageFitClass}
+            />
+          </div>
+        );
+      })}
+    </div>
+  ) : (
+    <div
+      className="grid gap-2"
+      style={{ gridTemplateColumns: `repeat(${Math.min(cols, 4)}, 1fr)` }}
+    >
+      {images.map((img, i) => (
+        <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-lg">
+          <Image
+            src={img.asset!.url}
+            alt={img.alt || ""}
+            fill
+            className={imageFitClass}
+          />
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div
@@ -263,44 +309,12 @@ function ImageGallery({ section }: { section: ContentSection }) {
       style={{ backgroundColor: section.bgColor || "transparent" }}
     >
       <div className="max-w-[1158px] mx-auto px-5">
-        {hasSpans || hasDimensions ? (
-          <div className="flex gap-2 w-full">
-            {images.map((img, i) => {
-              const d = img.asset?.dimensions;
-              const ratio = d ? d.width / d.height : 1;
-              const flex = (img.span || 1) * ratio;
-              return (
-                <div
-                  key={i}
-                  className="relative overflow-hidden rounded-lg"
-                  style={{ flex, aspectRatio: `${ratio}` }}
-                >
-                  <Image
-                    src={img.asset!.url}
-                    alt={img.alt || ""}
-                    fill
-                    className={imageFitClass}
-                  />
-                </div>
-              );
-            })}
+        {showCard ? (
+          <div className="bg-white rounded-3xl drop-shadow-2xl p-8 md:p-12">
+            {galleryContent}
           </div>
         ) : (
-          <div
-            className="grid gap-2"
-            style={{ gridTemplateColumns: `repeat(${Math.min(cols, 4)}, 1fr)` }}
-          >
-            {images.map((img, i) => (
-              <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-lg">
-                <Image
-                  src={img.asset!.url}
-                  alt={img.alt || ""}
-                  fill
-                  className={imageFitClass}
-                />
-              </div>
-            ))}
-          </div>
+          galleryContent
         )}
       </div>
     </div>

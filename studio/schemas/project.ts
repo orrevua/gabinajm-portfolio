@@ -297,6 +297,17 @@ export default defineType({
           title: 'Full Width Image',
           fields: [
             defineField({
+              name: 'heading',
+              title: 'Heading',
+              type: 'string',
+              description: 'Centered heading displayed above the image',
+            }),
+            defineField({
+              name: 'heading_pt',
+              title: 'Heading (PT)',
+              type: 'string',
+            }),
+            defineField({
               name: 'image',
               title: 'Image',
               type: 'image',
@@ -444,6 +455,13 @@ export default defineType({
                   ],
                 },
               ],
+            }),
+            defineField({
+              name: 'useCard',
+              title: 'Show inside card',
+              type: 'boolean',
+              description: 'When checked, the gallery is wrapped in a white card with rounded corners and drop shadow.',
+              initialValue: false,
             }),
             defineField({
               name: 'bgColor',

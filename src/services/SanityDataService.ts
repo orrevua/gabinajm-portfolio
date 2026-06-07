@@ -131,6 +131,7 @@ interface SanityProject {
     sectionLabel?: string;
     sectionLabel_pt?: string;
     heading?: string;
+    heading_pt?: string;
     body?: unknown;
     body_pt?: unknown;
     bullets?: unknown[];
@@ -319,7 +320,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
       _type: s._type,
       _key: s._key,
       sectionLabel: loc(s.sectionLabel, s.sectionLabel_pt, locale),
-      heading: s.heading,
+      heading: loc(s.heading, s.heading_pt, locale),
       body: loc(s.body, s.body_pt, locale) as import("@domain").RichTextBody | undefined,
       bullets: loc(s.bullets as string[] | undefined, s.bullets_pt as string[] | undefined, locale),
       bgColor: s.bgColor,
