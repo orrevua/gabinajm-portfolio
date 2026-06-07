@@ -7,7 +7,7 @@ export function NextProjectCard({ title, description, slug }: { title: string; d
   const { t } = useTranslation();
 
   return (
-    <div className="max-w-[1158px] mx-auto px-5 py-16">
+    <div className="max-w-[1158px] mx-auto px-5">
       <div className="relative overflow-hidden rounded-3xl bg-[#9810FA] px-10 py-12 md:px-14 md:py-14">
         <div className="absolute -top-20 -right-20 w-[340px] h-[340px] rounded-full bg-white/10 pointer-events-none" />
         <div className="relative z-10">
