@@ -101,11 +101,13 @@ export default async function RootLayout({
           <div className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted min-h-[88px]">
             <p>
               {translations[locale].footer.copyright.replace("{year}", String(new Date().getFullYear()))}
-              {" · "}
-              {translations[locale].footer.developedBy}{" "}
-              <a href="https://github.com/orrevua/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-accent transition-colors">@orrevua</a>
             </p>
             <p>{translations[locale].footer.tagline}</p>
+            <p>{translations[locale].footer.developedBy}{" "}
+              <a href="https://github.com/orrevua/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-accent transition-colors">
+                @orrevua
+              </a>
+            </p>
           </div>
           </footer>
         </LocaleProvider>
