@@ -711,57 +711,22 @@ export class SanityDataService implements IDataService {
       const data = await client.fetch<any>(HOME_PAGE_QUERY);
       if (!data) return null;
 
-      const hasFlat = data.projectsHeading;
-      if (hasFlat) {
-        return {
-          projectsHeading: loc(data.projectsHeading, data.projectsHeading_pt, locale),
-          maxProjects: data.maxProjects,
-          experienceHeading: loc(data.experienceHeading, data.experienceHeading_pt, locale),
-          contactHeading: loc(data.contactHeading, data.contactHeading_pt, locale),
-          contactSubtitle: loc(data.contactSubtitle, data.contactSubtitle_pt, locale),
-          availabilityText: loc(data.availabilityText, data.availabilityText_pt, locale),
-          showForm: data.showForm,
-          videoHeading: loc(data.videoHeading, data.videoHeading_pt, locale),
-          videoSubtitle: loc(data.videoSubtitle, data.videoSubtitle_pt, locale),
-          videoUrl: data.videoUrl || (data.videoAssetId ? buildFileUrl(data.videoAssetId) : undefined),
-          videoExternalUrl: data.videoExternalUrl,
-          videoPoster: data.videoPoster,
-          videoAutoplay: data.videoAutoplay,
-          videoLoop: data.videoLoop,
-          videoMuted: data.videoMuted,
-        };
-      }
-
-      // backward compat: old sections[] array → flat
-      const sections = data.sections || [];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const find = (type: string) => sections.find((s: any) => s._type === type);
-      const projects = find("projectsSection");
-      const experience = find("experienceSection");
-      const contact = find("contactSection");
-      const video = find("videoSection");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const lfs = (s: any, field: string) => {
-        if (!s) return undefined;
-        return loc(s[field], s[`${field}_pt`], locale);
-      };
-
       return {
-        projectsHeading: lfs(projects, "heading"),
-        maxProjects: projects?.maxProjects,
-        experienceHeading: lfs(experience, "heading"),
-        contactHeading: lfs(contact, "heading"),
-        contactSubtitle: lfs(contact, "subtitle"),
-        availabilityText: lfs(contact, "availabilityText"),
-        showForm: contact?.showForm,
-        videoHeading: lfs(video, "heading"),
-        videoSubtitle: lfs(video, "subtitle"),
-        videoUrl: video?.videoUrl,
-        videoExternalUrl: video?.externalUrl,
-        videoPoster: video?.poster,
-        videoAutoplay: video?.autoplay,
-        videoLoop: video?.loop,
-        videoMuted: video?.muted,
+        projectsHeading: loc(data.projectsHeading, data.projectsHeading_pt, locale),
+        maxProjects: data.maxProjects,
+        experienceHeading: loc(data.experienceHeading, data.experienceHeading_pt, locale),
+        contactHeading: loc(data.contactHeading, data.contactHeading_pt, locale),
+        contactSubtitle: loc(data.contactSubtitle, data.contactSubtitle_pt, locale),
+        availabilityText: loc(data.availabilityText, data.availabilityText_pt, locale),
+        showForm: data.showForm,
+        videoHeading: loc(data.videoHeading, data.videoHeading_pt, locale),
+        videoSubtitle: loc(data.videoSubtitle, data.videoSubtitle_pt, locale),
+        videoUrl: data.videoUrl || (data.videoAssetId ? buildFileUrl(data.videoAssetId) : undefined),
+        videoExternalUrl: data.videoExternalUrl,
+        videoPoster: data.videoPoster,
+        videoAutoplay: data.videoAutoplay,
+        videoLoop: data.videoLoop,
+        videoMuted: data.videoMuted,
       };
     } catch (error) {
       console.error("SanityDataService: Failed to fetch home page", error);

@@ -25,12 +25,6 @@ export function hexToIconFilter(hex: string): string {
   return `brightness(0) saturate(100%) invert(${Math.round(l * 100)}%) sepia(100%) saturate(${Math.max(Math.round(s * 10000), 100)}%) hue-rotate(${Math.round(h)}deg)`;
 }
 
-export interface CardTheme {
-  bg: string;
-  fg: string;
-  border: string;
-}
-
 export interface TechItem {
   name: string;
   iconUrl?: string;
@@ -50,8 +44,6 @@ export interface ProjectCardProps {
   technologies: TechItem[];
   link?: string | null;
   featured?: boolean;
-  cardTheme?: CardTheme | null;
-  cardStyle?: "large" | "small";
   companyLogo?: { url: string; alt: string } | null;
   isProtected?: boolean;
 }

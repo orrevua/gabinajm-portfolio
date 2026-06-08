@@ -347,37 +347,6 @@ export const SECTIONS_BY_PAGE_QUERY = `
   }
 `;
 
-export const SECTION_BY_UID_QUERY = `
-  *[_type == "section" && uid.current == $uid][0] {
-    _id,
-    uid,
-    sectionType,
-    title,
-    title_pt,
-    subtitle,
-    subtitle_pt,
-    content[],
-    ${CONTENT_BLOCKS_PROJECTION},
-    background {
-      type,
-      color,
-      image {
-        asset-> {
-          _id,
-          url,
-          "lqip": metadata.lqip
-        }
-      },
-      imageAlt
-    },
-    overlay,
-    hasDropShadow,
-    padding,
-    pages,
-    order
-  }
-`;
-
 export const ABOUT_PAGE_QUERY = `
   *[_type == "aboutPage"][0] {
     _id,
@@ -438,34 +407,7 @@ export const HOME_PAGE_QUERY = `
     contactSubtitle_pt,
     availabilityText,
     availabilityText_pt,
-    showForm,
-    // backward compat: old sections array
-    sections[] {
-      _type,
-      _key,
-      heading,
-      heading_pt,
-      body,
-      body_pt,
-      showResume,
-      showSkills,
-      maxProjects,
-      availabilityText,
-      availabilityText_pt,
-      showForm,
-      subtitle,
-      subtitle_pt,
-      "videoUrl": video.asset->url,
-      "videoAssetId": video.asset->_id,
-      externalUrl,
-      poster {
-        asset-> { _id, url, "lqip": metadata.lqip },
-        alt
-      },
-      autoplay,
-      loop,
-      muted
-    }
+    showForm
   }
 `;
 
@@ -473,10 +415,3 @@ export const PASSWORD_BY_SLUG_QUERY = `
   *[_type == "project" && slug.current == $slug][0] { password }
 `;
 
-export const PROFILE_LISTENER_QUERY = `*[_type == "profile"]`;
-
-/**
- * Query listener params for real-time updates via ISR revalidation
- * GROQ subscription for project changes
- */
-export const PROJECT_LISTENER_QUERY = `*[_type == "project"]`;

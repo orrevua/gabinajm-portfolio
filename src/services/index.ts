@@ -21,9 +21,6 @@ export {
   PROJECT_BY_SLUG_QUERY,
   ALL_PROJECT_SLUGS_QUERY,
   SECTIONS_QUERY,
-  SECTION_BY_UID_QUERY,
-  PROFILE_LISTENER_QUERY,
-  PROJECT_LISTENER_QUERY,
 } from "./sanityQueries";
 
 // Sanity image helpers

@@ -2,13 +2,6 @@
  * Shared domain types and enums
  */
 
-export type SocialPlatform = "github" | "linkedin" | "twitter" | "email" | "instagram";
-
-export interface SocialLink {
-  platform: SocialPlatform;
-  url: string;
-}
-
 export interface ImageCrop {
   top: number;
   bottom: number;
@@ -47,25 +40,12 @@ export interface ExperienceCompany {
   url: string | null;
 }
 
-export interface PortableTextMarkDefinition {
-  _key: string;
-  _type: string;
-  href?: string;
-}
-
-export interface PortableTextSpan {
-  _key: string;
-  _type: "span";
-  text: string;
-  marks: string[];
-}
-
 export interface PortableTextBlock {
   _key: string;
   _type: "block";
   style?: string;
-  children: PortableTextSpan[];
-  markDefs?: PortableTextMarkDefinition[];
+  children: { _key: string; _type: "span"; text: string; marks: string[] }[];
+  markDefs?: { _key: string; _type: string; href?: string }[];
 }
 
 export interface ProjectImage {
