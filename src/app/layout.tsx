@@ -98,12 +98,12 @@ export default async function RootLayout({
           <Navigation brandName="Gabinajm" />
           <main id="main-content" className="flex-1">{children}</main>
           <footer className="w-full bg-[#FFFFFF80] border-t-[1px] border-[#FCE7F3]">
-          <div className="container-max py-10 flex flex-col items-center gap-1 text-sm text-muted min-h-[88px]">
-            <p>
+          <div className="container-max py-10 flex flex-col items-center gap-1 text-muted min-h-[88px]">
+            <p className="text-base">
               {translations[locale].footer.copyright.replace("{year}", String(new Date().getFullYear()))}
             </p>
-            <p>{translations[locale].footer.tagline}</p>
-            <p>{translations[locale].footer.developedBy}{" "}
+            <p className="text-sm">{translations[locale].footer.tagline}</p>
+            <p className="text-xs">{translations[locale].footer.developedBy}{" "}
               <a href="https://github.com/orrevua/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-accent transition-colors">
                 @orrevua
               </a>
