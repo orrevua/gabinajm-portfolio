@@ -89,10 +89,10 @@ export const Navigation: React.FC<NavigationProps> = ({
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-semibold transition-colors ${
+                className={`text-sm font-semibold transition-colors hover:text-accent ${
                   isActive(link.href)
                     ? "text-[#0A0A0A]"
-                    : "text-[#0A0A0A]/70 hover:text-accent"
+                    : "text-[#0A0A0A]/70"
                 }`}
                 aria-current={isActive(link.href) ? "page" : undefined}
               >
