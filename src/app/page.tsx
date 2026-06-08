@@ -41,7 +41,7 @@ export default async function HomePage() {
     const dataService = getSanityDataService();
     [profile, projects, homePage, sections] = await Promise.all([
       dataService.getProfile(locale),
-      dataService.getFeaturedProjects(4, locale),
+      dataService.getFeaturedProjects(undefined, locale),
       dataService.getHomePage(locale),
       dataService.getSectionsByPage("home", locale),
     ]);

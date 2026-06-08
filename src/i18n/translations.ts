@@ -48,6 +48,8 @@ export const translations = {
       viewAllProjects: "View All Projects",
       notFound: "Project Not Found",
       notFoundDescription: "The project you're looking for doesn't exist or has been removed.",
+      prev: "Previous",
+      next: "Next",
     },
     pastExperience: {
       heading: "Past Experience",
@@ -157,6 +159,8 @@ export const translations = {
       viewAllProjects: "Ver Todos os Projetos",
       notFound: "Projeto Não Encontrado",
       notFoundDescription: "O projeto que você procura não existe ou foi removido.",
+      prev: "Anterior",
+      next: "Próximo",
     },
     pastExperience: {
       heading: "Experiência Anterior",
