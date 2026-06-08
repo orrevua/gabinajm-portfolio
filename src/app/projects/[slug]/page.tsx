@@ -584,7 +584,7 @@ export default async function ProjectDetailPage(props: PageProps) {
             {project.title}
           </h1>
           {project.subtitle && (
-            <p className="text-[clamp(24px,3vw,36px)] font-extrabold leading-[1.15] bg-gradient-to-r from-accent via-accent to-accent-purple bg-clip-text text-transparent mb-6">
+            <p className="text-[clamp(24px,3vw,36px)] font-extrabold leading-[1.15] bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent mb-6">
               {project.subtitle}
             </p>
           )}
