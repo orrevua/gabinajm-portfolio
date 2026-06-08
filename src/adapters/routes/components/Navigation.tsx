@@ -91,7 +91,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 href={link.href}
                 className={`text-sm font-semibold transition-colors hover:text-accent ${
                   isActive(link.href)
-                    ? "text-[#0A0A0A]"
+                    ? "bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent"
                     : "text-[#0A0A0A]/70"
                 }`}
                 aria-current={isActive(link.href) ? "page" : undefined}
