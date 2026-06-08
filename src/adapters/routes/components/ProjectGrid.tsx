@@ -77,7 +77,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
               <button
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="px-5 py-2.5 rounded-pill border border-border text-sm font-semibold text-[#0A0A0A]/70 hover:border-foreground hover:text-[#0A0A0A] active:scale-95 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-pill border-2 border-accent text-[#0A0A0A] font-bold shadow-[0_10px_20px_rgba(246,51,154,0.2)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.3)] hover:bg-accent hover:text-white active:scale-95 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {t.projects.prev || "Previous"}
               </button>
@@ -87,7 +87,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
               <button
                 onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={page === totalPages - 1}
-                className="px-5 py-2.5 rounded-pill border border-border text-sm font-semibold text-[#0A0A0A]/70 hover:border-foreground hover:text-[#0A0A0A] active:scale-95 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-pill border-2 border-accent text-[#0A0A0A] font-bold shadow-[0_10px_20px_rgba(246,51,154,0.2)] hover:shadow-[0_14px_28px_rgba(246,51,154,0.3)] hover:bg-accent hover:text-white active:scale-95 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {t.projects.next || "Next"}
               </button>
