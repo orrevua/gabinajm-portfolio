@@ -10,6 +10,7 @@ import type { Profile } from "@/src/domain/models/Profile";
 import type { Section } from "@/src/domain/models/Section";
 import type { AboutPage as AboutPageData } from "@/src/domain/interfaces/DataService";
 import { resolveColor } from "@/src/domain/types";
+import { ValuesSection } from "@/src/adapters/routes/components/ValuesSection";
 
 export const revalidate = 3600;
 
@@ -164,6 +165,9 @@ export default async function AboutPage() {
           </div>
         </ScrollReveal>
 
+        <ScrollReveal>
+          <ValuesSection heading={aboutPage?.valuesHeading} values={aboutPage?.values} />
+        </ScrollReveal>
       </section>
 
       {otherSections.map((section) => (
