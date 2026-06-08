@@ -5,6 +5,15 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ProjectGrid } from "../../../adapters/routes/components/ProjectGrid";
+import { translations } from "../../../i18n/translations";
+
+vi.mock("../../../i18n", () => ({
+  useTranslation: () => ({
+    locale: "en",
+    setLocale: vi.fn(),
+    t: translations.en,
+  }),
+}));
 
 // Mock ProjectCard
 vi.mock("../../adapters/routes/components/ProjectCard", () => ({
