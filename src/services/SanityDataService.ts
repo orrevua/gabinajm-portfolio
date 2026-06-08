@@ -550,10 +550,10 @@ export class SanityDataService implements IDataService {
    * @param limit Max number of projects to return (default: 3)
    * @returns Array of featured Project objects
    */
-  async getFeaturedProjects(limit: number = 3, locale: string = "en"): Promise<Project[]> {
+  async getFeaturedProjects(limit?: number, locale: string = "en"): Promise<Project[]> {
     return this.getProjects({
       featuredOnly: true,
-      limit,
+      ...(limit ? { limit } : {}),
       sort: "newest",
       locale,
     });
