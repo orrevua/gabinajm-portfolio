@@ -49,3 +49,6 @@ figma_full.json
 
 # Sanity backups
 backups/
+
+# Sanity Studio build output
+studio/*/
