@@ -76,7 +76,7 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
 
   return (
     <div className="flex flex-col pt-28 md:pt-36 pb-16">
-      <div className="w-full max-w-md mx-auto px-6 mb-6">
+      <div className="w-full max-w-md mx-auto px-6 md:px-2 mb-6">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm font-medium text-[#0A0A0A]/70 hover:text-[#0A0A0A] transition-colors"
@@ -88,7 +88,7 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
         </Link>
       </div>
 
-      <div className="flex items-start justify-center px-6">
+      <div className="flex items-start justify-center px-6 md:px-2">
         <div
           className="w-full max-w-md bg-white rounded-3xl p-8 md:p-10 drop-shadow-2xl"
           role="dialog"
