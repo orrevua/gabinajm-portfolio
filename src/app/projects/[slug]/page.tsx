@@ -555,7 +555,7 @@ export default async function ProjectDetailPage(props: PageProps) {
       <div className="max-w-[1158px] mx-auto px-5 pt-28 md:pt-36">
         <BackToProjectsLink />
 
-        <div className="max-w-[924px]">
+        <div>
           {technologies.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-8">
               {technologies.map((tech) => (
