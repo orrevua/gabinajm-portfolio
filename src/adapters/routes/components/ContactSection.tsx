@@ -99,6 +99,24 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errors = t.contact.errors as Record<string, string>;
+
+    if (!formData.name || formData.name.trim().length < 2) {
+      setErrorMessage(errors["NAME_REQUIRED"] || t.contact.toastError);
+      setStatus("error");
+      return;
+    }
+    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setErrorMessage(errors["EMAIL_INVALID"] || t.contact.toastError);
+      setStatus("error");
+      return;
+    }
+    if (!formData.message || formData.message.trim().length < 10) {
+      setErrorMessage(errors["MESSAGE_REQUIRED"] || t.contact.toastError);
+      setStatus("error");
+      return;
+    }
+
     setStatus("sending");
     setErrorMessage("");
 
@@ -135,7 +153,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-[#0A0A0A] mb-2">
               {t.contact.nameLabel}
@@ -147,7 +165,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
-              required
             />
           </div>
 
@@ -162,7 +179,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
-              required
             />
           </div>
 
@@ -177,7 +193,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
-              required
             />
           </div>
 
