@@ -24,6 +24,14 @@
   a, button, [role="button"] {
     @apply transition-colors duration-300;
   }
+
+  a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
 }
 
 @layer components {
@@ -109,6 +117,13 @@
     animation: float 4s ease-in-out infinite;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .animate-wave {
+      animation: none;
+    }
+  }
+
   @keyframes clip-slide-up {
     from { transform: translateY(110%); opacity: 0; }
     to   { transform: translateY(0);    opacity: 1; }
@@ -129,7 +144,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .card-lift:hover {
       transform: translateY(-8px);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);

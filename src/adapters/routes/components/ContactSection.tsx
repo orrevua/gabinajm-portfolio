@@ -161,9 +161,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             <input
               id="contact-name"
               type="text"
+              autoComplete="name"
               placeholder={t.contact.namePlaceholder}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              aria-invalid={status === "error" ? "true" : undefined}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
           </div>
@@ -175,9 +177,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             <input
               id="contact-email"
               type="email"
+              autoComplete="email"
               placeholder={t.contact.emailPlaceholder}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              aria-invalid={status === "error" ? "true" : undefined}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
           </div>
@@ -192,6 +196,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               rows={4}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              aria-invalid={status === "error" ? "true" : undefined}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
             />
           </div>
@@ -227,7 +232,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 target={link.platform === "email" ? undefined : "_blank"}
                 rel={link.platform === "email" ? undefined : "noopener noreferrer"}
                 className="flex items-center gap-4 p-4 rounded-2xl border border-border transition-colors group card-lift"
-                aria-label={`${link.platform}: ${handle}`}
+                aria-label={`${link.platform}: ${handle}${link.platform !== "email" ? " (opens in new tab)" : ""}`}
               >
                 <div className={`w-12 h-12 rounded-[14px] ${colorClass} flex items-center justify-center flex-shrink-0`}>
                   {icon}

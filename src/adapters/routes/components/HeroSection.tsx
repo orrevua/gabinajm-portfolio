@@ -55,7 +55,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </span>
           </h1>
 
-          <p className="text-xl text-[#0A0A0A]/70 leading-relaxed mb-8 max-w-md">
+          <p className="text-xl text-[#0A0A0A]/80 leading-relaxed mb-8 max-w-md">
             {profile.bio}
           </p>
 

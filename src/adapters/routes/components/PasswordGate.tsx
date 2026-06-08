@@ -117,9 +117,11 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
               <input
                 id="project-password"
                 type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t.password.placeholder}
+                aria-invalid={error ? "true" : undefined}
                 className={`form-input pl-10 pr-10 ${error ? "border-accent ring-2 ring-accent/30" : ""}`}
                 autoFocus
                 disabled={loading}
