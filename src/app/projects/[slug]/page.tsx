@@ -589,7 +589,7 @@ export default async function ProjectDetailPage(props: PageProps) {
             </p>
           )}
 
-          <div className="text-base leading-[1.7] text-[#0A0A0A]/70 mb-6 max-w-3xl">
+          <div className="text-base leading-[1.7] text-[#0A0A0A]/70 mb-6">
             {typeof project.description === "string" ? (
               <p>{project.description}</p>
             ) : (
