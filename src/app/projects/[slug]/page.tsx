@@ -561,7 +561,7 @@ export default async function ProjectDetailPage(props: PageProps) {
               {technologies.map((tech) => (
                 <span
                   key={tech.name}
-                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill border border-foreground/20 text-[#0A0A0A]/80"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 leading-none rounded-pill bg-[#FCE7F3] text-[#0A0A0A]/80"
                 >
                   {tech.iconUrl && (
                     <Image
