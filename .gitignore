@@ -46,3 +46,6 @@ docs/
 .github/
 figma_design_structure.json
 figma_full.json
+
+# Sanity backups
+backups/

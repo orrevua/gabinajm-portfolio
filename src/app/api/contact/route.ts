@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import sgMail from "@sendgrid/mail";
 
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || "";
+const BREVO_API_KEY = process.env.BREVO_API_KEY || "";
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "";
+const CONTACT_TO_NAME = process.env.CONTACT_TO_NAME || "";
 const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "";
+const CONTACT_FROM_NAME = process.env.CONTACT_FROM_NAME || "Portfolio Contact";
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 3;
@@ -34,10 +35,6 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-if (SENDGRID_API_KEY) {
-  sgMail.setApiKey(SENDGRID_API_KEY);
-}
-
 interface ContactBody {
   name: string;
   email: string;
@@ -58,7 +55,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!SENDGRID_API_KEY || !CONTACT_TO_EMAIL || !CONTACT_FROM_EMAIL) {
+    if (!BREVO_API_KEY || !CONTACT_TO_EMAIL || !CONTACT_FROM_EMAIL) {
       return NextResponse.json(
         { error: "NOT_CONFIGURED" },
         { status: 503 }
@@ -92,20 +89,34 @@ export async function POST(request: NextRequest) {
     const email = body.email.trim().slice(0, 320);
     const message = body.message.trim().slice(0, 5000);
 
-    await sgMail.send({
-      to: CONTACT_TO_EMAIL,
-      from: CONTACT_FROM_EMAIL,
-      replyTo: email,
-      subject: `Portfolio Contact: ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-      html: `
-        <h2>New contact from your portfolio</h2>
-        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-        <hr />
-        <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
-      `,
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "accept": "application/json",
+        "api-key": BREVO_API_KEY,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        sender: { name: CONTACT_FROM_NAME, email: CONTACT_FROM_EMAIL },
+        to: [{ email: CONTACT_TO_EMAIL, name: CONTACT_TO_NAME }],
+        replyTo: { email, name },
+        subject: `Portfolio Contact: ${name}`,
+        textContent: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+        htmlContent: `
+          <h2>New contact from your portfolio</h2>
+          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <hr />
+          <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
+        `,
+      }),
     });
+
+    if (!res.ok) {
+      const err = await res.text();
+      console.error("Brevo API error:", res.status, err);
+      return NextResponse.json({ error: "SEND_FAILED" }, { status: 500 });
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
