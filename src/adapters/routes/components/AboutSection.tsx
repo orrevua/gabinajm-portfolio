@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { colorToClass } from "@/src/domain/types";
+import { resolveColor } from "@/src/domain/types";
 import type { SkillTag } from "@/src/domain/types";
 import { PortableTextRenderer } from "./PortableTextRenderer";
 
@@ -50,17 +50,21 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         </div>
         {hasSkills && (
           <div className="flex flex-wrap gap-3 mb-8">
-            {technologies.map((skill) => (
+            {technologies.map((skill) => {
+              const c = resolveColor(skill.color);
+              return (
               <span
                 key={skill.name}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-pill text-base font-normal ${colorToClass(skill.color) || "bg-background text-foreground"}`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-pill text-base font-normal ${c.className || (c.style ? "" : "bg-background text-foreground")}`}
+                style={c.style}
               >
                 {skill.iconUrl && (
                   <Image src={skill.iconUrl} alt="" width={16} height={16} className="object-contain" aria-hidden="true" />
                 )}
                 {skill.name}
               </span>
-            ))}
+              );
+            })}
           </div>
         )}
 

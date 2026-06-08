@@ -99,20 +99,12 @@ export type RichTextBody = PortableTextBlock[] | string;
 
 const HEX_RE = /^#?([0-9a-fA-F]{3,8})$/;
 
-export function colorToClass(value: string | undefined, prefix = "bg"): string {
-  if (!value) return "";
+export function resolveColor(value: string | undefined): { className?: string; style?: { backgroundColor: string } } {
+  if (!value) return {};
   const v = value.trim();
   const m = HEX_RE.exec(v);
-  if (m) return `${prefix}-[#${m[1]}]`;
-  return v;
-}
-
-export function colorToHex(value: string | undefined): string | undefined {
-  if (!value) return undefined;
-  const v = value.trim();
-  const m = HEX_RE.exec(v);
-  if (m) return `#${m[1]}`;
-  return undefined;
+  if (m) return { style: { backgroundColor: `#${m[1]}` } };
+  return { className: v };
 }
 
 export function toPlainText(body: RichTextBody | undefined): string {
