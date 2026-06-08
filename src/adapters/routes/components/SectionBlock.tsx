@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { type ISection, type SectionContentBlock } from "@domain";
+import { colorToClass, colorToHex } from "@/src/domain/types";
 import { FormattedParagraphs } from "./FormattedParagraphs";
 
 export interface SectionBlockProps {
@@ -74,8 +75,8 @@ function InfoCardBlock({ block, hasDropShadow }: { block: SectionContentBlock; h
           {block.chips.map((chip) => (
             <span
               key={chip.label}
-              className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full"
-              style={{ backgroundColor: chip.color || "#f3f4f6" }}
+              className={`inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full ${colorToHex(chip.color) ? "" : colorToClass(chip.color) || "bg-[#f3f4f6]"}`}
+              style={colorToHex(chip.color) ? { backgroundColor: colorToHex(chip.color) } : undefined}
             >
               {chip.label}
             </span>

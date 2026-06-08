@@ -9,6 +9,7 @@ import { getServerTranslations } from "@/src/i18n/serverLocale";
 import type { Profile } from "@/src/domain/models/Profile";
 import type { Section } from "@/src/domain/models/Section";
 import type { AboutPage as AboutPageData } from "@/src/domain/interfaces/DataService";
+import { colorToClass, colorToHex } from "@/src/domain/types";
 
 export const revalidate = 3600;
 
@@ -133,8 +134,8 @@ export default async function AboutPage() {
               ).map((chip) => (
                 <span
                   key={chip.label}
-                  className="inline-flex items-center gap-2 text-base font-normal px-5 py-2.5 rounded-full"
-                  style={{ backgroundColor: chip.color }}
+                  className={`inline-flex items-center gap-2 text-base font-normal px-5 py-2.5 rounded-full ${colorToHex(chip.color) ? "" : colorToClass(chip.color)}`}
+                  style={colorToHex(chip.color) ? { backgroundColor: colorToHex(chip.color) } : undefined}
                 >
                   {chip.iconUrl && (
                     <Image src={chip.iconUrl} alt="" width={16} height={16} className="object-contain" aria-hidden="true" />
