@@ -35,7 +35,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
   return (
     <header
-      className="container-max py-16 md:pt-36 md:pb-6"
+      className="container-max py-24 md:pt-36 md:pb-6"
       aria-label={heading}
     >
       <div className="grid items-center gap-10 lg:grid-cols-[minmax(280px,360px)_1fr] lg:gap-14 border-none">
