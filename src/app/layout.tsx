@@ -51,9 +51,6 @@ export const metadata: Metadata = {
     description: "Gabi Abinajm is a Product Designer crafting accessible, human-centered digital experiences with intentional simplicity and inclusive design.",
     images: ["/og-image.png"],
   },
-  icons: {
-    icon: "/images/gabinajm.svg",
-  },
   robots: {
     index: true,
     follow: true,
