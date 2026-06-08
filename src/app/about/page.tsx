@@ -113,7 +113,7 @@ export default async function AboutPage() {
         heading={t.about.heading}
       />
 
-      <section className="container-max pb-24 md:pb-32 mt-10 md:mt-16">
+      <section className="container-max pb-12 md:pb-12 mt-10 md:mt-16">
         {/* Bio card */}
         <ScrollReveal>
           <div className="bg-white rounded-3xl p-8 md:p-12 mb-20 md:mb-28 drop-shadow-2xl">
