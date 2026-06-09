@@ -19,11 +19,11 @@ export const PastExperience: React.FC<PastExperienceProps> = ({
         {displayHeading}
       </h2>
 
-      <div className="flex items-center justify-center gap-6 md:gap-8 flex-wrap">
+      <div className="grid grid-cols-2 md:flex md:items-center md:justify-center gap-6 md:gap-8 max-w-[180px] md:max-w-none mx-auto">
         {companies.map((company) => {
           const logoContent = (
             <div
-              className="w-[75px] h-[75px] rounded-2xl overflow-hidden shadow-sm transition-all duration-500 grayscale hover:grayscale-0"
+              className="w-[56px] h-[56px] md:w-[75px] md:h-[75px] rounded-2xl overflow-hidden shadow-sm transition-all duration-500 grayscale hover:grayscale-0 mx-auto"
               title={company.name}
             >
               <Image
