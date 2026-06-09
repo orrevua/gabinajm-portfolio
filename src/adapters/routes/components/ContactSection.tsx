@@ -11,10 +11,12 @@ function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: 
   }, [onDismiss]);
 
   const isSent = type === "sent";
+  const base = isSent ? "bg-[#D2FCD8]/95 text-[#0A0A0A] border-[#1a7a2e]" : "bg-[#FCE7F3]/95 text-[#0A0A0A] border-[#c4365a]";
   return (
     <div
-      className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-pill text-base font-medium animate-fade-in max-w-[90vw] backdrop-blur-sm border ${isSent ? "bg-[#D2FCD8]/95 text-[#0A0A0A] border-[#1a7a2e]" : "bg-[#FCE7F3]/95 text-[#0A0A0A] border-[#c4365a]"}`}
+      className={`flex items-center gap-3 px-6 py-4 rounded-pill text-base font-medium animate-fade-in border cursor-pointer backdrop-blur-sm w-full md:fixed md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:z-50 md:w-auto md:max-w-[90vw] ${base}`}
       role="alert"
+      onClick={onDismiss}
     >
       {isSent ? (
         <IconCheck size={20} className="shrink-0 text-[#1a7a2e]" aria-hidden="true" />
@@ -144,7 +146,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   return (
-    <section className="container-max py-16 md:py-24" aria-label={displayHeading} id="contact">
+    <section className="container-max py-24 md:py-24 scroll-mt-20" aria-label={displayHeading} id="contact">
       <h2 className="text-heading font-extrabold text-[#0A0A0A] mb-2">
         {displayHeading}
       </h2>
@@ -153,7 +155,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-        <form onSubmit={handleSubmit} noValidate className="space-y-6">
+        <div className="relative">
+          {(status === "sent" || status === "error") && (
+            <div className="absolute inset-x-0 top-24 z-10" aria-live="polite">
+              <Toast type={status} message={status === "sent" ? t.contact.toastSuccess : errorMessage} onDismiss={() => setStatus("idle")} />
+            </div>
+          )}
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-[#0A0A0A] mb-2">
               {t.contact.nameLabel}
@@ -209,11 +217,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             {status === "sending" ? t.contact.sending : status === "sent" ? t.contact.sent : t.contact.send}
             {status === "idle" && <SendIcon />}
           </button>
-
-          {(status === "sent" || status === "error") && (
-            <Toast type={status} message={status === "sent" ? t.contact.toastSuccess : errorMessage} onDismiss={() => setStatus("idle")} />
-          )}
-        </form>
+          </form>
+        </div>
 
         <div className="space-y-4">
           <h3 className="text-xl font-semibold text-[#0A0A0A] mb-4">
