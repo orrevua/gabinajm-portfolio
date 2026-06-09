@@ -104,7 +104,7 @@ export default async function RootLayout({
             <p className="text-base">
               {translations[locale].footer.copyright.replace("{year}", String(new Date().getFullYear()))}
             </p>
-            <p className="text-sm">{translations[locale].footer.tagline}</p>
+            <p className="text-sm text-balance text-center">{translations[locale].footer.tagline}</p>
             <p className="text-xs">{translations[locale].footer.developedBy}{" "}
               <a href="https://github.com/orrevua/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-accent transition-colors">
                 @orrevua<span className="sr-only"> (opens in new tab)</span>
