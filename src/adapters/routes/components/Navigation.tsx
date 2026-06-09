@@ -46,9 +46,16 @@ export const Navigation: React.FC<NavigationProps> = ({
   const handleLogoClick = useCallback((e: React.MouseEvent) => {
     if (pathname === "/") {
       e.preventDefault();
+      window.history.replaceState(null, "", pathname);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [pathname]);
+
+  const handleContactClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = document.getElementById("contact");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -102,6 +109,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             <Link
               href={ctaLink.href}
               className="px-5 py-2.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white text-base font-bold hover:shadow-[0_0_20px_rgba(246,51,154,0.2)] active:scale-95 transition-all duration-150"
+              onClick={handleContactClick}
             >
               {ctaLink.label}
             </Link>
@@ -166,7 +174,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                   ? "bg-gradient-to-r from-accent to-accent-purple bg-clip-text text-transparent"
                   : "text-[#0A0A0A] hover:bg-gradient-to-r hover:from-accent hover:to-accent-purple hover:bg-clip-text hover:text-transparent"
               }`}
-              onClick={() => setIsOpen(false)}
+              onClick={(e) => { setIsOpen(false); handleContactClick(e); }}
             >
               {ctaLink.label}
             </Link>
