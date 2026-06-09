@@ -260,7 +260,7 @@ export default defineType({
                 preview: { select: { title: 'name', media: 'icon' } },
               }],
             }),
-            defineField({ name: 'resumeUrl', title: 'Resume URL', type: 'url', description: 'Link to downloadable resume/CV' }),
+            defineField({ name: 'resumeFile', title: 'Resume File', type: 'file', description: 'Upload resume/CV (PDF)', options: { accept: 'application/pdf' } }),
             defineField({ name: 'showResume', title: 'Show Resume Link', type: 'boolean', initialValue: true }),
             defineField({ name: 'showSkills', title: 'Show Skill Tags', type: 'boolean', initialValue: true }),
           ],
