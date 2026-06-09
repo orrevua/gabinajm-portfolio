@@ -117,10 +117,10 @@ function buildEmailHtml(name: string, email: string, message: string): string {
         <!-- Avatar circle -->
         <table role="presentation" cellpadding="0" cellspacing="0">
         <tr>
-          <td style="background:linear-gradient(135deg,#F6339A,#9810FA);width:44px;height:44px;border-radius:50%;text-align:center;vertical-align:middle;">
+          <td width="44" style="background:linear-gradient(135deg,#F6339A,#9810FA);width:44px;min-width:44px;height:44px;border-radius:50%;text-align:center;vertical-align:middle;">
             <span style="font-size:18px;font-weight:700;color:#ffffff;line-height:44px;">${safeName.charAt(0).toUpperCase()}</span>
           </td>
-          <td style="padding-left:14px;vertical-align:middle;">
+          <td style="padding-left:14px;vertical-align:middle;word-break:break-word;">
             <p style="margin:0;font-size:16px;font-weight:700;color:#0A0A0A;">${safeName}</p>
             <p style="margin:2px 0 0;font-size:13px;color:#595966;">${safeEmail}</p>
           </td>
