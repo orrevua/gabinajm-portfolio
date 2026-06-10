@@ -15,7 +15,7 @@ function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: 
   const base = isSent ? "bg-[#D2FCD8]/95 text-[#0A0A0A] border-[#1a7a2e]" : "bg-[#FCE7F3]/95 text-[#0A0A0A] border-[#c4365a]";
   return (
     <div
-      className={`flex items-center gap-3 px-6 py-4 rounded-pill text-base font-medium animate-fade-in border cursor-pointer backdrop-blur-sm w-full ${base}`}
+      className={`flex items-center gap-3 px-6 py-4 rounded-pill text-base font-medium animate-fade-in border cursor-pointer backdrop-blur-sm w-full md:fixed md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:z-50 md:w-auto md:max-w-[90vw] ${base}`}
       role="alert"
       onClick={onDismiss}
     >
