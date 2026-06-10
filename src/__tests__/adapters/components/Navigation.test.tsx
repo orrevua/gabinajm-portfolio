@@ -39,7 +39,7 @@ vi.mock("@/src/i18n", () => ({
 
 describe("Navigation Component", () => {
   const navLabels = ["Home", "About", "Contact"];
-  const getMenuButton = () => screen.getByLabelText("Toggle navigation menu");
+  const getMenuButton = () => screen.getByLabelText(/^(Menu|Close)$/);
 
   describe("rendering", () => {
     it("should render navigation element", () => {

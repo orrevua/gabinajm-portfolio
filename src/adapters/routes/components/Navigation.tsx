@@ -11,6 +11,28 @@ export interface NavigationProps {
   brandName?: string;
 }
 
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <span className="relative inline-block w-5 h-4" aria-hidden="true">
+      <span
+        className={`absolute left-0 right-0 h-[2px] bg-current rounded-full transition-all duration-300 ease-out ${
+          open ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0 rotate-0"
+        }`}
+      />
+      <span
+        className={`absolute left-0 right-0 h-[2px] bg-current rounded-full top-1/2 -translate-y-1/2 transition-opacity duration-200 ${
+          open ? "opacity-0" : "opacity-100"
+        }`}
+      />
+      <span
+        className={`absolute left-0 right-0 h-[2px] bg-current rounded-full transition-all duration-300 ease-out ${
+          open ? "top-1/2 -translate-y-1/2 -rotate-45" : "bottom-0 rotate-0"
+        }`}
+      />
+    </span>
+  );
+}
+
 export function Navigation({
   brandName = "Gabinajm",
 }: NavigationProps) {
@@ -116,19 +138,25 @@ export function Navigation({
             <LanguageSwitcher />
           </div>
 
-          <button
-            className="md:hidden text-[#0A0A0A] hover:text-accent-pink focus:outline-none transition-colors"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-            aria-label="Toggle navigation menu"
-          >
-            <span className="uppercase text-xs tracking-widest font-semibold">
-              {isOpen ? t.nav.close : t.nav.menu}
-            </span>
-          </button>
         </div>
       </nav>
+
+      <button
+        className="md:hidden fixed top-[26px] right-6 z-[70] flex items-center gap-2 text-[#0A0A0A] hover:text-accent-pink focus:outline-none transition-colors"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-controls="mobile-menu"
+        aria-label={isOpen ? t.nav.close : t.nav.menu}
+      >
+        <MenuIcon open={isOpen} />
+        <span
+          className={`text-xs tracking-widest font-semibold transition-all duration-300 ${
+            isOpen ? "opacity-0 max-w-0 overflow-hidden" : "opacity-100 max-w-[100px]"
+          }`}
+        >
+          {t.nav.menu}
+        </span>
+      </button>
 
       {isOpen && (
         <div
@@ -141,15 +169,6 @@ export function Navigation({
         >
           <div className="flex justify-between items-center px-6 pt-5">
             <LanguageSwitcher />
-            <button
-              onClick={() => setIsOpen(false)}
-              aria-label={t.nav.close}
-              className="text-[#0A0A0A] hover:text-accent-pink transition-colors p-1"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
           </div>
 
           <div className="flex-1 flex flex-col items-center justify-center gap-10">
