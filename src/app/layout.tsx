@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/src/adapters/routes/components/Navigation";
+import { BackToTop } from "@/src/adapters/routes/components/BackToTop";
 import { SkipToContent } from "@/src/adapters/routes/components/SkipToContent";
 import { LocaleProvider } from "@/src/i18n";
 import type { Locale } from "@/src/i18n";
@@ -113,6 +114,7 @@ export default async function RootLayout({
             </p>
           </div>
           </footer>
+          <BackToTop />
         </LocaleProvider>
         <SpeedInsights />
         <Analytics />
