@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import Image from "next/image";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { type ISection, type SectionContentBlock } from "@domain";
@@ -140,7 +139,7 @@ function ContentBlockRenderer({ block, hasDropShadow }: { block: SectionContentB
   }
 }
 
-export const SectionBlock: FC<SectionBlockProps> = ({ section }) => {
+export function SectionBlock({ section }: SectionBlockProps) {
   const paddingClass = PADDING_CLASSES[section.padding] ?? PADDING_CLASSES.medium;
   const hasImageBg = section.background?.type === "image" && section.background.imageUrl;
   const hasColorBg = section.background?.type === "color" && section.background.color;
@@ -199,4 +198,4 @@ export const SectionBlock: FC<SectionBlockProps> = ({ section }) => {
       </div>
     </section>
   );
-};
+}

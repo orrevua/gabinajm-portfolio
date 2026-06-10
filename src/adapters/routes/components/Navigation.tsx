@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, type FC, type MouseEvent } from "react";
+import { useState, useEffect, useCallback, useRef, type MouseEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,9 +11,9 @@ export interface NavigationProps {
   brandName?: string;
 }
 
-export const Navigation: FC<NavigationProps> = ({
+export function Navigation({
   brandName = "Gabinajm",
-}) => {
+}: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { t } = useTranslation();
@@ -179,4 +179,4 @@ export const Navigation: FC<NavigationProps> = ({
       )}
     </>
   );
-};
+}

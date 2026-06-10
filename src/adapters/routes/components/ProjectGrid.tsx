@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FC } from "react";
+import { useState } from "react";
 import { ProjectCard, type ProjectCardProps } from "./ProjectCard";
 import { useTranslation } from "@/src/i18n";
 
@@ -13,12 +13,12 @@ export interface ProjectGridProps {
   isLoading?: boolean;
 }
 
-export const ProjectGrid: FC<ProjectGridProps> = ({
+export function ProjectGrid({
   projects,
   title = "My projects",
   emptyMessage = "No projects available at the moment.",
   isLoading = false,
-}) => {
+}: ProjectGridProps) {
   const { t } = useTranslation();
   const [page, setPage] = useState(0);
   const totalPages = Math.ceil((projects?.length || 0) / PAGE_SIZE);
@@ -97,4 +97,4 @@ export const ProjectGrid: FC<ProjectGridProps> = ({
       )}
     </section>
   );
-};
+}

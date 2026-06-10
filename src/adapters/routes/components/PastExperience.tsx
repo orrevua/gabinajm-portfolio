@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import Image from "next/image";
 import { type ExperienceCompany } from "@domain";
 
@@ -7,10 +6,10 @@ export interface PastExperienceProps {
   companies: ExperienceCompany[];
 }
 
-export const PastExperience: FC<PastExperienceProps> = ({
+export function PastExperience({
   heading = "Past Experience",
   companies,
-}) => {
+}: PastExperienceProps) {
   const displayHeading = heading;
   if (!companies || companies.length === 0) return null;
 
@@ -48,4 +47,4 @@ export const PastExperience: FC<PastExperienceProps> = ({
       </div>
     </section>
   );
-};
+}

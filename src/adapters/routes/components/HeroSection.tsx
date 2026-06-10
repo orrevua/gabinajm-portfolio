@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import Image from "next/image";
 import { type IProfile } from "@domain";
 
@@ -17,7 +16,7 @@ const StarIcon = () => (
   <Image src="/images/star_icon.svg" alt="" width={16} height={16} aria-hidden="true" />
 );
 
-export const HeroSection: FC<HeroSectionProps> = ({
+export function HeroSection({
   profile,
   greeting,
   intro = "I'm",
@@ -26,7 +25,7 @@ export const HeroSection: FC<HeroSectionProps> = ({
   ctaPrimaryHref = "#contact",
   ctaSecondaryLabel,
   ctaSecondaryHref = "#about",
-}) => {
+}: HeroSectionProps) {
   const avatarUrl = profile.avatar?.asset?.url;
 
   return (
@@ -93,5 +92,5 @@ export const HeroSection: FC<HeroSectionProps> = ({
       </div>
     </section>
   );
-};
+}
 

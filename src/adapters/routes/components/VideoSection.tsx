@@ -1,5 +1,3 @@
-import type { FC } from "react";
-
 export interface VideoSectionProps {
   heading?: string;
   subtitle?: string;
@@ -28,7 +26,7 @@ function getEmbedUrl(url: string): string | null {
   return null;
 }
 
-export const VideoSection: FC<VideoSectionProps> = ({
+export function VideoSection({
   heading,
   subtitle,
   videoUrl,
@@ -37,7 +35,7 @@ export const VideoSection: FC<VideoSectionProps> = ({
   autoplay = false,
   loop = false,
   muted = true,
-}) => {
+}: VideoSectionProps) {
   const hasUpload = !!videoUrl;
   const embedUrl = externalUrl ? getEmbedUrl(externalUrl) : null;
   if (!hasUpload && !embedUrl) return null;
@@ -77,4 +75,4 @@ export const VideoSection: FC<VideoSectionProps> = ({
       </div>
     </section>
   );
-};
+}

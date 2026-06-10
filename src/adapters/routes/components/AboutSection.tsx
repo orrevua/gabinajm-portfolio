@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import Image from "next/image";
 import { resolveColor } from "@/src/domain/types";
 import type { SkillTag } from "@/src/domain/types";
@@ -21,7 +20,7 @@ const DownloadIcon = () => (
   </svg>
 );
 
-export const AboutSection: FC<AboutSectionProps> = ({
+export function AboutSection({
   heading = "About Me",
   body,
   showResume = true,
@@ -30,7 +29,7 @@ export const AboutSection: FC<AboutSectionProps> = ({
   resumeLabel = "My resume",
   resumeUrl,
   technologies = [],
-}) => {
+}: AboutSectionProps) {
   const hasResume = showResume && resumeUrl;
   const hasSkills = showSkills && technologies.length > 0;
   const showCtaRow = hasResume || showSkills;
@@ -93,4 +92,4 @@ export const AboutSection: FC<AboutSectionProps> = ({
       </div>
     </section>
   );
-};
+}

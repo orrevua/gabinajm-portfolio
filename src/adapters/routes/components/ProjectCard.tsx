@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,7 +48,7 @@ export interface ProjectCardProps {
   isProtected?: boolean;
 }
 
-export const ProjectCard: FC<ProjectCardProps> = ({
+export function ProjectCard({
   title,
   slug,
   description,
@@ -60,7 +59,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   featured = false,
   companyLogo,
   isProtected = false,
-}) => {
+}: ProjectCardProps) {
   const hasImage = mainImage?.url;
   const hasTechnologies = technologies && technologies.length > 0;
   const hasLink = link && link.trim().length > 0;
@@ -142,4 +141,4 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       </div>
     </article>
   );
-};
+}
