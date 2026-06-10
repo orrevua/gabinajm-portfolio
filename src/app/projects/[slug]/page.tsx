@@ -83,7 +83,7 @@ function RichBody({ body, style }: { body: PortableTextBlock[] | string | undefi
   );
 }
 
-function TextBlockContent({ heading, body, bullets, textColor, iconUrl }: { heading?: string; body?: PortableTextBlock[] | string; bullets?: string[]; textColor?: string; iconUrl?: string }) {
+function TextBlockContent({ heading, body, bullets, textColor, iconUrl, iconEmoji }: { heading?: string; body?: PortableTextBlock[] | string; bullets?: string[]; textColor?: string; iconUrl?: string; iconEmoji?: string }) {
   const color = textColor || "#0A0A0A";
   const muted = textColor ? `${color}CC` : undefined;
 
@@ -92,6 +92,7 @@ function TextBlockContent({ heading, body, bullets, textColor, iconUrl }: { head
       {heading && (
         <>
         {iconUrl && <Image src={iconUrl} alt="" width={28} height={28} className="shrink-0 w-[40px] h-[40px] m-3" aria-hidden="true" />}
+        {!iconUrl && iconEmoji && <span className="block m-3" style={{ fontSize: 36, lineHeight: 1 }} aria-hidden="true">{iconEmoji}</span>}
         <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2" style={{ color }}>
           {heading}
         </h2>
@@ -136,14 +137,14 @@ function TextBlock({ section }: { section: ContentSection }) {
             if (col.useCard) {
               return (
                 <div key={i} className="rounded-3xl p-6 md:p-8" style={{ ...colBgStyle, backgroundColor: colBgStyle.backgroundColor || "white" }}>
-                  <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} iconUrl={col.iconUrl} />
+                  <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} iconUrl={col.iconUrl} iconEmoji={col.iconEmoji} />
                 </div>
               );
             }
 
             return (
               <div key={i} style={colBgStyle}>
-                <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} iconUrl={col.iconUrl} />
+                <TextBlockContent heading={col.heading} body={col.body} textColor={col.textColor} iconUrl={col.iconUrl} iconEmoji={col.iconEmoji} />
               </div>
             );
           })}

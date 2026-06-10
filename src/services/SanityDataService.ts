@@ -162,6 +162,7 @@ interface SanityProject {
     noPadding?: boolean;
     textColumns?: Array<{
       icon?: { asset?: { url: string } };
+      iconEmoji?: string;
       heading?: string;
       heading_pt?: string;
       body?: unknown;
@@ -347,6 +348,7 @@ function mapSanityProjectToModel(sanityProject: SanityProject, locale: string = 
       noPadding: s.noPadding,
       textColumns: s.textColumns?.map((col) => ({
         iconUrl: col.icon?.asset?.url,
+        iconEmoji: col.iconEmoji,
         heading: loc(col.heading, col.heading_pt, locale),
         body: loc(col.body, col.body_pt, locale) as import("@domain").RichTextBody | undefined,
         useCard: col.useCard,

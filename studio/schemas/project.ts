@@ -241,7 +241,8 @@ export default defineType({
                   type: 'object',
                   name: 'textColumn',
                   fields: [
-                    defineField({ name: 'icon', title: 'Icon', type: 'image', description: 'Small icon or emoji image displayed above the heading' }),
+                    defineField({ name: 'icon', title: 'Icon Image', type: 'image', description: 'Small icon (SVG or PNG) displayed above the heading' }),
+                    defineField({ name: 'iconEmoji', title: 'Icon Emoji', type: 'string', description: 'Emoji displayed at 36px if no icon image is set (e.g. "🎯")' }),
                     defineField({ name: 'heading', title: 'Heading', type: 'string' }),
                     defineField({ name: 'heading_pt', title: 'Heading (PT)', type: 'string' }),
                     defineField({ name: 'body', title: 'Body', ...richText }),

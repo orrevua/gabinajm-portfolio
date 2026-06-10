@@ -182,6 +182,7 @@ export const PROJECT_BY_SLUG_QUERY = `
       noPadding,
       textColumns[] {
         icon { asset-> { _id, url } },
+        iconEmoji,
         heading,
         heading_pt,
         body,
