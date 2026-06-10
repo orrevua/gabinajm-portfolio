@@ -142,7 +142,7 @@ export function PasswordGate({ slug, projectTitle }: PasswordGateProps) {
                 placeholder={t.password.placeholder}
                 aria-invalid={state.inline ? "true" : undefined}
                 aria-describedby={state.inline ? "password-inline-error" : undefined}
-                className={`form-input pl-10 pr-10 ${state.inline ? "border-accent ring-2 ring-accent/30" : ""}`}
+                className={`form-input pl-10 pr-10 ${state.inline ? "border-[#FF2056] ring-2 ring-[#FF2056]/30" : ""}`}
                 autoFocus
               />
               <button
