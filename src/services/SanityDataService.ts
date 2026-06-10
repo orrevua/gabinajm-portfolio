@@ -200,6 +200,7 @@ interface SanityContentBlock {
   availabilityText?: string;
   availabilityText_pt?: string;
   skills?: Array<{ name: string; icon?: { asset?: { url: string } }; color?: string }>;
+  resumeUrl?: string;
   resumeFileUrl?: string;
   showResume?: boolean;
   showSkills?: boolean;
@@ -435,7 +436,7 @@ function mapSanitySectionToModel(doc: SanitySection, locale: string = "en"): Sec
       iconUrl: s.icon?.asset?.url,
       color: s.color,
     })),
-    resumeUrl: block.resumeFileUrl || '/Gabriela_Abinajm_Resume.pdf',
+    resumeUrl: block.resumeUrl || block.resumeFileUrl || '/Gabriela_Abinajm_Resume.pdf',
     showResume: block.showResume,
     showSkills: block.showSkills,
   }));

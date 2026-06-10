@@ -284,6 +284,7 @@ const CONTENT_BLOCKS_PROJECTION = `
       icon { asset-> { _id, url } },
       color
     },
+    resumeUrl,
     "resumeFileUrl": resumeFile.asset->url,
     showResume,
     showSkills
