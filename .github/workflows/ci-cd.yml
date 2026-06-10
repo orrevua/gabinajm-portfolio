@@ -177,7 +177,7 @@ jobs:
           STUDIO_URL: ${{ secrets.SANITY_STUDIO_URL }}
           SANITY_STUDIO_PROJECT_ID: ${{ secrets.SANITY_STUDIO_PROJECT_ID }}
           SANITY_STUDIO_DATASET: ${{ secrets.SANITY_STUDIO_DATASET }}
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_DEPLOY_TOKEN }}
 
   # Status check (required before merge)
   status:
