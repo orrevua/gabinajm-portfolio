@@ -668,7 +668,6 @@ export class SanityDataService implements IDataService {
   async getAboutPage(locale: string = "en"): Promise<AboutPage | null> {
     try {
       const client = getSanityClient();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data = await client.fetch<any>(ABOUT_PAGE_QUERY);
       if (!data) return null;
 
@@ -709,7 +708,6 @@ export class SanityDataService implements IDataService {
   async getHomePage(locale: string = "en"): Promise<HomePage | null> {
     try {
       const client = getSanityClient();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data = await client.fetch<any>(HOME_PAGE_QUERY);
       if (!data) return null;
 

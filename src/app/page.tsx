@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Metadata } from "next";
 import { HeroSection } from "@/src/adapters/routes/components/HeroSection";
 import { ProjectGrid } from "@/src/adapters/routes/components/ProjectGrid";
@@ -29,26 +30,21 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const { locale, t } = await getServerTranslations();
+  const dataService = getSanityDataService();
+
+  const profilePromise = dataService.getProfile(locale);
+  const projectsPromise = dataService.getFeaturedProjects(undefined, locale);
+  const homePagePromise = dataService.getHomePage(locale);
+  const sectionsPromise = dataService.getSectionsByPage("home", locale);
 
   let profile: Profile | null = null;
-  let projects: Project[] = [];
-  let homePage: HomePageData | null = null;
-  let sections: Section[] = [];
-  let fetchError = false;
-
   try {
-    const dataService = getSanityDataService();
-    [profile, projects, homePage, sections] = await Promise.all([
-      dataService.getProfile(locale),
-      dataService.getFeaturedProjects(undefined, locale),
-      dataService.getHomePage(locale),
-      dataService.getSectionsByPage("home", locale),
-    ]);
+    profile = await profilePromise;
   } catch {
-    fetchError = true;
+    profile = null;
   }
 
-  if (fetchError || !profile) {
+  if (!profile) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center container-max">
@@ -64,12 +60,6 @@ export default async function HomePage() {
     );
   }
 
-  const hp = homePage;
-
-  const aboutSection = sections.find((s) => s.sectionType === "about-preview");
-  const contactSection = sections.find((s) => s.sectionType === "contact");
-  const genericSections = sections.filter((s) => s.sectionType === "generic");
-
   return (
     <>
       <HeroSection
@@ -83,14 +73,66 @@ export default async function HomePage() {
         ctaSecondaryHref={profile.ctaSecondaryHref || undefined}
       />
 
+      <Suspense fallback={null}>
+        <BelowTheFold
+          projectsPromise={projectsPromise}
+          homePagePromise={homePagePromise}
+          sectionsPromise={sectionsPromise}
+          showMoreLabel={t.about.showMore}
+          resumeLabel={t.about.resume}
+          projectsHeadingFallback={t.projects.heading}
+        />
+      </Suspense>
+    </>
+  );
+}
+
+interface BelowTheFoldProps {
+  projectsPromise: Promise<Project[]>;
+  homePagePromise: Promise<HomePageData | null>;
+  sectionsPromise: Promise<Section[]>;
+  showMoreLabel: string;
+  resumeLabel: string;
+  projectsHeadingFallback: string;
+}
+
+async function BelowTheFold({
+  projectsPromise,
+  homePagePromise,
+  sectionsPromise,
+  showMoreLabel,
+  resumeLabel,
+  projectsHeadingFallback,
+}: BelowTheFoldProps) {
+  let projects: Project[] = [];
+  let homePage: HomePageData | null = null;
+  let sections: Section[] = [];
+
+  try {
+    [projects, homePage, sections] = await Promise.all([
+      projectsPromise,
+      homePagePromise,
+      sectionsPromise,
+    ]);
+  } catch {
+    return null;
+  }
+
+  const hp = homePage;
+  const aboutSection = sections.find((s) => s.sectionType === "about-preview");
+  const contactSection = sections.find((s) => s.sectionType === "contact");
+  const genericSections = sections.filter((s) => s.sectionType === "generic");
+
+  return (
+    <>
       {aboutSection && (
-        <SectionRouter section={aboutSection} showMoreLabel={t.about.showMore} resumeLabel={t.about.resume} />
+        <SectionRouter section={aboutSection} showMoreLabel={showMoreLabel} resumeLabel={resumeLabel} />
       )}
 
       {projects && projects.length > 0 && (
         <ScrollReveal>
           <ProjectGrid
-            title={hp?.projectsHeading || t.projects.heading}
+            title={hp?.projectsHeading || projectsHeadingFallback}
             projects={projects.map((project) => ({
               title: project.title,
               slug: project.slug,
@@ -115,7 +157,7 @@ export default async function HomePage() {
                   }
                 : undefined,
               imageFit: project.mainImageCrop === "full" ? "contain" : "cover",
-              technologies: project.technologies.map((t) => ({ name: t.name, iconUrl: t.iconUrl, color: t.color })),
+              technologies: project.technologies.map((tech) => ({ name: tech.name, iconUrl: tech.iconUrl, color: tech.color })),
               link: project.getPrimaryUrl() || undefined,
               featured: project.featured,
               isProtected: project.isProtected,
@@ -151,5 +193,3 @@ export default async function HomePage() {
     </>
   );
 }
-
-HomePage.displayName = "HomePage";

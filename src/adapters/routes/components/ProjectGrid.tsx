@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FC } from "react";
 import { ProjectCard, type ProjectCardProps } from "./ProjectCard";
 import { useTranslation } from "@/src/i18n";
 
@@ -13,7 +13,7 @@ export interface ProjectGridProps {
   isLoading?: boolean;
 }
 
-export const ProjectGrid: React.FC<ProjectGridProps> = ({
+export const ProjectGrid: FC<ProjectGridProps> = ({
   projects,
   title = "My projects",
   emptyMessage = "No projects available at the moment.",
@@ -98,5 +98,3 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
     </section>
   );
 };
-
-ProjectGrid.displayName = "ProjectGrid";

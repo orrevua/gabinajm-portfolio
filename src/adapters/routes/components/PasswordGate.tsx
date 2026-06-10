@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "@/src/i18n";
@@ -34,45 +35,59 @@ const EyeOffIcon = () => (
   </svg>
 );
 
-export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }) => {
+type GateState = { error: string };
+const INITIAL_STATE: GateState = { error: "" };
+
+function UnlockButton({ disabled, label, verifyingLabel }: { disabled: boolean; label: string; verifyingLabel: string }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending || disabled}
+      className="w-full mt-4 px-7 py-3.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-semibold hover:opacity-90 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {pending ? verifyingLabel : label}
+    </button>
+  );
+}
+
+export function PasswordGate({ slug, projectTitle }: PasswordGateProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!error) return;
-    const timer = setTimeout(() => setError(""), 5000);
-    return () => clearTimeout(timer);
-  }, [error]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const res = await fetch(`/api/projects/${slug}/unlock`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-
-      if (res.ok) {
-        router.refresh();
-        return;
+  const [state, formAction] = useActionState(
+    async (_prev: GateState, formData: FormData): Promise<GateState> => {
+      const pw = String(formData.get("password") || "");
+      try {
+        const res = await fetch(`/api/projects/${slug}/unlock`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: pw }),
+        });
+        if (res.ok) {
+          router.refresh();
+          return { error: "" };
+        }
+        const data = await res.json();
+        return { error: data.error || t.password.incorrectPassword };
+      } catch {
+        return { error: t.password.genericError };
       }
+    },
+    INITIAL_STATE
+  );
 
-      const data = await res.json();
-      setError(data.error || t.password.incorrectPassword);
-    } catch {
-      setError(t.password.genericError);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [dismissedError, setDismissedError] = useState("");
+  useEffect(() => {
+    if (!state.error) return;
+    const current = state.error;
+    const timer = setTimeout(() => setDismissedError(current), 5000);
+    return () => clearTimeout(timer);
+  }, [state.error]);
+
+  const showError = state.error && state.error !== dismissedError;
 
   return (
     <div className="flex flex-col pt-28 md:pt-36 pb-16">
@@ -106,7 +121,7 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
             </p>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form action={formAction}>
             <label htmlFor="project-password" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
               {t.password.label}
             </label>
@@ -116,15 +131,15 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
               </span>
               <input
                 id="project-password"
+                name="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t.password.placeholder}
-                aria-invalid={error ? "true" : undefined}
-                className={`form-input pl-10 pr-10 ${error ? "border-accent ring-2 ring-accent/30" : ""}`}
+                aria-invalid={state.error ? "true" : undefined}
+                className={`form-input pl-10 pr-10 ${state.error ? "border-accent ring-2 ring-accent/30" : ""}`}
                 autoFocus
-                disabled={loading}
               />
               <button
                 type="button"
@@ -136,18 +151,16 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
               </button>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading || !password}
-              className="w-full mt-4 px-7 py-3.5 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-semibold hover:opacity-90 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? t.password.verifying : t.password.unlock}
-            </button>
+            <UnlockButton
+              disabled={!password}
+              label={t.password.unlock}
+              verifyingLabel={t.password.verifying}
+            />
           </form>
         </div>
       </div>
 
-      {error && (
+      {showError && (
         <div
           role="alert"
           className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#DC2626] text-white px-6 py-3.5 rounded-xl shadow-lg animate-fade-in"
@@ -156,11 +169,9 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ slug, projectTitle }
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
             <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
           </svg>
-          <span className="text-sm font-medium">{error}</span>
+          <span className="text-sm font-medium">{state.error}</span>
         </div>
       )}
     </div>
   );
-};
-
-PasswordGate.displayName = "PasswordGate";
+}

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -71,7 +72,7 @@ export async function generateMetadata(
   }
 }
 
-function RichBody({ body, style }: { body: PortableTextBlock[] | string | undefined; style?: React.CSSProperties }) {
+function RichBody({ body, style }: { body: PortableTextBlock[] | string | undefined; style?: CSSProperties }) {
   if (!body) return null;
   if (typeof body === "string") {
     return <p className="text-base leading-[1.7] whitespace-pre-wrap" style={style}>{body}</p>;
@@ -113,7 +114,7 @@ function TextBlockContent({ heading, body, bullets, textColor, iconUrl, iconEmoj
 function TextBlock({ section }: { section: ContentSection }) {
   const textColor = section.textColor || "#0A0A0A";
   const isGradient = section.bgColor?.includes("gradient");
-  const bgStyle: React.CSSProperties = section.bgColor
+  const bgStyle: CSSProperties = section.bgColor
     ? isGradient
       ? { background: section.bgColor }
       : { backgroundColor: section.bgColor }
@@ -130,7 +131,7 @@ function TextBlock({ section }: { section: ContentSection }) {
         <div className="-mx-1 md:-mx-3 grid grid-cols-1 md:grid-cols-2 gap-6">
           {section.textColumns.map((col, i) => {
             const colGradient = col.bgColor?.includes("gradient");
-            const colBgStyle: React.CSSProperties = col.bgColor
+            const colBgStyle: CSSProperties = col.bgColor
               ? colGradient ? { background: col.bgColor } : { backgroundColor: col.bgColor }
               : {};
 
@@ -650,5 +651,3 @@ export default async function ProjectDetailPage(props: PageProps) {
     </article>
   );
 }
-
-ProjectDetailPage.displayName = "ProjectDetailPage";

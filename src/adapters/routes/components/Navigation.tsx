@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, type FC, type MouseEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,7 +11,7 @@ export interface NavigationProps {
   brandName?: string;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({
+export const Navigation: FC<NavigationProps> = ({
   brandName = "Gabinajm",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +43,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const handleLogoClick = useCallback((e: React.MouseEvent) => {
+  const handleLogoClick = useCallback((e: MouseEvent) => {
     if (pathname === "/") {
       e.preventDefault();
       window.history.replaceState(null, "", pathname);
@@ -51,7 +51,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     }
   }, [pathname]);
 
-  const handleContactClick = useCallback((e: React.MouseEvent) => {
+  const handleContactClick = useCallback((e: MouseEvent) => {
     e.preventDefault();
     const el = document.getElementById("contact");
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -180,5 +180,3 @@ export const Navigation: React.FC<NavigationProps> = ({
     </>
   );
 };
-
-Navigation.displayName = "Navigation";

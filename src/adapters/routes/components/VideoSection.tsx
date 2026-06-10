@@ -1,3 +1,5 @@
+import type { FC } from "react";
+
 export interface VideoSectionProps {
   heading?: string;
   subtitle?: string;
@@ -26,7 +28,7 @@ function getEmbedUrl(url: string): string | null {
   return null;
 }
 
-export const VideoSection: React.FC<VideoSectionProps> = ({
+export const VideoSection: FC<VideoSectionProps> = ({
   heading,
   subtitle,
   videoUrl,
@@ -76,5 +78,3 @@ export const VideoSection: React.FC<VideoSectionProps> = ({
     </section>
   );
 };
-
-VideoSection.displayName = "VideoSection";

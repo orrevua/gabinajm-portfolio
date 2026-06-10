@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -48,7 +49,7 @@ export interface ProjectCardProps {
   isProtected?: boolean;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({
+export const ProjectCard: FC<ProjectCardProps> = ({
   title,
   slug,
   description,
@@ -142,5 +143,3 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     </article>
   );
 };
-
-ProjectCard.displayName = "ProjectCard";

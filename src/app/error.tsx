@@ -48,5 +48,3 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
     </div>
   );
 }
-
-ErrorPage.displayName = "ErrorPage";

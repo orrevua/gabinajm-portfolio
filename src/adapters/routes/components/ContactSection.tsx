@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useActionState, useEffect, useState, type ReactNode } from "react";
+import { useFormStatus } from "react-dom";
 import { IconCheck, IconAlertCircle } from "@tabler/icons-react";
 import { useTranslation } from "@/src/i18n";
 
@@ -44,7 +45,7 @@ const PLATFORM_COLORS: Record<string, string> = {
   twitter: "bg-[#1DA1F2]",
 };
 
-const PLATFORM_ICONS: Record<string, React.ReactNode> = {
+const PLATFORM_ICONS: Record<string, ReactNode> = {
   email: (
     <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 6L2 7" />
@@ -85,65 +86,81 @@ const SendIcon = () => (
   </svg>
 );
 
-export const ContactSection: React.FC<ContactSectionProps> = ({
+type ContactState =
+  | { status: "idle" }
+  | { status: "sent" }
+  | { status: "error"; message: string };
+
+const INITIAL_STATE: ContactState = { status: "idle" };
+
+function SubmitButton({ disabled, sendingLabel, sentLabel, sendLabel, sentStatus }: { disabled: boolean; sendingLabel: string; sentLabel: string; sendLabel: string; sentStatus: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending || disabled}
+      className="w-full flex items-center justify-center gap-2 px-7 py-4 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold hover:opacity-90 active:scale-95 transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {pending ? sendingLabel : sentStatus ? sentLabel : sendLabel}
+      {!pending && !sentStatus && <SendIcon />}
+    </button>
+  );
+}
+
+export function ContactSection({
   heading,
   subtitle,
   email,
   socialLinks = [],
   availabilityText,
-}) => {
+}: ContactSectionProps) {
   const { t } = useTranslation();
   const displayHeading = heading || t.contact.heading;
   const displaySubtitle = subtitle || t.contact.subtitle;
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const errors = t.contact.errors as Record<string, string>;
+  const errors = t.contact.errors as Record<string, string>;
+  const errorFallback = t.contact.toastError;
 
-    if (!formData.name || formData.name.trim().length < 2) {
-      setErrorMessage(errors["NAME_REQUIRED"] || t.contact.toastError);
-      setStatus("error");
-      return;
-    }
-    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setErrorMessage(errors["EMAIL_INVALID"] || t.contact.toastError);
-      setStatus("error");
-      return;
-    }
-    if (!formData.message || formData.message.trim().length < 10) {
-      setErrorMessage(errors["MESSAGE_REQUIRED"] || t.contact.toastError);
-      setStatus("error");
-      return;
-    }
+  const [state, formAction] = useActionState(
+    async (_prev: ContactState, formData: FormData): Promise<ContactState> => {
+      const name = String(formData.get("name") || "");
+      const emailValue = String(formData.get("email") || "");
+      const message = String(formData.get("message") || "");
 
-    setStatus("sending");
-    setErrorMessage("");
+      if (name.trim().length < 2) {
+        return { status: "error", message: errors["NAME_REQUIRED"] || errorFallback };
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        return { status: "error", message: errors["EMAIL_INVALID"] || errorFallback };
+      }
+      if (message.trim().length < 10) {
+        return { status: "error", message: errors["MESSAGE_REQUIRED"] || errorFallback };
+      }
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        setStatus("sent");
-        setFormData({ name: "", email: "", message: "" });
-      } else {
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email: emailValue, message }),
+        });
+        if (res.ok) return { status: "sent" };
         const data = await res.json();
         const code = data.error as string;
-        const errors = t.contact.errors as Record<string, string>;
-        setErrorMessage(errors[code] || t.contact.toastError);
-        setStatus("error");
+        return { status: "error", message: errors[code] || errorFallback };
+      } catch {
+        return { status: "error", message: errorFallback };
       }
-    } catch {
-      setErrorMessage(t.contact.toastError);
-      setStatus("error");
-    }
-  };
+    },
+    INITIAL_STATE
+  );
+
+  const [dismissedFor, setDismissedFor] = useState<ContactState["status"] | null>(null);
+  const visibleToast =
+    (state.status === "sent" || state.status === "error") && dismissedFor !== state.status
+      ? state
+      : null;
+
+  const formKey = state.status === "sent" ? "sent" : "active";
 
   return (
     <section className="container-max py-24 md:py-24 scroll-mt-20" aria-label={displayHeading} id="contact">
@@ -156,24 +173,27 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
         <div className="relative">
-          {(status === "sent" || status === "error") && (
+          {visibleToast && (
             <div className="absolute inset-x-0 top-24 z-10" aria-live="polite">
-              <Toast type={status} message={status === "sent" ? t.contact.toastSuccess : errorMessage} onDismiss={() => setStatus("idle")} />
+              <Toast
+                type={visibleToast.status}
+                message={visibleToast.status === "sent" ? t.contact.toastSuccess : visibleToast.message}
+                onDismiss={() => setDismissedFor(visibleToast.status)}
+              />
             </div>
           )}
-          <form onSubmit={handleSubmit} noValidate className="space-y-6">
+          <form key={formKey} action={formAction} noValidate className="space-y-6">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-[#0A0A0A] mb-2">
               {t.contact.nameLabel}
             </label>
             <input
               id="contact-name"
+              name="name"
               type="text"
               autoComplete="name"
               placeholder={t.contact.namePlaceholder}
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              aria-invalid={status === "error" ? "true" : undefined}
+              aria-invalid={state.status === "error" ? "true" : undefined}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
           </div>
@@ -184,12 +204,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </label>
             <input
               id="contact-email"
+              name="email"
               type="email"
               autoComplete="email"
               placeholder={t.contact.emailPlaceholder}
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              aria-invalid={status === "error" ? "true" : undefined}
+              aria-invalid={state.status === "error" ? "true" : undefined}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
             />
           </div>
@@ -200,23 +219,21 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </label>
             <textarea
               id="contact-message"
+              name="message"
               placeholder={t.contact.messagePlaceholder}
               rows={4}
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              aria-invalid={status === "error" ? "true" : undefined}
+              aria-invalid={state.status === "error" ? "true" : undefined}
               className="w-full px-4 py-3.5 rounded-[14px] border border-border bg-white text-[#0A0A0A] placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={status === "sending" || status === "sent"}
-            className="w-full flex items-center justify-center gap-2 px-7 py-4 rounded-pill bg-gradient-to-r from-accent to-accent-purple text-white font-bold hover:opacity-90 active:scale-95 transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {status === "sending" ? t.contact.sending : status === "sent" ? t.contact.sent : t.contact.send}
-            {status === "idle" && <SendIcon />}
-          </button>
+          <SubmitButton
+            disabled={state.status === "sent"}
+            sendingLabel={t.contact.sending}
+            sentLabel={t.contact.sent}
+            sendLabel={t.contact.send}
+            sentStatus={state.status === "sent"}
+          />
           </form>
         </div>
 
@@ -284,6 +301,4 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       </div>
     </section>
   );
-};
-
-ContactSection.displayName = "ContactSection";
+}

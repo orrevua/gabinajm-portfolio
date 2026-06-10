@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Inter } from "next/font/google";
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("locale")?.value;
@@ -119,5 +120,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
-RootLayout.displayName = "RootLayout";

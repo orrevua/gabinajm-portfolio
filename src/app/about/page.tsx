@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 import { ProfileHeader } from "@/src/adapters/routes/components/ProfileHeader";
@@ -36,42 +37,17 @@ const SKILL_CHIPS: Array<{ label: string; iconUrl?: string; color: string }> = [
 
 export default async function AboutPage() {
   const { locale, t } = await getServerTranslations();
+  const dataService = getSanityDataService();
+
+  const profilePromise = dataService.getProfile(locale);
+  const sectionsPromise = dataService.getSectionsByPage("about", locale);
+  const aboutPagePromise = dataService.getAboutPage(locale);
 
   let profile: Profile | null = null;
-  let sections: Section[] = [];
-  let aboutPage: AboutPageData | null = null;
-  let fetchError = false;
-
   try {
-    const dataService = await getSanityDataService();
-    [profile, sections, aboutPage] = await Promise.all([
-      dataService.getProfile(locale),
-      dataService.getSectionsByPage("about", locale),
-      dataService.getAboutPage(locale),
-    ]);
+    profile = await profilePromise;
   } catch {
-    fetchError = true;
-  }
-
-  if (fetchError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center container-max">
-          <h1 className="text-heading font-serif font-bold text-foreground mb-6">
-            {t.error.unableToLoad}
-          </h1>
-          <p className="text-muted text-sm uppercase tracking-widest mb-8">
-            {t.error.tryAgain}
-          </p>
-          <a
-            href="/"
-            className="text-foreground uppercase tracking-widest text-sm font-semibold border-b-2 border-foreground pb-1 hover:text-muted hover:border-muted transition-colors"
-          >
-            {t.error.backToHome}
-          </a>
-        </div>
-      </div>
-    );
+    profile = null;
   }
 
   if (!profile) {
@@ -95,36 +71,72 @@ export default async function AboutPage() {
     );
   }
 
+  return (
+    <>
+      <ProfileHeader
+        profile={profile}
+        profileUnavailableText={t.error.profileUnavailable}
+        heading={t.about.heading}
+      />
+
+      <Suspense fallback={null}>
+        <BelowTheFold
+          sectionsPromise={sectionsPromise}
+          aboutPagePromise={aboutPagePromise}
+          bioHeadingFallback={t.about.bioHeading}
+          bioFallback={t.about.bio}
+          resumeLabel={t.about.resume}
+        />
+      </Suspense>
+    </>
+  );
+}
+
+interface BelowTheFoldProps {
+  sectionsPromise: Promise<Section[]>;
+  aboutPagePromise: Promise<AboutPageData | null>;
+  bioHeadingFallback: string;
+  bioFallback: string[];
+  resumeLabel: string;
+}
+
+async function BelowTheFold({
+  sectionsPromise,
+  aboutPagePromise,
+  bioHeadingFallback,
+  bioFallback,
+  resumeLabel,
+}: BelowTheFoldProps) {
+  let sections: Section[] = [];
+  let aboutPage: AboutPageData | null = null;
+
+  try {
+    [sections, aboutPage] = await Promise.all([sectionsPromise, aboutPagePromise]);
+  } catch {
+    return null;
+  }
+
   const aboutPreviewSection = sections.find((s) => s.sectionType === "about-preview");
   const aboutBlock = aboutPreviewSection?.contentBlocks.find((b) => b._type === "aboutPreviewBlock");
   const resumeUrl = aboutBlock?.resumeUrl || null;
   const aboutBio = aboutPage?.bio;
-  const aboutHeroImage = aboutPage?.heroImage;
 
   const contactSection = sections.find((s) => s.sectionType === "contact");
   const otherSections = sections.filter((s) => s.sectionType !== "contact" && s.sectionType !== "about-preview");
 
   return (
     <>
-      <ProfileHeader
-        profile={profile}
-        heroImage={aboutHeroImage}
-        profileUnavailableText={t.error.profileUnavailable}
-        heading={t.about.heading}
-      />
-
       <section className="container-max pb-12 md:pb-12 mt-10 md:mt-16">
-        {/* Bio card */}
         <ScrollReveal>
           <div className="bg-white rounded-3xl p-8 md:p-12 mb-20 md:mb-28 drop-shadow-2xl">
             <h2 className="text-[clamp(28px,4vw,36px)] font-bold leading-tight mb-8 bg-gradient-to-r from-accent via-accent to-accent-purple inline-block bg-clip-text text-transparent">
-              {aboutPage?.bioHeading || t.about.bioHeading}
+              {aboutPage?.bioHeading || bioHeadingFallback}
             </h2>
             <div className="space-y-6 text-lg text-[#0A0A0A]/70 leading-relaxed mb-10">
               {aboutBio ? (
                 <PortableTextRenderer value={aboutBio} />
               ) : (
-                t.about.bio.map((paragraph, i) => <p key={i}>{paragraph}</p>)
+                bioFallback.map((paragraph, i) => <p key={i}>{paragraph}</p>)
               )}
             </div>
 
@@ -159,7 +171,7 @@ export default async function AboutPage() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                {t.about.resume}
+                {resumeLabel}
               </a>
             )}
           </div>
@@ -178,5 +190,3 @@ export default async function AboutPage() {
     </>
   );
 }
-
-AboutPage.displayName = "AboutPage";

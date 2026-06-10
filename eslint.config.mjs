@@ -1,6 +1,20 @@
 import nextConfig from "eslint-config-next/core-web-vitals";
 
 const eslintConfig = [
+  {
+    ignores: [
+      "studio/**",
+      ".next/**",
+      "node_modules/**",
+      "out/**",
+      "build/**",
+      "dist/**",
+      "coverage/**",
+      "*.config.js",
+      "*.config.mjs",
+      "*.config.cjs",
+    ],
+  },
   ...nextConfig,
   {
     rules: {

@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import Image from "next/image";
 import { resolveColor } from "@/src/domain/types";
 import type { SkillTag } from "@/src/domain/types";
@@ -20,7 +21,7 @@ const DownloadIcon = () => (
   </svg>
 );
 
-export const AboutSection: React.FC<AboutSectionProps> = ({
+export const AboutSection: FC<AboutSectionProps> = ({
   heading = "About Me",
   body,
   showResume = true,
@@ -93,5 +94,3 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     </section>
   );
 };
-
-AboutSection.displayName = "AboutSection";

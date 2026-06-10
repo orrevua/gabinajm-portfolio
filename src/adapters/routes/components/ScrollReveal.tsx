@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ElementType, type ReactNode } from "react";
 
 type RevealVariant = "fade" | "clip" | "line";
 
 interface ScrollRevealProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   stagger?: boolean;
   variant?: RevealVariant;
-  as?: keyof React.JSX.IntrinsicElements;
+  as?: ElementType;
 }
 
 const VARIANT_CLASS: Record<RevealVariant, string> = {
@@ -18,13 +18,13 @@ const VARIANT_CLASS: Record<RevealVariant, string> = {
   line: "line-reveal",
 };
 
-export const ScrollReveal: React.FC<ScrollRevealProps> = ({
+export function ScrollReveal({
   children,
   className = "",
   stagger = false,
   variant = "fade",
   as: Tag = "div",
-}) => {
+}: ScrollRevealProps) {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -56,11 +56,8 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const baseClass = stagger ? "reveal-stagger" : VARIANT_CLASS[variant];
 
   return (
-    // @ts-expect-error — dynamic tag element
     <Tag ref={ref} className={`${baseClass} ${className}`}>
       {children}
     </Tag>
   );
-};
-
-ScrollReveal.displayName = "ScrollReveal";
+}

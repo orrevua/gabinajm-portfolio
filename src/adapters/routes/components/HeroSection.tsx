@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import Image from "next/image";
 import { type IProfile } from "@domain";
 
@@ -16,7 +17,7 @@ const StarIcon = () => (
   <Image src="/images/star_icon.svg" alt="" width={16} height={16} aria-hidden="true" />
 );
 
-export const HeroSection: React.FC<HeroSectionProps> = ({
+export const HeroSection: FC<HeroSectionProps> = ({
   profile,
   greeting,
   intro = "I'm",
@@ -94,4 +95,3 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   );
 };
 
-HeroSection.displayName = "HeroSection";

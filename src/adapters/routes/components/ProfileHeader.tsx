@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import Image from "next/image";
 import { type IProfile } from "@domain";
 import type { ProfileAvatar } from "@/src/domain/types";
@@ -13,7 +14,7 @@ const StarIcon = () => (
   <Image src="/images/star_icon.svg" alt="" width={16} height={16} aria-hidden="true" />
 );
 
-export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
+export const ProfileHeader: FC<ProfileHeaderProps> = ({
   profile,
   heroImage,
   profileUnavailableText = "Profile information is currently unavailable.",
@@ -72,5 +73,3 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     </header>
   );
 };
-
-ProfileHeader.displayName = "ProfileHeader";
