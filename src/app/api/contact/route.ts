@@ -168,7 +168,7 @@ function buildEmailHtml(name: string, email: string, message: string): string {
 <td align="center" style="padding:20px 40px 32px;">
   <p style="margin:0;font-size:12px;color:#595966;">Sent from your portfolio contact form</p>
   <p style="margin:4px 0 0;font-size:12px;color:#595966;">
-    <a href="https://gabinajm.com" style="color:#F6339A;text-decoration:none;font-weight:600;">gabinajm.com</a>
+    <a href="https://www.gabinajm.com.br" style="color:#F6339A;text-decoration:none;font-weight:600;">gabinajm.com.br</a>
   </p>
 </td>
 </tr>

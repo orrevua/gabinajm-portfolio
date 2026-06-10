@@ -17,7 +17,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://gabinajm.com";
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://www.gabinajm.com.br";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
