@@ -39,15 +39,18 @@ export default async function AboutPage() {
   const { locale, t } = await getServerTranslations();
   const dataService = getSanityDataService();
 
-  const profilePromise = dataService.getProfile(locale);
   const sectionsPromise = dataService.getSectionsByPage("about", locale);
-  const aboutPagePromise = dataService.getAboutPage(locale);
 
   let profile: Profile | null = null;
+  let aboutPage: AboutPageData | null = null;
   try {
-    profile = await profilePromise;
+    [profile, aboutPage] = await Promise.all([
+      dataService.getProfile(locale),
+      dataService.getAboutPage(locale),
+    ]);
   } catch {
     profile = null;
+    aboutPage = null;
   }
 
   if (!profile) {
@@ -75,6 +78,7 @@ export default async function AboutPage() {
     <>
       <ProfileHeader
         profile={profile}
+        heroImage={aboutPage?.heroImage}
         profileUnavailableText={t.error.profileUnavailable}
         heading={t.about.heading}
       />
@@ -82,7 +86,7 @@ export default async function AboutPage() {
       <Suspense fallback={null}>
         <BelowTheFold
           sectionsPromise={sectionsPromise}
-          aboutPagePromise={aboutPagePromise}
+          aboutPage={aboutPage}
           bioHeadingFallback={t.about.bioHeading}
           bioFallback={t.about.bio}
           resumeLabel={t.about.resume}
@@ -94,7 +98,7 @@ export default async function AboutPage() {
 
 interface BelowTheFoldProps {
   sectionsPromise: Promise<Section[]>;
-  aboutPagePromise: Promise<AboutPageData | null>;
+  aboutPage: AboutPageData | null;
   bioHeadingFallback: string;
   bioFallback: string[];
   resumeLabel: string;
@@ -102,16 +106,15 @@ interface BelowTheFoldProps {
 
 async function BelowTheFold({
   sectionsPromise,
-  aboutPagePromise,
+  aboutPage,
   bioHeadingFallback,
   bioFallback,
   resumeLabel,
 }: BelowTheFoldProps) {
   let sections: Section[] = [];
-  let aboutPage: AboutPageData | null = null;
 
   try {
-    [sections, aboutPage] = await Promise.all([sectionsPromise, aboutPagePromise]);
+    sections = await sectionsPromise;
   } catch {
     return null;
   }
