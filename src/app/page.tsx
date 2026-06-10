@@ -10,7 +10,6 @@ import type { Profile } from "@/src/domain/models/Profile";
 import type { Project } from "@/src/domain/models/Project";
 import type { Section } from "@/src/domain/models/Section";
 import type { HomePage as HomePageData } from "@/src/domain/interfaces/DataService";
-import { toPlainText } from "@/src/domain/types";
 
 const CARD_IMAGE_WIDTH = 1200;
 const CARD_IMAGE_HEIGHT = 750;
