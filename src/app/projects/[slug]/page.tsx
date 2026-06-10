@@ -92,8 +92,8 @@ function TextBlockContent({ heading, body, bullets, textColor, iconUrl, iconEmoj
     <>
       {heading && (
         <>
-        {iconUrl && <Image src={iconUrl} alt="" width={28} height={28} className="shrink-0 w-[40px] h-[40px] m-3" aria-hidden="true" />}
-        {!iconUrl && iconEmoji && <span className="block m-3" style={{ fontSize: 36, lineHeight: 1 }} aria-hidden="true">{iconEmoji}</span>}
+        {iconUrl && <Image src={iconUrl} alt="" width={28} height={28} className="shrink-0 w-[40px] h-[40px] mb-3" aria-hidden="true" />}
+        {!iconUrl && iconEmoji && <span className="block mb-3" style={{ fontSize: 36, lineHeight: 1 }} aria-hidden="true">{iconEmoji}</span>}
         <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2" style={{ color }}>
           {heading}
         </h2>
