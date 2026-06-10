@@ -23,7 +23,7 @@ export function LanguageSwitcher() {
             className={`relative z-10 px-3 py-1 rounded-pill text-sm transition-colors duration-300 ${
               locale === l
                 ? "text-white font-bold"
-                : "bg-[#E5E7EB] text-[#0A0A0A]/60 font-medium hover:text-[#0A0A0A] hover:bg-[#D1D5DB]"
+                : "text-[#0A0A0A]/60 font-medium hover:text-[#0A0A0A] hover:bg-[#E5E7EB]"
             }`}
             aria-label={l === "en" ? "English" : "Português"}
             aria-pressed={locale === l}
