@@ -15,7 +15,7 @@ function Toast({ type, message, onDismiss }: { type: "sent" | "error"; message: 
   const base = isSent ? "bg-[#D2FCD8]/95 text-[#0A0A0A] border-[#1a7a2e]" : "bg-[#FCE7F3]/95 text-[#0A0A0A] border-[#c4365a]";
   return (
     <div
-      className={`flex items-center gap-3 px-6 py-4 rounded-pill text-base font-medium animate-fade-in border cursor-pointer backdrop-blur-sm w-full md:fixed md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:z-50 md:w-auto md:max-w-[90vw] ${base}`}
+      className={`flex items-center gap-3 px-6 py-4 rounded-pill text-base font-medium animate-fade-in border cursor-pointer backdrop-blur-sm w-full ${base}`}
       role="alert"
       onClick={onDismiss}
     >
@@ -154,13 +154,24 @@ export function ContactSection({
     INITIAL_STATE
   );
 
+  const [prevState, setPrevState] = useState(state);
   const [dismissedFor, setDismissedFor] = useState<ContactState["status"] | null>(null);
+  const [sendCount, setSendCount] = useState(0);
+
+  if (prevState !== state) {
+    setPrevState(state);
+    setDismissedFor(null);
+    if (state.status === "sent") {
+      setSendCount((c) => c + 1);
+    }
+  }
+
   const visibleToast =
     (state.status === "sent" || state.status === "error") && dismissedFor !== state.status
       ? state
       : null;
 
-  const formKey = state.status === "sent" ? "sent" : "active";
+  const sentLocked = state.status === "sent" && dismissedFor !== "sent";
 
   return (
     <section className="container-max py-24 md:py-24 scroll-mt-20" aria-label={displayHeading} id="contact">
@@ -172,17 +183,8 @@ export function ContactSection({
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-        <div className="relative">
-          {visibleToast && (
-            <div className="absolute inset-x-0 top-24 z-10" aria-live="polite">
-              <Toast
-                type={visibleToast.status}
-                message={visibleToast.status === "sent" ? t.contact.toastSuccess : visibleToast.message}
-                onDismiss={() => setDismissedFor(visibleToast.status)}
-              />
-            </div>
-          )}
-          <form key={formKey} action={formAction} noValidate className="space-y-6">
+        <div>
+          <form key={`form-${sendCount}`} action={formAction} noValidate className="space-y-6">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-[#0A0A0A] mb-2">
               {t.contact.nameLabel}
@@ -227,12 +229,22 @@ export function ContactSection({
             />
           </div>
 
+          {visibleToast && (
+            <div aria-live="polite">
+              <Toast
+                type={visibleToast.status}
+                message={visibleToast.status === "sent" ? t.contact.toastSuccess : visibleToast.message}
+                onDismiss={() => setDismissedFor(visibleToast.status)}
+              />
+            </div>
+          )}
+
           <SubmitButton
-            disabled={state.status === "sent"}
+            disabled={sentLocked}
             sendingLabel={t.contact.sending}
             sentLabel={t.contact.sent}
             sendLabel={t.contact.send}
-            sentStatus={state.status === "sent"}
+            sentStatus={sentLocked}
           />
           </form>
         </div>

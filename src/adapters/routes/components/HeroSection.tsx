@@ -30,10 +30,10 @@ export function HeroSection({
 
   return (
     <section
-      className="min-h-[70vh] md:min-h-[85vh] flex items-center relative pt-28 pb-16 overflow-hidden"
+      className="min-h-[70vh] lg:min-h-[85vh] flex items-center relative pt-28 pb-16 overflow-hidden"
       aria-label="Portfolio hero"
     >
-      <div className="container-max relative z-10 flex flex-col-reverse md:flex-row items-center gap-12 md:gap-8">
+      <div className="container-max relative z-10 flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-8">
         <div className="flex-1 max-w-xl">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-pill bg-accent/10 text-accent text-sm font-semibold mb-6">
             <StarIcon />
@@ -76,15 +76,15 @@ export function HeroSection({
         </div>
 
         {avatarUrl && (
-          <div className="flex-1 flex justify-center md:justify-end">
-            <div className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] animate-float">
+          <div className="flex-1 flex justify-center lg:justify-end">
+            <div className="relative w-[320px] h-[320px] lg:w-[500px] lg:h-[500px] animate-float">
               <Image
                 src={avatarUrl}
                 alt={profile.avatar?.alt || profile.name}
                 fill
                 className="object-contain"
                 priority
-                sizes="(max-width: 768px) 320px, 500px"
+                sizes="(max-width: 1024px) 320px, 500px"
               />
             </div>
           </div>
