@@ -4,6 +4,7 @@ import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { IconAlertCircle } from "@tabler/icons-react";
 import { useTranslation } from "@/src/i18n";
 
 export interface PasswordGateProps {
@@ -35,8 +36,8 @@ const EyeOffIcon = () => (
   </svg>
 );
 
-type GateState = { error: string };
-const INITIAL_STATE: GateState = { error: "" };
+type GateState = { inline: string; toast: string };
+const INITIAL_STATE: GateState = { inline: "", toast: "" };
 
 function UnlockButton({ disabled, label, verifyingLabel }: { disabled: boolean; label: string; verifyingLabel: string }) {
   const { pending } = useFormStatus();
@@ -68,26 +69,28 @@ export function PasswordGate({ slug, projectTitle }: PasswordGateProps) {
         });
         if (res.ok) {
           router.refresh();
-          return { error: "" };
+          return INITIAL_STATE;
         }
-        const data = await res.json();
-        return { error: data.error || t.password.incorrectPassword };
+        if (res.status === 401) {
+          return { inline: t.password.incorrectPassword, toast: "" };
+        }
+        return { inline: "", toast: t.password.unlockError };
       } catch {
-        return { error: t.password.genericError };
+        return { inline: "", toast: t.password.unlockError };
       }
     },
     INITIAL_STATE
   );
 
-  const [dismissedError, setDismissedError] = useState("");
+  const [dismissedToast, setDismissedToast] = useState("");
   useEffect(() => {
-    if (!state.error) return;
-    const current = state.error;
-    const timer = setTimeout(() => setDismissedError(current), 5000);
+    if (!state.toast) return;
+    const current = state.toast;
+    const timer = setTimeout(() => setDismissedToast(current), 5000);
     return () => clearTimeout(timer);
-  }, [state.error]);
+  }, [state.toast]);
 
-  const showError = state.error && state.error !== dismissedError;
+  const showToast = state.toast && state.toast !== dismissedToast;
 
   return (
     <div className="flex flex-col pt-28 md:pt-36 pb-16">
@@ -125,7 +128,7 @@ export function PasswordGate({ slug, projectTitle }: PasswordGateProps) {
             <label htmlFor="project-password" className="block text-sm font-semibold text-[#0A0A0A] mb-2">
               {t.password.label}
             </label>
-            <div className="relative mb-1">
+            <div className="relative">
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#0A0A0A]/40">
                 <LockIcon />
               </span>
@@ -137,8 +140,9 @@ export function PasswordGate({ slug, projectTitle }: PasswordGateProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t.password.placeholder}
-                aria-invalid={state.error ? "true" : undefined}
-                className={`form-input pl-10 pr-10 ${state.error ? "border-accent ring-2 ring-accent/30" : ""}`}
+                aria-invalid={state.inline ? "true" : undefined}
+                aria-describedby={state.inline ? "password-inline-error" : undefined}
+                className={`form-input pl-10 pr-10 ${state.inline ? "border-accent ring-2 ring-accent/30" : ""}`}
                 autoFocus
               />
               <button
@@ -151,6 +155,12 @@ export function PasswordGate({ slug, projectTitle }: PasswordGateProps) {
               </button>
             </div>
 
+            {state.inline && (
+              <p id="password-inline-error" className="text-sm text-[#0A0A0A]/70 mt-2" role="alert">
+                {state.inline}
+              </p>
+            )}
+
             <UnlockButton
               disabled={!password}
               label={t.password.unlock}
@@ -160,16 +170,15 @@ export function PasswordGate({ slug, projectTitle }: PasswordGateProps) {
         </div>
       </div>
 
-      {showError && (
+      {showToast && (
         <div
           role="alert"
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#DC2626] text-white px-6 py-3.5 rounded-xl shadow-lg animate-fade-in"
+          aria-live="polite"
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-pill text-base font-medium animate-fade-in border cursor-pointer backdrop-blur-sm max-w-[90vw] bg-[#FCE7F3]/95 text-[#0A0A0A] border-[#c4365a]"
+          onClick={() => setDismissedToast(state.toast)}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-            <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-          <span className="text-sm font-medium">{state.error}</span>
+          <IconAlertCircle size={20} className="shrink-0 text-[#c4365a]" aria-hidden="true" />
+          {state.toast}
         </div>
       )}
     </div>

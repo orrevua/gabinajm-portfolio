@@ -88,6 +88,7 @@ export const translations = {
       verifying: "Verifying...",
       incorrectPassword: "The password is incorrect.",
       genericError: "Something went wrong. Please try again.",
+      unlockError: "Failed to unlock the page",
     },
     footer: {
       copyright: "© {year} Gabinajm. All rights reserved.",
@@ -199,6 +200,7 @@ export const translations = {
       verifying: "Verificando...",
       incorrectPassword: "A senha está incorreta.",
       genericError: "Algo deu errado. Tente novamente.",
+      unlockError: "Erro ao desbloquear página",
     },
     footer: {
       copyright: "© {year} Gabinajm. Todos os direitos reservados.",
