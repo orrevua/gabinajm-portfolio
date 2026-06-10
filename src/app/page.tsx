@@ -95,7 +95,7 @@ export default async function HomePage() {
             projects={projects.map((project) => ({
               title: project.title,
               slug: project.slug,
-              description: project.excerpt || toPlainText(project.description),
+              description: project.subtitle || "",
               mainImage: project.mainImage?.asset
                 ? {
                     url: buildSanityImageUrl(
