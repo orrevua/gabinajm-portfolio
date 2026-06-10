@@ -13,19 +13,19 @@ export interface NavigationProps {
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
-    <span className="relative inline-block w-5 h-4" aria-hidden="true">
+    <span className="relative inline-block w-[14px] h-[10px]" aria-hidden="true">
       <span
-        className={`absolute left-0 right-0 h-[2px] bg-current rounded-full transition-all duration-300 ease-out ${
+        className={`absolute left-0 right-0 h-[1.5px] bg-current rounded-full transition-all duration-300 ease-out ${
           open ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0 rotate-0"
         }`}
       />
       <span
-        className={`absolute left-0 right-0 h-[2px] bg-current rounded-full top-1/2 -translate-y-1/2 transition-opacity duration-200 ${
+        className={`absolute left-0 right-0 h-[1.5px] bg-current rounded-full top-1/2 -translate-y-1/2 transition-opacity duration-200 ${
           open ? "opacity-0" : "opacity-100"
         }`}
       />
       <span
-        className={`absolute left-0 right-0 h-[2px] bg-current rounded-full transition-all duration-300 ease-out ${
+        className={`absolute left-0 right-0 h-[1.5px] bg-current rounded-full transition-all duration-300 ease-out ${
           open ? "top-1/2 -translate-y-1/2 -rotate-45" : "bottom-0 rotate-0"
         }`}
       />
