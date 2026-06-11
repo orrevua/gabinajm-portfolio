@@ -113,8 +113,13 @@ export function ProjectCard({
 
       <div className="p-6">
         <h3 className="text-2xl font-bold text-[#0A0A0A] group-hover:text-accent leading-tight mb-1">
-          {title}{description && <span className="text-2xl font-bold text-[#0A0A0A] group-hover:text-accent leading-tight mb-1"> - {description}</span>}
+          {title}
         </h3>
+        {description && (
+          <p className="text-sm text-muted leading-snug mb-4">
+            {description}
+          </p>
+        )}
         {hasTechnologies && (
           <div className="flex flex-wrap gap-2">
             {technologies.map((tech) => (
