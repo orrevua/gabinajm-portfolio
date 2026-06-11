@@ -136,7 +136,8 @@ async function BelowTheFold({
             projects={projects.map((project) => ({
               title: project.title,
               slug: project.slug,
-              description: project.excerpt || project.subtitle || "",
+              subtitle: project.subtitle || undefined,
+              description: project.excerpt || "",
               mainImage: project.mainImage?.asset
                 ? {
                     url: buildSanityImageUrl(
